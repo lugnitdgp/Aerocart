@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "403265499826",
+    "project_id": "amazn-caa2b",
+    "storage_bucket": "amazn-caa2b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403265499826:android:9fbb97daf0342e2217cfab",
+        "android_client_info": {
+          "package_name": "com.example.amazon_clone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA_cLl2jR4zISJIAWmgsh1nX9Dfl4CwnA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

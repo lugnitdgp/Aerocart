@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SignInButton(
               Buttons.google,
-              onPressed:()=>AuthService().signinwithGoogle()),        
+              onPressed:() async => await AuthService().signinwithGoogle()),        
             
             //new to amazon register here
             const SizedBox(

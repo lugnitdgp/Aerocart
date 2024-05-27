@@ -7,6 +7,8 @@ import 'package:weather_app/additional_info.dart';
 import 'package:weather_app/hourly_forecast.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/secrets.dart';
+import 'package:moon_icons/moon_icons.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -77,6 +79,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           final humidity = data['list'][0]['main']['humidity'];
           final wind = data['list'][0]['wind']['speed'];
           final pressure=data['list'][0]['main']['pressure'];
+          final currtime = DateTime.parse(data['list'][0]['dt_txt']);
           return Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -109,7 +112,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             Text('$temp°C', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
                             const SizedBox(height: 12,),
                             Icon(
-                              currentSky=='Clouds' || currentSky =='Rain'? Icons.cloud:Icons.sunny, 
+                              (int.parse(DateFormat.H().format(currtime))>18&&int.parse(DateFormat.H().format(currtime))<5)?(currentSky=='Clouds'? Icons.cloud:(currentSky =='Rain'? WeatherIcons.rain:MoonIcons.other_moon_16_light)):(currentSky=='Clouds'? Icons.cloud:(currentSky =='Rain'? WeatherIcons.rain:Icons.sunny)), 
                               size: 64,
                               ),
                             const SizedBox(height: 12,),
@@ -141,9 +144,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     final time = DateTime.parse(hourlyForecast['dt_txt']);
                     
                     return HourlyForecast(
-                      icon: hourlySky == 'Clouds' || hourlySky == 'Rain'
-                              ? Icons.cloud
-                              : Icons.sunny, 
+                      icon: (int.parse(DateFormat.H().format(time))>18&&int.parse(DateFormat.H().format(time))<5)?(hourlySky=='Clouds'? Icons.cloud:(hourlySky =='Rain'? WeatherIcons.rain:MoonIcons.other_moon_16_light)):(hourlySky=='Clouds'? Icons.cloud:(hourlySky =='Rain'? WeatherIcons.rain:Icons.sunny)),  
                       time: DateFormat.j().format(time), 
                       temp: hourlyTemp);
                   }),

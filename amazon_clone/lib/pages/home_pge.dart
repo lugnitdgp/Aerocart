@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  void signout(){
-    FirebaseAuth.instance.signOut();
+  void signout() async{
+    await FirebaseAuth.instance.signOut();
+
   }
 
   @override
@@ -13,19 +14,19 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 3,
-        title: Center(
-          child: Column(
+          title :Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(50,0,0,0),
+                padding: const EdgeInsets.fromLTRB(10,8,0,0),
                 child: Image.asset('lib/images/amazon.png',height: 35,),
               ),
             ],
           ),
-        ),
         backgroundColor: Colors.cyanAccent,
         toolbarHeight: 65,
         actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search), iconSize: 30,),         
+          IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart_outlined), iconSize: 27,),
           IconButton(onPressed: signout, icon: const Icon(Icons.logout))
         ],
       ),

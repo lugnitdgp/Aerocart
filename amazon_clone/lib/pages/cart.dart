@@ -1,26 +1,19 @@
-import 'package:amazon_clone/utils/carousel.dart';
-import 'package:amazon_clone/utils/categories.dart';
 import 'package:amazon_clone/utils/search_screen.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class CartPage extends StatefulWidget {
+  const CartPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<CartPage> createState() => _CartPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final search=TextEditingController();
-  
-
-
+class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    int crossAxisCount=width ~/180;
-    return Scaffold(
-      appBar: PreferredSize(
+    return  Scaffold(
+            appBar: PreferredSize(
           preferredSize: const Size(double.infinity,70),
           child: Container(
             decoration: const BoxDecoration(
@@ -77,39 +70,8 @@ class _HomePageState extends State<HomePage> {
               ]
             ),
           ),
-      ),    
-      backgroundColor: Colors.blueGrey[50],
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              CategoriesBar(),
-              ImageCarousel(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: 10,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                  ),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                      ),
-                    );
-                  },),
-              )
-              
-            ],
-          ),
-        ),
-      );
+      ),
+      body: Text("Cart Page!!!"),
+    );
   }
 }
-

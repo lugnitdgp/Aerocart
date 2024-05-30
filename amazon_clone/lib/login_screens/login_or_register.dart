@@ -1,5 +1,5 @@
-import 'package:amazon_clone/pages/login_page.dart';
-import 'package:amazon_clone/pages/register_page.dart';
+import 'package:amazon_clone/login_screens/login_page.dart';
+import 'package:amazon_clone/login_screens/register_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginOrRegister extends StatefulWidget {

@@ -219,14 +219,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.12.0"
-  moon_icons:
-    dependency: "direct main"
-    description:
-      name: moon_icons
-      sha256: be4ec63b4bc05c42d54312292c26e88bf8d6b130abee35fd4dcc89f582b68d2e
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   path:
     dependency: transitive
     description:

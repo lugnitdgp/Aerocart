@@ -1,25 +1,49 @@
-
-import 'package:amazon_clone/pages/auth_service.dart';
-import 'package:amazon_clone/pages/button.dart';
-import 'package:amazon_clone/pages/forgot_pw_page.dart';
-import 'package:amazon_clone/pages/text_field.dart';
+import 'package:amazon_clone/auth/auth_page.dart';
+import 'package:amazon_clone/utils/button.dart';
+import 'package:amazon_clone/utils/text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<RegisterPage> {
   final email=TextEditingController();
   final password=TextEditingController();
+  final confirmPassword=TextEditingController();
 
-  void signUserIn() async{
+  void signinwithGoogle() async{
+    //interctive signin process
+    final GoogleSignInAccount? gUser= await GoogleSignIn().signIn();
+    //obtain details
+    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+    //create a new credential for user
+    final credential =GoogleAuthProvider.credential(
+      accessToken: gAuth.accessToken,
+      idToken: gAuth.idToken,
+    );
+    //sign in
+    try {
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      Navigator.pushAndRemoveUntil(
+         context,
+          MaterialPageRoute(builder: (context){
+            return AuthPage();
+      },), (route)=>false
+      );
+    }on FirebaseAuthException catch (e) {
+      showErrorMsg(e.toString());
+    }
+  }
+
+  void signUserUp() async{
     showDialog(
       context: context,
       builder: (context){
@@ -29,13 +53,18 @@ class _LoginPageState extends State<LoginPage> {
       }
       );
     try{
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email.text, 
-      password: password.text);
-      Navigator.pop(context);
+      if(password.text==confirmPassword.text){
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email.text, 
+        password: password.text);     
+        Navigator.pop(context); 
+      }
+      else{
+        showErrorMsg("Passwords don't match");
+      }
     }on FirebaseAuthException catch (e){
-      Navigator.pop(context);
-      showErrorMsg(e.message.toString());
+
+      showErrorMsg(e.code);
     }      
   }
 
@@ -44,14 +73,11 @@ class _LoginPageState extends State<LoginPage> {
       context: context, 
       builder: (context){
        return  AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4)
-        ),
         actions: [
           Text(message,style: const TextStyle(fontSize: 20),)
         ],
         actionsAlignment: MainAxisAlignment.center,
-        actionsPadding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+        actionsPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       );
     });
   }
@@ -71,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         backgroundColor: Colors.white,
-        toolbarHeight: 65,
+        toolbarHeight: 60,
         
       ),
       body:  SingleChildScrollView(
@@ -84,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
             //welcome back
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text('Welcome Back you\'ve been missed', 
+                child: Text('Let\'s create an account for you', 
                 style: TextStyle(
                   fontSize:17,
                   fontWeight: FontWeight.w500,
@@ -105,30 +131,20 @@ class _LoginPageState extends State<LoginPage> {
               controller: password,
               hintText: 'Enter Password', 
               obstext: true),
-            //forgot password
-             Padding(
-              padding: EdgeInsets.fromLTRB(0,5,25,0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context){
-                          return ForgotPasswordPS();
-                        },
-                        ),                        
-                      );
-                    },
-                    child: Text('Forgot Password?')),
-                ],
-              ),
+            //condirm password
+            const SizedBox(
+              height: 5,
             ),
-            //sign-in
+            //enter password
+             Textfield(
+              controller: confirmPassword,
+              hintText: 'Confirm Password', 
+              obstext: true),
+            
+            //sign-up
             MyButton(
-              text: 'Sign-in',
-              ontap: signUserIn
+              text: 'Sign-up',
+              ontap: signUserUp
               ),
             //other option
             const Padding(
@@ -157,8 +173,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SignInButton(
               Buttons.google,
-              onPressed:() async => await AuthService().signinwithGoogle()),        
-            
+              onPressed: signinwithGoogle),
+        
             //new to amazon register here
             const SizedBox(
               height: 20,
@@ -166,11 +182,11 @@ class _LoginPageState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('New to Amazon?'),
+                const Text('Already have an account?'),
                 GestureDetector(
                   onTap: widget.onTap,
                   child: Text(
-                    'Register now', 
+                    'Login now', 
                     style: TextStyle(
                       color: Colors.blue[700],
                       fontWeight: FontWeight.bold),

@@ -1,25 +1,51 @@
 
-import 'package:amazon_clone/pages/auth_service.dart';
-import 'package:amazon_clone/pages/button.dart';
-import 'package:amazon_clone/pages/text_field.dart';
+import 'package:amazon_clone/auth/auth_page.dart';
+import 'package:amazon_clone/utils/button.dart';
+import 'package:amazon_clone/login_screens/forgot_pw_page.dart';
+import 'package:amazon_clone/utils/text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
-class RegisterPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   final Function()? onTap;
-  const RegisterPage({super.key, required this.onTap});
+  const LoginPage({super.key, required this.onTap});
 
   @override
-  State<RegisterPage> createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
   final email=TextEditingController();
   final password=TextEditingController();
-  final confirmPassword=TextEditingController();
 
-  void signUserUp() async{
+  void signinwithGoogle() async{
+    //interctive signin process
+    final GoogleSignInAccount? gUser= await GoogleSignIn().signIn();
+    //obtain details
+    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+    //create a new credential for user
+    final credential =GoogleAuthProvider.credential(
+      accessToken: gAuth.accessToken,
+      idToken: gAuth.idToken,
+    );
+    //sign in
+    try {
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      Navigator.pushAndRemoveUntil(
+         context,
+          MaterialPageRoute(builder: (context){
+            return AuthPage();
+      },), (route)=>false
+      );
+    }on FirebaseAuthException catch (e) {
+      showErrorMsg(e.toString());
+    }
+  }
+
+
+  void signUserIn() async{
     showDialog(
       context: context,
       builder: (context){
@@ -29,18 +55,18 @@ class _LoginPageState extends State<RegisterPage> {
       }
       );
     try{
-      if(password.text==confirmPassword.text){
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email.text, 
-        password: password.text);     
-        Navigator.pop(context); 
-      }
-      else{
-        showErrorMsg("Passwords don't match");
-      }
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email.text, 
+      password: password.text);Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+         context,
+          MaterialPageRoute(builder: (context){
+            return AuthPage();
+      },), (route)=>false
+    );
     }on FirebaseAuthException catch (e){
-
-      showErrorMsg(e.code);
+      Navigator.pop(context);
+      showErrorMsg(e.message.toString());
     }      
   }
 
@@ -49,11 +75,14 @@ class _LoginPageState extends State<RegisterPage> {
       context: context, 
       builder: (context){
        return  AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4)
+        ),
         actions: [
           Text(message,style: const TextStyle(fontSize: 20),)
         ],
         actionsAlignment: MainAxisAlignment.center,
-        actionsPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        actionsPadding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
       );
     });
   }
@@ -73,7 +102,7 @@ class _LoginPageState extends State<RegisterPage> {
           ),
         ),
         backgroundColor: Colors.white,
-        toolbarHeight: 90,
+        toolbarHeight: 65,
         
       ),
       body:  SingleChildScrollView(
@@ -86,7 +115,7 @@ class _LoginPageState extends State<RegisterPage> {
             //welcome back
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text('Let\'s create an account for you', 
+                child: Text('Welcome Back you\'ve been missed', 
                 style: TextStyle(
                   fontSize:17,
                   fontWeight: FontWeight.w500,
@@ -107,20 +136,30 @@ class _LoginPageState extends State<RegisterPage> {
               controller: password,
               hintText: 'Enter Password', 
               obstext: true),
-            //condirm password
-            const SizedBox(
-              height: 5,
+            //forgot password
+             Padding(
+              padding: EdgeInsets.fromLTRB(0,5,25,0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context){
+                          return ForgotPasswordPS();
+                        },
+                        ),                        
+                      );
+                    },
+                    child: Text('Forgot Password?')),
+                ],
+              ),
             ),
-            //enter password
-             Textfield(
-              controller: confirmPassword,
-              hintText: 'Confirm Password', 
-              obstext: true),
-            
-            //sign-up
-            MyButton(
-              text: 'Sign-up',
-              ontap: signUserUp
+            //sign-in
+            MyButton (
+              text: 'Sign-in',
+              ontap: signUserIn,                                            
               ),
             //other option
             const Padding(
@@ -149,8 +188,8 @@ class _LoginPageState extends State<RegisterPage> {
             ),
             SignInButton(
               Buttons.google,
-              onPressed: () => AuthService().signinwithGoogle()),
-        
+              onPressed:signinwithGoogle),        
+            
             //new to amazon register here
             const SizedBox(
               height: 20,
@@ -158,11 +197,11 @@ class _LoginPageState extends State<RegisterPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Already have an account?'),
+                const Text('New to Amazon?'),
                 GestureDetector(
                   onTap: widget.onTap,
                   child: Text(
-                    'Login now', 
+                    'Register now', 
                     style: TextStyle(
                       color: Colors.blue[700],
                       fontWeight: FontWeight.bold),

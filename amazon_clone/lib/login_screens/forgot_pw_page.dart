@@ -1,9 +1,7 @@
-
-import 'package:amazon_clone/pages/auth_service.dart';
-import 'package:amazon_clone/pages/text_field.dart';
+import 'package:amazon_clone/utils/text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sign_in_button/sign_in_button.dart';
+
 
 class ForgotPasswordPS extends StatefulWidget {
   const ForgotPasswordPS({super.key});
@@ -102,35 +100,6 @@ class _LoginPageState extends State<ForgotPasswordPS> {
                   borderRadius: BorderRadius.circular(10)
                 ),
                 child: const Text('Reset Password', style: TextStyle(fontSize: 16),),
-              ),          
-              //other option
-              const Padding(
-                padding: EdgeInsets.all(25.0),
-                child: Row(
-                  children: [
-                    Expanded(child:
-                      Divider(
-                        thickness: 0.5,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text('Or continue with',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),            
-                    Expanded(child:
-                      Divider(
-                        thickness: 0.5,
-                        color: Colors.black,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              //google
-              const SizedBox(
-                height: 4,
-              ),
-              SignInButton(
-                Buttons.google,
-                onPressed:()=>AuthService().signinwithGoogle()
               ), 
             ],
           ),

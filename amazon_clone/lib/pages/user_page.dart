@@ -1,4 +1,6 @@
 import 'package:amazon_clone/auth/auth_page.dart';
+import 'package:amazon_clone/utils/button.dart';
+import 'package:amazon_clone/utils/products_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -39,20 +41,41 @@ class _UserPageState extends State<UserPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children:[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [Padding(
-                    padding: const EdgeInsets.fromLTRB(16,0,0,10),
-                    child: Image.asset('lib/images/amazon.png',height: 35,),
-                    ),
-                    
-                  ]
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16,10,0,10),
+                        child: Image.asset('lib/images/Amazon_icon.png',height: 50,),                    
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {}, 
+                            icon: Icon(Icons.notifications_none_outlined,size: 28,)),
+                          
+                          IconButton(
+                            onPressed: () {}, 
+                            icon:Icon(Icons.search,size: 28,), ),                          
+                        ],
+                      ),
+                      
+                    ]
+                  ),
                 ),
               ]
             ),
           ),
        ),
-      body: Center(child: IconButton(onPressed:signout,icon:Icon(Icons.logout))),
+      body: Column(        
+        children: [
+          ProductsList(),
+          MyButton(ontap: () {}, text: "Sell"),
+          MyButton(ontap: signout, text: "Sign Out"),          
+        ],
+      )
     );
   }
 }

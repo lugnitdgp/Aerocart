@@ -84,6 +84,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               CategoriesBar(),
               ImageCarousel(),
+              Text("Recomended Items",style: TextStyle(fontSize: 16),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: GridView.builder(

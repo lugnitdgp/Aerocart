@@ -18,6 +18,7 @@ class _LoginPageState extends State<RegisterPage> {
   final email=TextEditingController();
   final password=TextEditingController();
   final confirmPassword=TextEditingController();
+  final username=TextEditingController();
 
   void signinwithGoogle() async{
     //interctive signin process
@@ -58,6 +59,12 @@ class _LoginPageState extends State<RegisterPage> {
         email: email.text, 
         password: password.text);     
         Navigator.pop(context); 
+        Navigator.pushAndRemoveUntil(
+         context,
+          MaterialPageRoute(builder: (context){
+            return AuthPage();
+      },), (route)=>false
+    );
       }
       else{
         showErrorMsg("Passwords don't match");
@@ -118,6 +125,14 @@ class _LoginPageState extends State<RegisterPage> {
                   ),
                   ),
               ),
+            //username
+            Textfield(
+              controller: username,
+              hintText: 'Enter Username', 
+              obstext: false),
+            const SizedBox(
+              height: 5,
+            ),
             //enter gmail
              Textfield(
               controller: email,

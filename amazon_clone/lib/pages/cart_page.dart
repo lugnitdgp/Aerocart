@@ -1,42 +1,21 @@
 import 'package:amazon_clone/auth/user_details_model.dart';
-import 'package:amazon_clone/utils/carousel.dart';
-import 'package:amazon_clone/utils/categories.dart';
-import 'package:amazon_clone/utils/home_items.dart';
+import 'package:amazon_clone/utils/button.dart';
+import 'package:amazon_clone/utils/cart_items.dart';
 import 'package:amazon_clone/utils/search_screen.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class CartPage extends StatefulWidget {
+  const CartPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<CartPage> createState() => _CartPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  double offset = 0;
-  ScrollController scrollController = ScrollController();
-  final search = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-    scrollController.addListener(() {
-      setState(() {
-        offset = scrollController.position.pixels;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose;
-    super.dispose();
-  }
-
+class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    int crossAxisCount = width ~/ 180;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 70),
@@ -100,44 +79,32 @@ class _HomePageState extends State<HomePage> {
           ]),
         ),
       ),
-      backgroundColor: Colors.blueGrey[50],
-      body: Stack(children: [
-        SingleChildScrollView(
-          controller: scrollController,
-          child: Column(children: [
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+        Column(
+          children: [
             const SizedBox(
               height: 40,
-              width: double.infinity,
-            ),
-            CategoriesBar(),
-            ImageCarousel(),
-            Text(
-              "Recomended Items",
-              style: TextStyle(fontSize: 16),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6.0),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 10,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                ),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: HomeItems()
-                  );
+              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+              child: MyButton(ontap: () {}, text: "Proceed to buy"),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  return CartItems();
                 },
               ),
-            ),
-          ]),
+            ),            
+          ],
         ),
         UserDetailsBar(
-          offset: offset,
-          userDetailsModel: UserDetailsModel(name: 'User', address: 'address'),
-        )
+            offset: 0,
+            userDetailsModel:
+                UserDetailsModel(name: "User", address: "Address"))
       ]),
     );
   }

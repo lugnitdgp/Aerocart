@@ -1,6 +1,8 @@
 import 'package:amazon_clone/auth/auth_page.dart';
+import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/products_list.dart';
+import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -69,12 +71,20 @@ class _UserPageState extends State<UserPage> {
             ),
           ),
        ),
-      body: Column(        
+      body: Stack(
         children: [
-          ProductsList(),
-          MyButton(ontap: () {}, text: "Sell"),
-          MyButton(ontap: signout, text: "Sign Out"),          
-        ],
+          Column(        
+          children: [
+            const SizedBox(
+              height: 35,
+            ),
+            ProductsList(),
+            MyButton(ontap: () {}, text: "Sell"),
+            MyButton(ontap: signout, text: "Sign Out"),          
+          ],
+        ),
+         UserDetailsBar(offset: 0,userDetailsModel: UserDetailsModel(name: 'User', address: " Address"),)
+        ]
       )
     );
   }

@@ -1,6 +1,7 @@
 import 'package:amazon_clone/auth/auth_page.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/text_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -19,6 +20,8 @@ class _LoginPageState extends State<RegisterPage> {
   final password=TextEditingController();
   final confirmPassword=TextEditingController();
   final username=TextEditingController();
+  final address=TextEditingController();
+  FirebaseFirestore firebaseFirestore=FirebaseFirestore.instance;
 
   void signinwithGoogle() async{
     //interctive signin process
@@ -57,7 +60,8 @@ class _LoginPageState extends State<RegisterPage> {
       if(password.text==confirmPassword.text){
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text, 
-        password: password.text);     
+        password: password.text);  
+        await firebaseFirestore.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).set({"username":username, "address":address});
         Navigator.pop(context); 
         Navigator.pushAndRemoveUntil(
          context,
@@ -129,6 +133,15 @@ class _LoginPageState extends State<RegisterPage> {
             Textfield(
               controller: username,
               hintText: 'Enter Username', 
+              obstext: false),
+            const SizedBox(
+              height: 5,
+            ),
+            //address
+            //username
+            Textfield(
+              controller: address,
+              hintText: 'Enter address', 
               obstext: false),
             const SizedBox(
               height: 5,

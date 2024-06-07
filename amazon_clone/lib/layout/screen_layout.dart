@@ -1,4 +1,4 @@
-import 'package:amazon_clone/pages/cart.dart';
+import 'package:amazon_clone/pages/cart_page.dart';
 import 'package:amazon_clone/pages/home_pge.dart';
 import 'package:amazon_clone/pages/user_page.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +60,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                ),
              ),
            ),
+
         ]
         )
       );

@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(4)
         ),
         actions: [
-          Text(message,style: const TextStyle(fontSize: 20),)
+          Text(message.trim(),style: const TextStyle(fontSize: 20),)
         ],
         actionsAlignment: MainAxisAlignment.center,
         actionsPadding: const EdgeInsets.fromLTRB(5, 10, 5, 10),

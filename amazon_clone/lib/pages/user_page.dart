@@ -79,8 +79,14 @@ class _UserPageState extends State<UserPage> {
               height: 35,
             ),
             ProductsList(),
-            MyButton(ontap: () {}, text: "Sell"),
-            MyButton(ontap: signout, text: "Sign Out"),          
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: MyButton(ontap: () {}, text: "Sell"),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: MyButton(ontap: signout, text: "Sign Out"),
+            ),          
           ],
         ),
          UserDetailsBar(offset: 0,userDetailsModel: UserDetailsModel(name: 'User', address: " Address"),)

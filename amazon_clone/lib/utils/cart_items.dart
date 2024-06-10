@@ -1,8 +1,10 @@
+import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/product_info.dart';
 import 'package:flutter/material.dart';
 
 class CartItems extends StatelessWidget {
-  const CartItems({super.key});
+  final ProductModels product;
+  const CartItems({super.key,required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class CartItems extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border(
+          border: const Border(
               bottom: BorderSide(
             color: Colors.grey,
             width: 1,
@@ -32,15 +34,14 @@ class CartItems extends StatelessWidget {
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 3,
                       height: 120,
-                      child: Image.network(
-                          "https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png"),
+                      child: Image.network(product.url),
                     ),
                   ],
                 ),
-                const ProductInfo(
-                    productName: "Something very good ",
-                    cost: 10000,
-                    sellerName: "Seller"),
+                ProductInfo(
+                    productName: product.productname,
+                    cost: product.cost,
+                    sellerName: product.sellername),
                 Align(
                     alignment: Alignment.centerLeft,
                     child: Container(

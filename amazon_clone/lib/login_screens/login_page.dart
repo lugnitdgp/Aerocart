@@ -20,6 +20,13 @@ class _LoginPageState extends State<LoginPage> {
   final email=TextEditingController();
   final password=TextEditingController();
 
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    super.dispose();
+  }
+
   void signinwithGoogle() async{
     //interctive signin process
     final GoogleSignInAccount? gUser= await GoogleSignIn().signIn();

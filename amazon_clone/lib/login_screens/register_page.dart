@@ -16,213 +16,216 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<RegisterPage> {
-  final email=TextEditingController();
-  final password=TextEditingController();
-  final confirmPassword=TextEditingController();
-  final username=TextEditingController();
-  final address=TextEditingController();
-  FirebaseFirestore firebaseFirestore=FirebaseFirestore.instance;
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final confirmPassword = TextEditingController();
+  final username = TextEditingController();
+  final address = TextEditingController();
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  void signinwithGoogle() async{
-    //interctive signin process
-    final GoogleSignInAccount? gUser= await GoogleSignIn().signIn();
-    //obtain details
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    confirmPassword.dispose();
+    username.dispose();
+    address.dispose();
+    super.dispose();
+  }
+
+  void signinwithGoogle() async {
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication gAuth = await gUser!.authentication;
-    //create a new credential for user
-    final credential =GoogleAuthProvider.credential(
+    final credential = GoogleAuthProvider.credential(
       accessToken: gAuth.accessToken,
       idToken: gAuth.idToken,
     );
     //sign in
     try {
       await FirebaseAuth.instance.signInWithCredential(credential);
-      Navigator.pushAndRemoveUntil(
-         context,
-          MaterialPageRoute(builder: (context){
-            return AuthPage();
-      },), (route)=>false
-      );
-    }on FirebaseAuthException catch (e) {
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+        builder: (context) {
+          return AuthPage();
+        },
+      ), (route) => false);
+    } on FirebaseAuthException catch (e) {
       showErrorMsg(e.toString());
     }
   }
 
-  void signUserUp() async{
+  void signUserUp() async {
     showDialog(
-      context: context,
-      builder: (context){
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      );
-    try{
-      if(password.text==confirmPassword.text){
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+    try {
+      if (password.text == confirmPassword.text) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email.text, 
-        password: password.text);  
-        await firebaseFirestore.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).set({"username":username, "address":address});
-        Navigator.pop(context); 
-        Navigator.pushAndRemoveUntil(
-         context,
-          MaterialPageRoute(builder: (context){
+            email: email.text, password: password.text);
+        await firebaseFirestore
+            .collection("users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({"name": username, "address": address});
+        Navigator.pop(context);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+          builder: (context) {
             return AuthPage();
-      },), (route)=>false
-    );
-      }
-      else{
+          },
+        ), (route) => false);
+      } else {
         showErrorMsg("Passwords don't match");
       }
-    }on FirebaseAuthException catch (e){
-
+    } on FirebaseAuthException catch (e) {
       showErrorMsg(e.code);
-    }      
+    }
   }
 
-  void showErrorMsg(String message){
-     showDialog(
-      context: context, 
-      builder: (context){
-       return  AlertDialog(
-        actions: [
-          Text(message,style: const TextStyle(fontSize: 20),)
-        ],
-        actionsAlignment: MainAxisAlignment.center,
-        actionsPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-      );
-    });
+  void showErrorMsg(String message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            actions: [
+              Text(
+                message,
+                style: const TextStyle(fontSize: 20),
+              )
+            ],
+            actionsAlignment: MainAxisAlignment.center,
+            actionsPadding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         elevation: 3,
         title: Center(
           child: Column(
             children: [
-              Image.asset('lib/images/amazon.png',height: 35,),
+              Image.asset(
+                'lib/images/amazon.png',
+                height: 35,
+              ),
             ],
           ),
         ),
         backgroundColor: Colors.white,
         toolbarHeight: 60,
-        
       ),
-      body:  SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [     
+            children: [
               const SizedBox(
                 height: 16,
               ),
-            //welcome back
+              //welcome back
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text('Let\'s create an account for you', 
-                style: TextStyle(
-                  fontSize:17,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[800],
+                child: Text(
+                  'Let\'s create an account for you',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[800],
                   ),
-                  ),
+                ),
               ),
-            //username
-            Textfield(
-              controller: username,
-              hintText: 'Enter Username', 
-              obstext: false),
-            const SizedBox(
-              height: 5,
-            ),
-            //address
-            //username
-            Textfield(
-              controller: address,
-              hintText: 'Enter address', 
-              obstext: false),
-            const SizedBox(
-              height: 5,
-            ),
-            //enter gmail
-             Textfield(
-              controller: email,
-              hintText: 'Enter Gmail', 
-              obstext: false),
-            const SizedBox(
-              height: 5,
-            ),
-            //enter password
-             Textfield(
-              controller: password,
-              hintText: 'Enter Password', 
-              obstext: true),
-            //condirm password
-            const SizedBox(
-              height: 5,
-            ),
-            //enter password
-             Textfield(
-              controller: confirmPassword,
-              hintText: 'Confirm Password', 
-              obstext: true),
-            
-            //sign-up
-            MyButton(
-              text: 'Sign-up',
-              ontap: signUserUp
+              //username
+              Textfield(
+                  controller: username,
+                  hintText: 'Enter Username',
+                  obstext: false),
+              const SizedBox(
+                height: 5,
               ),
-            //other option
-            const Padding(
-              padding: EdgeInsets.all(25.0),
-              child: Row(
+              //address
+              Textfield(
+                  controller: address,
+                  hintText: 'Enter address',
+                  obstext: false),
+              const SizedBox(
+                height: 5,
+              ),
+              // enter gmail
+              Textfield(
+                  controller: email, hintText: 'Enter Gmail', obstext: false),
+              const SizedBox(
+                height: 5,
+              ),
+              //enter password
+              Textfield(
+                  controller: password,
+                  hintText: 'Enter Password',
+                  obstext: true),
+              //condirm password
+              const SizedBox(
+                height: 5,
+              ),
+              //enter password
+              Textfield(
+                  controller: confirmPassword,
+                  hintText: 'Confirm Password',
+                  obstext: true),
+
+              //sign-up
+              MyButton(text: 'Sign-up', ontap: signUserUp),
+              //other option
+              const Padding(
+                padding: EdgeInsets.all(25.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      'Or continue with',
+                      style: TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.black,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              //google
+              const SizedBox(
+                height: 4,
+              ),
+              SignInButton(Buttons.google, onPressed: signinwithGoogle),
+
+              //new to amazon register here
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(child:
-                    Divider(
-                      thickness: 0.5,
-                      color: Colors.black,
+                  const Text('Already have an account?'),
+                  GestureDetector(
+                    onTap: widget.onTap,
+                    child: Text(
+                      'Login now',
+                      style: TextStyle(
+                          color: Colors.blue[700], fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Text('Or continue with',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),            
-                  Expanded(child:
-                    Divider(
-                      thickness: 0.5,
-                      color: Colors.black,
-                    ),
-                  )
                 ],
               ),
-            ),
-            //google
-            const SizedBox(
-              height: 4,
-            ),
-            SignInButton(
-              Buttons.google,
-              onPressed: signinwithGoogle),
-        
-            //new to amazon register here
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Already have an account?'),
-                GestureDetector(
-                  onTap: widget.onTap,
-                  child: Text(
-                    'Login now', 
-                    style: TextStyle(
-                      color: Colors.blue[700],
-                      fontWeight: FontWeight.bold),
-                    ),
-                  ),
-              ],
-            ),
-            
             ],
           ),
         ),

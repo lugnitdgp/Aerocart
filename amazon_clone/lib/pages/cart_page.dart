@@ -1,6 +1,7 @@
 import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/cart_items.dart';
+import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/search_screen.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:flutter/material.dart';
@@ -80,8 +81,7 @@ class _CartPageState extends State<CartPage> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
+      body: Stack(children: [
         Column(
           children: [
             const SizedBox(
@@ -95,10 +95,19 @@ class _CartPageState extends State<CartPage> {
               child: ListView.builder(
                 itemCount: 5,
                 itemBuilder: (BuildContext context, int index) {
-                  return CartItems();
+                  return CartItems(
+                    product: ProductModels(
+                        cost: 1000,
+                        productname: "Something very good",
+                        sellername: "Keshto",
+                        selleruid: "zmjjkk",
+                        uid: "2ku5",
+                        url:
+                            "https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png"),
+                  );
                 },
               ),
-            ),            
+            ),
           ],
         ),
         UserDetailsBar(

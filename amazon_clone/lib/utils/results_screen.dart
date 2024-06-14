@@ -1,17 +1,15 @@
-import 'package:amazon_clone/utils/results_screen.dart';
+import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/utils/result_widget.dart';
 import 'package:flutter/material.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+class ResultsScreen extends StatelessWidget {
+  final String querry;
+  const ResultsScreen({super.key, required this.querry});
 
-  @override
-  State<SearchScreen> createState() => _SearchScreenState();
-}
-
-class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    int crossAxisCount = width ~/ 180;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 60),
@@ -42,15 +40,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: TextField(
-                        onSubmitted: (String querry) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ResultsScreen(querry: querry),
-                            ),
-                          );
-                        },
                         decoration: InputDecoration(
                           isCollapsed: true,
                           isDense: true,
@@ -81,6 +70,47 @@ class _SearchScreenState extends State<SearchScreen> {
                 ]),
           ]),
         ),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,10,0,30),
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  const TextSpan(
+                      text: "Search results for ",
+                      style: TextStyle(fontSize: 17, color: Colors.black)),
+                  TextSpan(
+                    text: "'$querry'",
+                    style: const TextStyle(
+                        fontSize: 17,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+              ),
+              itemCount: 10,
+              itemBuilder: (BuildContext context, int index) {
+                return ResultWidget(
+                    product: ProductModels(
+                        cost: 1000,
+                          productname: "Something very good",
+                          sellername: "Keshto",
+                          selleruid: "zmjjkk",
+                          uid: "2ku5",
+                          url:"https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png"));
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

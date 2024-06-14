@@ -13,7 +13,7 @@ class ScreenLayout extends StatefulWidget {
 class _ScreenLayoutState extends State<ScreenLayout> {
   int currPage =0;
   final List<Widget> tablist=[
-    const HomePage(),
+   const HomePage(),
     const CartPage(),
     const UserPage(),
   ];

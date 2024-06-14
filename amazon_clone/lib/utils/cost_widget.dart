@@ -32,9 +32,6 @@ class CostWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 10,
             color: Colors.black,
-            fontFeatures: const [
-              FontFeature.superscripts(),
-            ],
           ),
         )
       ],

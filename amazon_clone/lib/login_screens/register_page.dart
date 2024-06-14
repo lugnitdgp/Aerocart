@@ -68,18 +68,19 @@ class _LoginPageState extends State<RegisterPage> {
         await firebaseFirestore
             .collection("users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({"name": username, "address": address});
-        Navigator.pop(context);
+            .set({"name": username.text, "address": address.text});   
+        Navigator.pop(context);     
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
           builder: (context) {
             return AuthPage();
           },
         ), (route) => false);
+        
       } else {
         showErrorMsg("Passwords don't match");
       }
-    } on FirebaseAuthException catch (e) {
-      showErrorMsg(e.code);
+    }catch (e) {
+      showErrorMsg(e.toString());
     }
   }
 

@@ -1,8 +1,7 @@
-import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/utils/carousel.dart';
 import 'package:amazon_clone/utils/categories.dart';
 import 'package:amazon_clone/utils/home_items.dart';
-import 'package:amazon_clone/utils/search_screen.dart';
+import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -109,9 +108,9 @@ class _HomePageState extends State<HomePage> {
               height: 40,
               width: double.infinity,
             ),
-            CategoriesBar(),
-            ImageCarousel(),
-            Text(
+            const CategoriesBar(),
+            const ImageCarousel(),
+            const Text(
               "Recomended Items",
               style: TextStyle(fontSize: 16),
             ),
@@ -119,16 +118,14 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 6.0),
               child: GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: 10,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount,
                 ),
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: HomeItems()
-                  );
+                  return const Padding(
+                      padding: EdgeInsets.all(8.0), child: HomeItems());
                 },
               ),
             ),
@@ -136,7 +133,6 @@ class _HomePageState extends State<HomePage> {
         ),
         UserDetailsBar(
           offset: offset,
-          userDetailsModel: UserDetailsModel(name: 'User', address: 'address'),
         )
       ]),
     );

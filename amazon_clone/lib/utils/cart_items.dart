@@ -1,10 +1,11 @@
+import 'package:amazon_clone/pages/product_screen.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/product_info.dart';
 import 'package:flutter/material.dart';
 
 class CartItems extends StatelessWidget {
   final ProductModels product;
-  const CartItems({super.key,required this.product});
+  const CartItems({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +32,19 @@ class CartItems extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 3,
-                      height: 120,
-                      child: Image.network(product.url),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductScreen(product: product)));
+                      },
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        height: 120,
+                        child: Image.network(product.url),
+                      ),
                     ),
                   ],
                 ),
@@ -57,8 +67,7 @@ class CartItems extends StatelessWidget {
                       ),
                       child: IconButton(
                           onPressed: () {}, icon: Icon(Icons.delete_outlined)),
-                    )
-                ),
+                    )),
               ],
             ),
           ),

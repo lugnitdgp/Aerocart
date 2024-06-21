@@ -1,4 +1,4 @@
-import 'package:amazon_clone/utils/results_screen.dart';
+import 'package:amazon_clone/pages/results_screen.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -33,7 +33,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      icon: Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back),
                       color: Colors.black,
                     ),
                   ),
@@ -54,7 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         decoration: InputDecoration(
                           isCollapsed: true,
                           isDense: true,
-                          contentPadding: EdgeInsets.all(11),
+                          contentPadding: const EdgeInsets.all(11),
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Search',
@@ -73,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               borderSide: const BorderSide(color: Colors.grey)),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(color: Colors.grey)),
+                              borderSide: const BorderSide(color: Colors.grey)),
                         ),
                       ),
                     ),

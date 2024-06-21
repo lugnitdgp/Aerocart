@@ -5,6 +5,7 @@ class ProductModels {
   final String sellername;
   final String selleruid;
   final double cost;
+  final String description;
 
   ProductModels(
       {required this.cost,
@@ -12,5 +13,6 @@ class ProductModels {
       required this.sellername,
       required this.selleruid,
       required this.uid,
-      required this.url});
+      required this.url,
+      required this.description});
 }

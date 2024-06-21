@@ -31,7 +31,7 @@ class ResultsScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      icon: Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back),
                       color: Colors.black,
                     ),
                   ),
@@ -43,7 +43,7 @@ class ResultsScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           isCollapsed: true,
                           isDense: true,
-                          contentPadding: EdgeInsets.all(11),
+                          contentPadding: const EdgeInsets.all(11),
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Search',
@@ -62,7 +62,7 @@ class ResultsScreen extends StatelessWidget {
                               borderSide: const BorderSide(color: Colors.grey)),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(color: Colors.grey)),
+                              borderSide: const BorderSide(color: Colors.grey)),
                         ),
                       ),
                     ),
@@ -106,7 +106,10 @@ class ResultsScreen extends StatelessWidget {
                           sellername: "Keshto",
                           selleruid: "zmjjkk",
                           uid: "2ku5",
-                          url:"https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png"));
+                          url:"https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png",
+                          description: "sodales ut etiam sit amet nisl purus in mollis nunc sed id semper risus in hendrerit gravida rutrum quisque non tellus orci ac auctor augue mauris augue neque gravida in fermentum et sollicitudin ac orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla facilisi cras fermentum odio jsdfgnivdn fndfngo fnignfnof nognfodngnofgnofnognn nn nnognfgonfo gnofn no n gonfdognfodn non fognfo ngon nosfdngonffognsodfngonfo nsnfognodfsngonsfon ndsofgnosfndognsfodngo sofdgnosdfngonfong nfodgn osfdn gon ",
+
+                        ));
               },
             ),
           ),

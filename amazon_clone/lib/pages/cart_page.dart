@@ -1,8 +1,7 @@
-import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/cart_items.dart';
 import 'package:amazon_clone/utils/models.dart';
-import 'package:amazon_clone/utils/search_screen.dart';
+import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -101,9 +100,11 @@ class _CartPageState extends State<CartPage> {
                         productname: "Something very good",
                         sellername: "Keshto",
                         selleruid: "zmjjkk",
-                        uid: "2ku5",
+                        uid: "2k3r",
                         url:
-                            "https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png"),
+                            "https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png",
+                        description:"sodales ut etiam sit amet nisl purus in mollis nunc sed id semper risus in hendrerit gravida rutrum quisque non tellus orci ac auctor augue mauris augue neque gravida in fermentum et sollicitudin ac orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla facilisi cras fermentum odio jsdfgnivdn fndfngo fnignfnof nognfodngnofgnofnognn nn nnognfgonfo gnofn no n gonfdognfodn non fognfo ngon nosfdngonffognsodfngonfo nsnfognodfsngonsfon ndsofgnosfndognsfodngo sofdgnosdfngonfong nfodgn osfdn gon ",
+                      ),
                   );
                 },
               ),
@@ -112,8 +113,7 @@ class _CartPageState extends State<CartPage> {
         ),
         UserDetailsBar(
             offset: 0,
-            userDetailsModel:
-                UserDetailsModel(name: "User", address: "Address"))
+        )
       ]),
     );
   }

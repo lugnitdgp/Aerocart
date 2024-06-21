@@ -1,6 +1,8 @@
 import 'package:amazon_clone/auth/auth_page.dart';
+import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 
@@ -19,10 +21,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(useMaterial3:true ),
-      home: const AuthPage(),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => UserDetailsProvider(),)],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.light(useMaterial3:true ),
+        home: const AuthPage(),
+      ),
     );
   }
 }

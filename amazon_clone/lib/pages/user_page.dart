@@ -1,5 +1,4 @@
 import 'package:amazon_clone/auth/auth_page.dart';
-import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/products_list.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
@@ -89,7 +88,7 @@ class _UserPageState extends State<UserPage> {
             ),          
           ],
         ),
-         UserDetailsBar(offset: 0,userDetailsModel: UserDetailsModel(name: 'User', address: " Address"),)
+         UserDetailsBar(offset: 0,)
         ]
       )
     );

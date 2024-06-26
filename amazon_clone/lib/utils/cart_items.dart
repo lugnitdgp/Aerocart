@@ -10,7 +10,7 @@ class CartItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(3, 8, 3, 8),
+      padding: const EdgeInsets.fromLTRB(3, 8, 3, 8),
       width: double.infinity,
       height: 160,
       decoration: BoxDecoration(
@@ -66,7 +66,7 @@ class CartItems extends StatelessWidget {
                         ),
                       ),
                       child: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.delete_outlined)),
+                          onPressed: () {}, icon:const Icon(Icons.delete_outlined)),
                     )),
               ],
             ),

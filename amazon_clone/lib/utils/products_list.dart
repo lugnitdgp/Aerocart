@@ -20,7 +20,7 @@ class _ProductsListState extends State<ProductsList> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
+          const Row(
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),

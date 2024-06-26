@@ -41,9 +41,9 @@ class _ImageCarouselState extends State<ImageCarousel> {
                 items: myitems, 
                 options: CarouselOptions(
                   autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 2),
+                  autoPlayInterval: const Duration(seconds: 2),
                   pauseAutoPlayInFiniteScroll: true,
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayAnimationDuration:const Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   viewportFraction: 1,
                   onPageChanged: (index, reason) {

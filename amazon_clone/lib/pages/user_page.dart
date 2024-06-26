@@ -1,4 +1,5 @@
 import 'package:amazon_clone/auth/auth_page.dart';
+import 'package:amazon_clone/pages/sell_screen.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/products_list.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
@@ -15,10 +16,9 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   void signout() async{
     await FirebaseAuth.instance.signOut();
-    Navigator.pushAndRemoveUntil(
-        context,
+    Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context){
-            return AuthPage();
+            return const AuthPage();
       },), (route)=>false
       );
   }
@@ -55,11 +55,11 @@ class _UserPageState extends State<UserPage> {
                         children: [
                           IconButton(
                             onPressed: () {}, 
-                            icon: Icon(Icons.notifications_none_outlined,size: 28,)),
+                            icon: const Icon(Icons.notifications_none_outlined,size: 28,)),
                           
                           IconButton(
                             onPressed: () {}, 
-                            icon:Icon(Icons.search,size: 28,), ),                          
+                            icon:const Icon(Icons.search,size: 28,), ),                          
                         ],
                       ),
                       
@@ -77,10 +77,10 @@ class _UserPageState extends State<UserPage> {
             const SizedBox(
               height: 35,
             ),
-            ProductsList(),
+            const ProductsList(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: MyButton(ontap: () {}, text: "Sell"),
+              child: MyButton(ontap: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>const SellScreen()));}, text: "Sell"),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),

@@ -19,38 +19,68 @@ class _ProductScreenState extends State<ProductScreen> {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: Padding(
-          padding: EdgeInsets.fromLTRB(width*0.077,0,0,10),
+          padding: EdgeInsets.fromLTRB(width * 0.077, 0, 0, 10),
           child: Container(
             height: 60,
             decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 4),
               color: Colors.black,
-              borderRadius: BorderRadius.circular(50)
+              borderRadius: BorderRadius.circular(50),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   onTap: () {},
                   child: Container(
                     height: 50,
-                    width: width/2.24,
+                    width: width / 2,
                     decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(40)
+                        border: Border.all(color: Colors.white, width: 1),
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(40)),
+                    child: Center(
+                      child: Text.rich(
+                        TextSpan(children: [
+                          const TextSpan(
+                            text: "Total: ",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          const TextSpan(
+                            text: " ₹",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          TextSpan(
+                            text: widget.product.cost.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                                color: Colors.white),
+                          ),
+                        ]),
+                      ),
                     ),
-                    child: Center(child: Text("Add to Cart",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
                   ),
                 ),
                 GestureDetector(
                   onTap: () {},
                   child: Container(
-                    height: 50,
-                    width: width/2.24,
+                    height: 53,
+                    width: width / 3,
                     decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(40)
-                    ),
-                    child: Center(child: Text("Buy Now",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                        border: const Border(
+                            left: BorderSide(color: Colors.black, width: 5)),
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.circular(40)),
+                    child: const Center(
+                        child: Text(
+                      "Add to Cart",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    )),
                   ),
                 )
               ],
@@ -129,100 +159,116 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         ),
         backgroundColor: Colors.blueGrey[50],
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              UserDetailsBar(
-                offset: 0,
-              ),
-              Column(
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Stack(children: [
-                      Container(
-                        height: 320,
-                        width: width - 10,
-                        constraints: BoxConstraints(
-                            maxHeight: MediaQuery.of(context).size.height / 3),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 25),
-                          child: Image.network(widget.product.url),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                            onPressed: () {}, icon: const Icon(Icons.share)),
-                      )
-                    ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(25)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.product.productname,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 22),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CostWidget(cost: widget.product.cost),
-                              Text.rich(
-                                TextSpan(children: [
-                                  TextSpan(text: "Seller:"),
-                                  TextSpan(
-                                    text: widget.product.sellername,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16),
-                                  ),
-                                ]),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
+                        child: Stack(children: [
                           Container(
-                            width: width * 0.3,
-                            height: 37,
+                            height: 320,
+                            width: width - 10,
+                            constraints: BoxConstraints(
+                                maxHeight:
+                                    MediaQuery.of(context).size.height / 3),
                             decoration: BoxDecoration(
-                                color: Colors.amber,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: const Center(
-                              child: Text(
-                                "Description",
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.w700),
-                              ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 15, 15, 25),
+                              child: Image.network(widget.product.url),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(widget.product.description,style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),),
-                          )
-                        ],
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.share)),
+                          ),
+                        ]),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 90,)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.product.productname,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 22),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  CostWidget(cost: widget.product.cost),
+                                  Text.rich(
+                                    TextSpan(children: [
+                                      const TextSpan(text: "Seller:"),
+                                      TextSpan(
+                                        text: widget.product.sellername,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16),
+                                      ),
+                                    ]),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                width: width * 0.3,
+                                height: 37,
+                                decoration: BoxDecoration(
+                                    color: Colors.amber,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: const Center(
+                                  child: Text(
+                                    "Description",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  widget.product.description,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 90,
+                      )
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
+              ),
+            ),
+            UserDetailsBar(
+              offset: 0,
+            ),
+          ],
         ),
       ),
     );

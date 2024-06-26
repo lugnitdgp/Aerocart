@@ -8,6 +8,6 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FirebaseAuth.instance.currentUser!=null? ScreenLayout():LoginOrRegister();
+    return FirebaseAuth.instance.currentUser!=null? const ScreenLayout():const LoginOrRegister();
   }
 }

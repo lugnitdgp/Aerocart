@@ -14,14 +14,14 @@ class CostWidget extends StatelessWidget {
           style: TextStyle(
             color: Colors.black,
             fontSize: 17,
-            fontFeatures: const [
+            fontFeatures: [
               FontFeature.superscripts(),
             ],
           ),
         ),
         Text(
           cost.toInt().toString(),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 25,
             color: Colors.black,
             fontWeight: FontWeight.w800,
@@ -29,7 +29,7 @@ class CostWidget extends StatelessWidget {
         ),
         Text(
           (cost - cost.truncate()).toString(),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 10,
             color: Colors.black,
           ),

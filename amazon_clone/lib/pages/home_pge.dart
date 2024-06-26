@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SearchScreen()));
+                            builder: (context) => const SearchScreen()));
                   },
                   child: Container(
                     width: width * 0.6,

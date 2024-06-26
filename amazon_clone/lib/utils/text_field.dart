@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Textfield extends StatelessWidget {  
-  final controller;
+  final TextEditingController controller;
   final String hintText;
   final bool obstext;
 
@@ -17,7 +17,7 @@ class Textfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-             padding: EdgeInsets.fromLTRB(20,5,20,0),
+             padding: const EdgeInsets.fromLTRB(20,5,20,0),
              child: TextField(
               controller: controller,
               decoration: InputDecoration(

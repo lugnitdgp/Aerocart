@@ -15,7 +15,7 @@ class CustomSquareButton extends StatelessWidget {
         width: dimension,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-            side: BorderSide(
+            side:const  BorderSide(
               color: Colors.grey,width: 1,
             ),
             borderRadius: BorderRadius.circular(20)

@@ -43,7 +43,7 @@ class _CartPageState extends State<CartPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SearchScreen()));
+                            builder: (context) => const SearchScreen()));
                   },
                   child: Container(
                     width: width * 0.6,

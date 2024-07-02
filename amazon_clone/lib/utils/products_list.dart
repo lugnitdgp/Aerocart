@@ -15,7 +15,7 @@ class _ProductsListState extends State<ProductsList> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 160,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       color: Colors.white,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -23,7 +23,7 @@ class _ProductsListState extends State<ProductsList> {
           const Row(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                padding: EdgeInsets.symmetric(horizontal: 12.0),
                 child: Text("Your Orders",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
               ),
               Text("Show More",style: TextStyle(color: Colors.blue),),              

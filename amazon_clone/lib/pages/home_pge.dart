@@ -1,7 +1,9 @@
 import 'package:amazon_clone/utils/carousel.dart';
 import 'package:amazon_clone/utils/categories.dart';
-import 'package:amazon_clone/utils/home_items.dart';
+import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
+import 'package:amazon_clone/utils/loading_widget.dart';
+import 'package:amazon_clone/utils/products_showcase.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +18,11 @@ class _HomePageState extends State<HomePage> {
   double offset = 0;
   ScrollController scrollController = ScrollController();
   final search = TextEditingController();
+  List<Widget>? product;
   @override
   void initState() {
     super.initState();
+    getData();
     scrollController.addListener(() {
       setState(() {
         offset = scrollController.position.pixels;
@@ -31,11 +35,15 @@ class _HomePageState extends State<HomePage> {
     scrollController.dispose;
     super.dispose();
   }
-
+  void getData() async{
+    List<Widget>?temp=await CloudFirestoreClass().getProducts();
+    setState(() {
+      product=temp;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    int crossAxisCount = width ~/ 180;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 70),
@@ -100,7 +108,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       backgroundColor: Colors.blueGrey[50],
-      body: Stack(children: [
+      body: product!=null? Stack(children: [
         SingleChildScrollView(
           controller: scrollController,
           child: Column(children: [
@@ -114,27 +122,13 @@ class _HomePageState extends State<HomePage> {
               "Recomended Items",
               style: TextStyle(fontSize: 16),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6.0),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 10,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                ),
-                itemBuilder: (context, index) {
-                  return const Padding(
-                      padding: EdgeInsets.all(8.0), child: HomeItems());
-                },
-              ),
-            ),
+            ProductsShowcase(children: product!)            
           ]),
         ),
         UserDetailsBar(
           offset: offset,
         )
-      ]),
+      ]):const LoadingWidget()
     );
   }
 }

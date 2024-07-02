@@ -1,4 +1,5 @@
 import 'package:amazon_clone/auth/user_details_model.dart';
+import 'package:amazon_clone/login_screens/user_details.dart';
 import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +11,8 @@ class UserDetailsBar extends StatelessWidget {
     required this.offset,
   });
   final List<Color> userdetailscolor = [
-    Color.fromARGB(255, 127, 247, 247),
-    Color.fromARGB(224, 169, 248, 220)
+    const Color.fromARGB(255, 127, 247, 247),
+    const Color.fromARGB(224, 169, 248, 220)
   ];
 
   @override
@@ -40,12 +41,23 @@ class UserDetailsBar extends StatelessWidget {
               ),
               SizedBox(
                 width: width * 0.7,
-                child: Text(
+                child:userDetailsModel.name!="loading"&&userDetailsModel.address!="loading"? Text(
                   "Deliver to ${userDetailsModel.name}-${userDetailsModel.address}",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: Colors.grey[800]),
-                ),
+                ):
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const UserDetails()));
+                  },
+                  child: Text(
+                    "Add Address for better experience",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.grey[800]),
+                  ),
+                )
               ),
             ],
           ),

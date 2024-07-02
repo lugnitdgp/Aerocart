@@ -1,11 +1,15 @@
 import 'package:amazon_clone/pages/search_screen.dart';
+import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:amazon_clone/utils/button.dart';
+import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/text_field.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class SellScreen extends StatefulWidget {
   const SellScreen({super.key});
@@ -62,7 +66,8 @@ class _SellScreenState extends State<SellScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const SearchScreen()));
+                                      builder: (context) =>
+                                          const SearchScreen()));
                             },
                             icon: const Icon(
                               Icons.notifications_none_outlined,
@@ -248,7 +253,30 @@ class _SellScreenState extends State<SellScreen> {
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: width - width / 1.2),
-                    child: MyButton(ontap: () {}, text: "Sell"),
+                    child: MyButton(
+                        ontap: () async {
+                          String output = await CloudFirestoreClass()
+                              .uploadProducttoDatabase(
+                                  image: image,
+                                  description: description.text,
+                                  productName: name.text,
+                                  cost: cost.text,
+                                  sellerName: Provider.of<UserDetailsProvider>(
+                                          context,
+                                          listen: false)
+                                      .userdetails
+                                      .name,
+                                  sellerUid:
+                                      FirebaseAuth.instance.currentUser!.uid);
+                          if(output=="Success"){
+                            Utils().showSnackBar(context: context, content: "Product Uploaded");
+                            Navigator.pop(context);
+                          }
+                          else{
+                            Utils().showSnackBar(context: context, content: output);
+                          }
+                        },
+                        text: "Sell"),
                   ),
                   Padding(
                     padding:

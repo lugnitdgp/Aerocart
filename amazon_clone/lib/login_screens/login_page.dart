@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushAndRemoveUntil(
          context,
           MaterialPageRoute(builder: (context){
-            return AuthPage();
+            return const AuthPage();
       },), (route)=>false
       );
     }on FirebaseAuthException catch (e) {
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushAndRemoveUntil(
          context,
           MaterialPageRoute(builder: (context){
-            return AuthPage();
+            return const AuthPage();
       },), (route)=>false
     );
     }on FirebaseAuthException catch (e){
@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
               obstext: true),
             //forgot password
              Padding(
-              padding: EdgeInsets.fromLTRB(0,5,25,0),
+              padding: const EdgeInsets.fromLTRB(0,5,25,0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -154,12 +154,12 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context){
-                          return ForgotPasswordPS();
+                          return const ForgotPasswordPS();
                         },
                         ),                        
                       );
                     },
-                    child: Text('Forgot Password?')),
+                    child: const Text('Forgot Password?')),
                 ],
               ),
             ),

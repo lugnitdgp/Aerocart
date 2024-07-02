@@ -15,4 +15,26 @@ class ProductModels {
       required this.uid,
       required this.url,
       required this.description});
+  Map<String, dynamic> getJson() {
+    return {
+      'url': url,
+      'productName': productname,
+      'cost': cost,
+      'uid': uid,
+      'sellerName': sellername,
+      'sellerUid': selleruid,
+      'description': description,
+    };
+  }
+
+  factory ProductModels.getModelFromJson({required Map<String?, dynamic> json}) {
+    return ProductModels(
+        cost: json["cost"],
+        productname: json["productName"],
+        sellername: json["sellerName"],
+        selleruid: json["sellerUid"],
+        uid: json["uid"],
+        url: json["url"],
+        description: json["description"]);
+  }
 }

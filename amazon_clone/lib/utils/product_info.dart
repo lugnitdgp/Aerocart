@@ -68,7 +68,7 @@ class ProductInfo extends StatelessWidget {
                 CustomSquareButton(
                   onpressed: () {},
                   dimension: 30,
-                  child: Icon(Icons.remove,size: 20,),
+                  child: const Icon(Icons.remove,size: 20,),
                 ),
                 CustomSquareButton(
                   onpressed: () {},
@@ -78,7 +78,7 @@ class ProductInfo extends StatelessWidget {
                 CustomSquareButton(
                   onpressed: () {},
                   dimension: 30,
-                  child:  Icon(Icons.add,size: 20,),
+                  child:  const Icon(Icons.add,size: 20,),
                 ),
               ],
             ),

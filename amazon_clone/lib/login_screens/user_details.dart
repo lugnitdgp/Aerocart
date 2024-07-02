@@ -4,18 +4,15 @@ import 'package:amazon_clone/utils/text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 
-class RegisterPage extends StatefulWidget {
-  final Function()? onTap;
-  const RegisterPage({super.key, required this.onTap});
+class UserDetails extends StatefulWidget {  
+  const UserDetails({super.key});
 
   @override
-  State<RegisterPage> createState() => _LoginPageState();
+  State<UserDetails> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<RegisterPage> {
+class _LoginPageState extends State<UserDetails> {
   final email = TextEditingController();
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
@@ -33,25 +30,7 @@ class _LoginPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void signinwithGoogle() async {
-    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: gAuth.accessToken,
-      idToken: gAuth.idToken,
-    );
-    //sign in
-    try {
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-        builder: (context) {
-          return const AuthPage();
-        },
-      ), (route) => false);
-    } on FirebaseAuthException catch (e) {
-      showErrorMsg(e.toString());
-    }
-  }
+
 
   void signUserUp() async {
     showDialog(
@@ -62,9 +41,7 @@ class _LoginPageState extends State<RegisterPage> {
           );
         });
     try {
-      if (password.text == confirmPassword.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: email.text, password: password.text);
+      
         await firebaseFirestore
             .collection("users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -76,9 +53,7 @@ class _LoginPageState extends State<RegisterPage> {
           },
         ), (route) => false);
         
-      } else {
-        showErrorMsg("Passwords don't match");
-      }
+      
     }catch (e) {
       showErrorMsg(e.toString());
     }
@@ -131,7 +106,7 @@ class _LoginPageState extends State<RegisterPage> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  'Let\'s create an account for you',
+                  'Update your address',
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w500,
@@ -170,63 +145,14 @@ class _LoginPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 5,
               ),
-              //enter password
-              Textfield(
-                  controller: confirmPassword,
-                  hintText: 'Confirm Password',
-                  obstext: true),
 
               //sign-up
-              MyButton(text: 'Sign-up', ontap: signUserUp),
-              //other option
-              const Padding(
-                padding: EdgeInsets.all(25.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      'Or continue with',
-                      style: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.bold),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.black,
-                      ),
-                    )
-                  ],
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 20),
+                child: MyButton(text: 'Continue', ontap: signUserUp),
               ),
-              //google
-              const SizedBox(
-                height: 4,
-              ),
-              SignInButton(Buttons.google, onPressed: signinwithGoogle),
-
-              //new to amazon register here
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Already have an account?'),
-                  GestureDetector(
-                    onTap: widget.onTap,
-                    child: Text(
-                      'Login now',
-                      style: TextStyle(
-                          color: Colors.blue[700], fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
+             
+             
             ],
           ),
         ),

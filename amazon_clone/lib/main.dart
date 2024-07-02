@@ -1,4 +1,4 @@
-import 'package:amazon_clone/auth/auth_page.dart';
+import 'package:amazon_clone/pages/splash_screen.dart';
 import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light(useMaterial3:true ),
-        home: const AuthPage(),
+        home: const SplashScreen(),
       ),
     );
   }

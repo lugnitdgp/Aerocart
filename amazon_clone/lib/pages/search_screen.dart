@@ -43,8 +43,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: TextField(
                         onSubmitted: (String querry) {
-                          Navigator.push(
-                            context,
+                          Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) =>
                                   ResultsScreen(querry: querry),

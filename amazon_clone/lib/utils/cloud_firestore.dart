@@ -77,4 +77,12 @@ class CloudFirestoreClass {
     }
     return children;
   }
+
+  Future addProducttoCart({required ProductModels model})async{
+    await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").doc(model.uid).set(model.getJson());
+  }
+
+  Future deleteFromCart({required String uid}) async{
+    await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").doc(uid).delete();
+  }
 }

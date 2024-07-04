@@ -1,7 +1,9 @@
 import 'package:amazon_clone/pages/results_screen.dart';
+import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
+import 'package:amazon_clone/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -66,7 +68,10 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () async{
+                   await CloudFirestoreClass().addProducttoCart(model: widget.product);                   
+                   Utils().showSnackBar(context: context, content: "Added to Cart");
+                  },
                   child: Container(
                     height: 53,
                     width: width / 3,

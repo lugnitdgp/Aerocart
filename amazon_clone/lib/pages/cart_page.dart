@@ -3,6 +3,8 @@ import 'package:amazon_clone/utils/cart_items.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CartPage extends StatefulWidget {
@@ -91,28 +93,32 @@ class _CartPageState extends State<CartPage> {
               child: MyButton(ontap: () {}, text: "Proceed to buy"),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (BuildContext context, int index) {
-                  return CartItems(
-                    product: ProductModels(
-                        cost: 1000,
-                        productname: "Something very good",
-                        sellername: "Keshto",
-                        selleruid: "zmjjkk",
-                        uid: "2k3r",
-                        url:
-                            "https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png",
-                        description:"sodales ut etiam sit amet nisl purus in mollis nunc sed id semper risus in hendrerit gravida rutrum quisque non tellus orci ac auctor augue mauris augue neque gravida in fermentum et sollicitudin ac orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla facilisi cras fermentum odio jsdfgnivdn fndfngo fnignfnof nognfodngnofgnofnognn nn nnognfgonfo gnofn no n gonfdognfodn non fognfo ngon nosfdngonffognsodfngonfo nsnfognodfsngonsfon ndsofgnosfndognsfodngo sofdgnosdfngonfong nfodgn osfdn gon ",
-                      ),
-                  );
-                },
-              ),
+                child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection("cart")
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                } else {
+                  return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        ProductModels model = ProductModels.getModelFromJson(
+                            json: snapshot.data!.docs[index].data());
+                        return CartItems(product: model);
+                      });
+                }
+              },
+            )
             ),
           ],
         ),
         UserDetailsBar(
-            offset: 0,
+          offset: 0,
         )
       ]),
     );

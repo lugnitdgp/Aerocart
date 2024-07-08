@@ -1,15 +1,36 @@
-import 'package:amazon_clone/utils/models.dart';
-import 'package:amazon_clone/utils/result_widget.dart';
+import 'package:amazon_clone/utils/cloud_firestore.dart';
+import 'package:amazon_clone/utils/products_showcase.dart';
 import 'package:flutter/material.dart';
 
-class ResultsScreen extends StatelessWidget {
+class ResultsScreen extends StatefulWidget {
   final String querry;
   const ResultsScreen({super.key, required this.querry});
 
   @override
+  State<ResultsScreen> createState() => _ResultsScreenState();
+}
+
+class _ResultsScreenState extends State<ResultsScreen> {
+
+  List<Widget>? product;
+
+  @override
+  void initState() {
+    getData(widget.querry);
+    super.initState();
+  }
+
+  void getData(querry) async{
+    List<Widget>?temp=await CloudFirestoreClass().searchProducts(name: querry);
+    setState(() {
+      product=temp;
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    int crossAxisCount = width ~/ 180;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 60),
@@ -40,6 +61,10 @@ class ResultsScreen extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: TextField(
+                        onSubmitted: (value) {
+                          getData(value);
+                          setState(() {});
+                        },
                         decoration: InputDecoration(
                           isCollapsed: true,
                           isDense: true,
@@ -74,7 +99,7 @@ class ResultsScreen extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,10,0,30),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
             child: RichText(
               text: TextSpan(
                 children: [
@@ -82,7 +107,7 @@ class ResultsScreen extends StatelessWidget {
                       text: "Search results for ",
                       style: TextStyle(fontSize: 17, color: Colors.black)),
                   TextSpan(
-                    text: "'$querry'",
+                    text: "'${widget.querry}'",
                     style: const TextStyle(
                         fontSize: 17,
                         fontStyle: FontStyle.italic,
@@ -93,26 +118,8 @@ class ResultsScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-              ),
-              itemCount: 10,
-              itemBuilder: (BuildContext context, int index) {
-                return ResultWidget(
-                    product: ProductModels(
-                        cost: 1000,
-                          productname: "Something very good",
-                          sellername: "Keshto",
-                          selleruid: "zmjjkk",
-                          uid: "2ku5",
-                          url:"https://m.media-amazon.com/images/I/11uufjN3lYL._SX90_SY90_.png",
-                          description: "sodales ut etiam sit amet nisl purus in mollis nunc sed id semper risus in hendrerit gravida rutrum quisque non tellus orci ac auctor augue mauris augue neque gravida in fermentum et sollicitudin ac orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla facilisi cras fermentum odio jsdfgnivdn fndfngo fnignfnof nognfodngnofgnofnognn nn nnognfgonfo gnofn no n gonfdognfodn non fognfo ngon nosfdngonffognsodfngonfo nsnfognodfsngonsfon ndsofgnosfndognsfodngo sofdgnosdfngonfong nfodgn osfdn gon ",
-
-                        ));
-              },
-            ),
-          ),
+            child: ProductsShowcase(children: product!)
+          )
         ],
       ),
     );

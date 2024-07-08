@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CostWidget extends StatelessWidget {
-  final double cost;
+  final double? cost;
   const CostWidget({super.key,required this.cost});
 
   @override
@@ -20,7 +20,7 @@ class CostWidget extends StatelessWidget {
           ),
         ),
         Text(
-          cost.toInt().toString(),
+          cost!.toInt().toString(),
           style: const TextStyle(
             fontSize: 25,
             color: Colors.black,
@@ -28,7 +28,7 @@ class CostWidget extends StatelessWidget {
           ),
         ),
         Text(
-          (cost - cost.truncate()).toString(),
+          (cost! - cost!.truncate()).toString(),
           style: const TextStyle(
             fontSize: 10,
             color: Colors.black,

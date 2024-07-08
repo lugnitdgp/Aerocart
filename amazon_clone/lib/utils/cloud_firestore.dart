@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/utils/home_items.dart';
 import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/utils/review_model.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +30,8 @@ class CloudFirestoreClass {
       required String productName,
       required String cost,
       required String sellerName,
-      required String sellerUid}) async {
+      required String sellerUid,
+      }) async {
     productName.trim();
     description.trim();
     String output = "Something went wrong";
@@ -45,7 +47,8 @@ class CloudFirestoreClass {
             selleruid: sellerName,
             uid: uid,
             url: url,
-            description: description);
+            description: description,
+            rating: 0);
         firebaseFirestore.collection("products").doc(uid).set(product.getJson());
         output = "Success";
       } catch (e) {
@@ -68,14 +71,38 @@ class CloudFirestoreClass {
 
   Future<List<Widget>> getProducts() async{
     List<Widget> children=[];
-    QuerySnapshot<Map<String,dynamic>> snap = await firebaseFirestore.collection("products").get();
-
+    QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("products").get();
     for(int i=0;i<snap.docs.length;i++){
       DocumentSnapshot docSnap = snap.docs[i];
       ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
       children.add(HomeItems(productModels: models));
     }
     return children;
+  }
+    Future<List<Widget>> searchProducts({required String name}) async{
+    List<Widget> children=[];
+    QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("products").get();
+    for(int i=0;i<snap.docs.length;i++){
+      DocumentSnapshot docSnap = snap.docs[i];
+      if(docSnap['productName'].toLowerCase().startsWith(name.toLowerCase())){
+      ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
+      children.add(HomeItems(productModels: models));
+      }
+      else {
+        continue;
+      }
+    }
+    return children;
+  }
+
+    Future uploadReviewToDatabase(
+      {required String productUid, required ReviewModel model}) async {
+    await firebaseFirestore
+        .collection("products")
+        .doc(productUid)
+        .collection("reviews")
+        .add(model.getJson());
+          await changeAverageRating(productUid: productUid, reviewModel: model);
   }
 
   Future addProducttoCart({required ProductModels model})async{
@@ -84,5 +111,19 @@ class CloudFirestoreClass {
 
   Future deleteFromCart({required String uid}) async{
     await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").doc(uid).delete();
+  }
+
+   Future changeAverageRating(
+      {required String productUid, required ReviewModel reviewModel}) async {
+    DocumentSnapshot snapshot =
+        await firebaseFirestore.collection("products").doc(productUid).get();
+    ProductModels model =
+        ProductModels.getModelFromJson(json: (snapshot.data() as dynamic));
+    int currentRating = model.rating;
+    int newRating = ((currentRating + reviewModel.rating) / 2).toInt();
+    await firebaseFirestore
+        .collection("products")
+        .doc(productUid)
+        .update({"rating": newRating});
   }
 }

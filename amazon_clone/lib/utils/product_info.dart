@@ -2,16 +2,23 @@ import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/custom_square_button.dart';
 import 'package:flutter/material.dart';
 
-class ProductInfo extends StatelessWidget {
+class ProductInfo extends StatefulWidget {
   final String productName;
-  final double cost;
+  final double? cost;
   final String sellerName;
-  const ProductInfo(
-      {super.key,
-      required this.productName,
-      required this.cost,
-      required this.sellerName});
+  const ProductInfo({
+    super.key,
+    required this.productName,
+    required this.cost,
+    required this.sellerName,
+  });
 
+  @override
+  State<ProductInfo> createState() => _ProductInfoState();
+}
+
+class _ProductInfoState extends State<ProductInfo> {
+  int count = 1;
   @override
   Widget build(BuildContext context) {
     SizedBox spaceThingy = const SizedBox(
@@ -26,7 +33,7 @@ class ProductInfo extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              productName,
+              widget.productName,
               maxLines: 2,
               style: const TextStyle(
                 fontWeight: FontWeight.w500,
@@ -39,7 +46,7 @@ class ProductInfo extends StatelessWidget {
           spaceThingy,
           Align(
             alignment: Alignment.centerLeft,
-            child: CostWidget(cost: cost),
+            child: CostWidget(cost: widget.cost),
           ),
           spaceThingy,
           Align(
@@ -51,7 +58,7 @@ class ProductInfo extends StatelessWidget {
                       text: "Sold by ",
                       style: TextStyle(color: Colors.grey[700], fontSize: 14)),
                   TextSpan(
-                      text: sellerName,
+                      text: widget.sellerName,
                       style: const TextStyle(
                           color: Colors.lightBlue, fontSize: 14)),
                 ],
@@ -65,20 +72,42 @@ class ProductInfo extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
+                count > 1
+                    ? CustomSquareButton(
+                        onpressed: () {
+                          setState(() {
+                            count--;
+                          });
+                        },
+                        dimension: 30,
+                        child: const Icon(
+                          Icons.remove,
+                          size: 20,
+                        ),
+                      )
+                    : const SizedBox(
+                        height: 1,
+                        width: 1,
+                      ),
                 CustomSquareButton(
-                  onpressed: () {},
-                  dimension: 30,
-                  child: const Icon(Icons.remove,size: 20,),
-                ),
+                    onpressed: () {},
+                    dimension: 30,
+                    child: Text(
+                      "$count",
+                      style:
+                          TextStyle(fontSize: 16, color: Colors.cyan.shade700),
+                    )),
                 CustomSquareButton(
-                  onpressed: () {},
+                  onpressed: () {
+                    setState(() {
+                      count++;
+                    });
+                  },
                   dimension: 30,
-                  child: Text("0",style: TextStyle(fontSize: 16,color: Colors.cyan.shade700),)
-                ),                
-                CustomSquareButton(
-                  onpressed: () {},
-                  dimension: 30,
-                  child:  const Icon(Icons.add,size: 20,),
+                  child: const Icon(
+                    Icons.add,
+                    size: 20,
+                  ),
                 ),
               ],
             ),

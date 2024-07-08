@@ -52,7 +52,7 @@ class CartItems extends StatelessWidget {
                 ProductInfo(
                     productName: product.productname,
                     cost: product.cost,
-                    sellerName: product.sellername),
+                    sellerName: product.sellername,),
                 Align(
                     alignment: Alignment.centerLeft,
                     child: Container(

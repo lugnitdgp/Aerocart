@@ -1,9 +1,15 @@
 import 'package:amazon_clone/pages/results_screen.dart';
 import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
+import 'package:amazon_clone/utils/custom_simple_rounded_button.dart';
 import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/utils/rating_star_widget.dart';
+import 'package:amazon_clone/utils/review_dialog.dart';
+import 'package:amazon_clone/utils/review_model.dart';
+import 'package:amazon_clone/utils/review_widget.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:amazon_clone/utils/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -68,9 +74,11 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () async{
-                   await CloudFirestoreClass().addProducttoCart(model: widget.product);                   
-                   Utils().showSnackBar(context: context, content: "Added to Cart");
+                  onTap: () async {
+                    await CloudFirestoreClass()
+                        .addProducttoCart(model: widget.product);
+                    Utils().showSnackBar(
+                        context: context, content: "Added to Cart");
                   },
                   child: Container(
                     height: 53,
@@ -175,11 +183,8 @@ class _ProductScreenState extends State<ProductScreen> {
                         padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
                         child: Stack(children: [
                           Container(
-                            height: 320,
                             width: width - 10,
-                            constraints: BoxConstraints(
-                                maxHeight:
-                                    MediaQuery.of(context).size.height / 3),
+                            constraints: const BoxConstraints(maxHeight: 320),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(30)),
@@ -200,7 +205,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(12),
                           width: double.infinity,
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -208,28 +213,39 @@ class _ProductScreenState extends State<ProductScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                widget.product.productname,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 22),
-                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  CostWidget(cost: widget.product.cost),
-                                  Text.rich(
-                                    TextSpan(children: [
-                                      const TextSpan(text: "Seller:"),
-                                      TextSpan(
-                                        text: widget.product.sellername,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16),
-                                      ),
-                                    ]),
+                                  Text(
+                                    widget.product.productname,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 22),
                                   ),
+                                  RatingStatWidget(rating: widget.product.rating),
                                 ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CostWidget(cost: widget.product.cost),
+                                    Text.rich(
+                                      TextSpan(children: [
+                                        const TextSpan(text: "Seller:"),
+                                        TextSpan(
+                                          text: widget.product.sellername,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16),
+                                        ),
+                                      ]),
+                                    ),
+                                  ],
+                                ),
                               ),
                               const SizedBox(
                                 height: 15,
@@ -259,6 +275,50 @@ class _ProductScreenState extends State<ProductScreen> {
                                 ),
                               )
                             ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomSimpleRoundedButton(
+                          text: "Add review for this product",
+                          onPressed: () {
+                            showDialog(
+                                    context: context,
+                                    builder: (context) => ReviewDialog(
+                                          productUid: widget.product.uid,
+                                        ));
+                          }),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection("products")
+                                .doc(widget.product.uid)
+                                .collection("reviews")
+                                .snapshots(),
+                            builder: (context,
+                                AsyncSnapshot<
+                                        QuerySnapshot<Map<String, dynamic>>>
+                                    snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Container();
+                              } else {
+                                return ListView.builder(
+                                    itemCount: snapshot.data!.docs.length,
+                                    itemBuilder: (context, index) {
+                                      ReviewModel model =
+                                          ReviewModel.getModelFromJson(
+                                              json: snapshot.data!.docs[index]
+                                                  .data());
+                                      return ReviewWidget(review: model);
+                                    });
+                              }
+                            },
                           ),
                         ),
                       ),

@@ -1,5 +1,7 @@
+import 'package:amazon_clone/pages/checkout_screen.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/cart_items.dart';
+import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
@@ -90,7 +92,10 @@ class _CartPageState extends State<CartPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50.0),
-              child: MyButton(ontap: () {}, text: "Proceed to buy"),
+              child: MyButton(ontap: () async{
+                double cost=await CloudFirestoreClass().getTotalCost();
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckoutScreen(cost:cost,),),);
+              }, text: "Proceed to buy"),
             ),
             Expanded(
                 child: StreamBuilder(
@@ -103,7 +108,13 @@ class _CartPageState extends State<CartPage> {
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Container();
-                } else {
+                }
+                else if(!snapshot.hasData){
+                  return const Center(
+                    child: Text("No Items in Cart",style: TextStyle(fontSize: 30,color: Colors.black),),
+                  );
+                }
+                 else {
                   return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {

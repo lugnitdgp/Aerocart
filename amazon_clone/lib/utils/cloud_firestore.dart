@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:amazon_clone/auth/user_details_model.dart';
+import 'package:amazon_clone/utils/checkout_items.dart';
 import 'package:amazon_clone/utils/home_items.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/review_model.dart';
@@ -126,4 +127,26 @@ class CloudFirestoreClass {
         .doc(productUid)
         .update({"rating": newRating});
   }
+
+    Future<double> getTotalCost() async{
+    double cost=0;
+    QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").get();
+    for(int i=0;i<snap.docs.length;i++){
+      DocumentSnapshot docSnap = snap.docs[i];
+      ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
+      cost+=models.cost!;
+    }
+    return cost;
+  }
+
+    Future<List<Widget>> checkoutProducts() async{
+    List<Widget> children=[];
+    QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").get();
+    for(int i=0;i<snap.docs.length;i++){
+      DocumentSnapshot docSnap = snap.docs[i];
+      ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
+      children.add(CheckoutItems(product: models));
+    }
+    return children;
+}
 }

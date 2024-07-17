@@ -122,7 +122,8 @@ class _HomePageState extends State<HomePage> {
               "Recomended Items",
               style: TextStyle(fontSize: 16),
             ),
-            ProductsShowcase(children: product!)            
+            ProductsShowcase(children: product!),    
+            const SizedBox(height: 80,),        
           ]),
         ),
         UserDetailsBar(

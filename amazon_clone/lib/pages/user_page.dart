@@ -2,8 +2,12 @@ import 'package:amazon_clone/auth/auth_page.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/pages/sell_screen.dart';
 import 'package:amazon_clone/utils/button.dart';
-import 'package:amazon_clone/utils/products_list.dart';
+import 'package:amazon_clone/utils/home_items.dart';
+import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/utils/product_showcase_list_view.dart';
+import 'package:amazon_clone/utils/products_showcase.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -85,7 +89,27 @@ class _UserPageState extends State<UserPage> {
               const SizedBox(
                 height: 35,
               ),
-              const ProductsList(),
+              FutureBuilder(
+                  future: FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection("orders")
+                      .get(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Container();
+                    } else {
+                      List<Widget> children = [];
+                      for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                        ProductModels model = ProductModels.getModelFromJson(
+                            json: snapshot.data!.docs[i].data());
+                        children.add(HomeItems(productModels: model));
+                      }
+                      return ProductsShowcaseListView(title: "Your Orders ", children: children);
+                    }
+                  }),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: MyButton(

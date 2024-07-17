@@ -148,5 +148,32 @@ class CloudFirestoreClass {
       children.add(CheckoutItems(product: models));
     }
     return children;
-}
+  }
+   Future buyAllItemsInCart({required UserDetailsModel userDetails}) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
+        .collection("users")
+        .doc(firebaseAuth.currentUser!.uid)
+        .collection("cart")
+        .get();
+
+    for (int i = 0; i < snapshot.docs.length; i++) {
+      ProductModels model =
+          ProductModels.getModelFromJson(json: snapshot.docs[i].data());
+      addProductToOrders(model: model, userDetails: userDetails);
+      await deleteFromCart(uid: model.uid);
+    }
+  }
+
+  Future addProductToOrders(
+      {required ProductModels model,
+      required UserDetailsModel userDetails}) async {
+    await firebaseFirestore
+        .collection("users")
+        .doc(firebaseAuth.currentUser!.uid)
+        .collection("orders")
+        .add(model.getJson());
+    await deleteFromCart(uid: model.uid);
+  }
+
+
 }

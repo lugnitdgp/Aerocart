@@ -5,26 +5,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UserDetails extends StatefulWidget {  
-  const UserDetails({super.key});
+class UpdateAddress extends StatefulWidget {  
+  const UpdateAddress({super.key});
 
   @override
-  State<UserDetails> createState() => _LoginPageState();
+  State<UpdateAddress> createState() => _UpdateAddressState();
 }
 
-class _LoginPageState extends State<UserDetails> {
-  final email = TextEditingController();
-  final password = TextEditingController();
-  final confirmPassword = TextEditingController();
+class _UpdateAddressState extends State<UpdateAddress> {
+
   final username = TextEditingController();
   final address = TextEditingController();
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
   void dispose() {
-    email.dispose();
-    password.dispose();
-    confirmPassword.dispose();
+
     username.dispose();
     address.dispose();
     super.dispose();
@@ -45,7 +41,7 @@ class _LoginPageState extends State<UserDetails> {
         await firebaseFirestore
             .collection("users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({"name": username.text, "address": address.text});   
+            .update({"address": address.text});   
         Navigator.pop(context);     
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
           builder: (context) {
@@ -114,7 +110,14 @@ class _LoginPageState extends State<UserDetails> {
                   ),
                 ),
               ),
-
+              //username
+              Textfield(
+                  controller: username,
+                  hintText: 'Enter Username',
+                  obstext: false),
+              const SizedBox(
+                height: 5,
+              ),
               //address
               Textfield(
                   controller: address,
@@ -123,12 +126,14 @@ class _LoginPageState extends State<UserDetails> {
               const SizedBox(
                 height: 5,
               ),
-             
+
 
               //sign-up
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 20),
-                child: MyButton(text: 'Continue', ontap: signUserUp),
+                child: MyButton(text: 'Update', ontap: () {
+                  Navigator.pop(context);
+                },),
               ),
              
              

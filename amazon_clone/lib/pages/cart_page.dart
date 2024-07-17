@@ -126,6 +126,7 @@ class _CartPageState extends State<CartPage> {
               },
             )
             ),
+            const SizedBox(height: 180,)
           ],
         ),
         UserDetailsBar(

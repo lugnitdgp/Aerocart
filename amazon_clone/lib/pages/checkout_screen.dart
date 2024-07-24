@@ -196,7 +196,7 @@ class _OrderScreenState extends State<CheckoutScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => UpdateAddress()));
+                                  builder: (context) => const UpdateAddress()));
                         },
                         child: const Text(
                           "Change address",

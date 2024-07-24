@@ -1,10 +1,5 @@
 import 'package:amazon_clone/pages/results_screen.dart';
 import 'package:amazon_clone/utils/cloud_firestore.dart';
-import 'package:amazon_clone/utils/loading_widget.dart';
-import 'package:amazon_clone/utils/models.dart';
-import 'package:amazon_clone/utils/products_showcase.dart';
-import 'package:amazon_clone/utils/result_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -15,11 +10,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  TextEditingController querry = TextEditingController();
   String name = "";
-  List<Widget>? product;
+  List<Widget> product=[];
+
 
     void getData(String name) async{
-    List<Widget>?temp=await CloudFirestoreClass().searchProducts(name: name);
+    List<Widget>temp=await CloudFirestoreClass().searchProducts(name: name);
     setState(() {
       product=temp;
     });
@@ -28,7 +25,6 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     
     double width = MediaQuery.of(context).size.width;
-    int crossAxisCount = width ~/ 180;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 60),
@@ -57,10 +53,12 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: TextField(
+                    controller: querry,
                     onChanged: (val) {
                       setState(() {
                         name = val;
-                      });                      
+                      });  
+                      getData(val);                    
                     },
                     onSubmitted: (value) {
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ResultsScreen(querry: value)));
@@ -137,28 +135,30 @@ class _SearchScreenState extends State<SearchScreen> {
       //                 }
       //                 else{
       //                   getData(name);
-      //                   return product!=null?ProductsShowcase(children:product!):Container();
+      //                   return ListView(
+      //                     children: product,
+      //                   );
       //                 }
-                      // GridView.builder(
-                      //     gridDelegate:
-                      //         SliverGridDelegateWithFixedCrossAxisCount(
-                      //             crossAxisCount: crossAxisCount,),
-                      //     itemCount: snapshot.data!.docs.length,
-                      //     itemBuilder: (context, index) {
-                      //       var dataa=snapshot.data!.docs[index].data() as Map<String,dynamic>;
-                      //       print(dataa);
-                      //        ProductModels product =
-                      //           ProductModels.getModelFromJson(
-                      //               json: dataa);
+      //                 // GridView.builder(
+      //                 //     gridDelegate:
+      //                 //         SliverGridDelegateWithFixedCrossAxisCount(
+      //                 //             crossAxisCount: crossAxisCount,),
+      //                 //     itemCount: snapshot.data!.docs.length,
+      //                 //     itemBuilder: (context, index) {
+      //                 //       var dataa=snapshot.data!.docs[index].data() as Map<String,dynamic>;
+      //                 //       print(dataa);
+      //                 //        ProductModels product =
+      //                 //           ProductModels.getModelFromJson(
+      //                 //               json: dataa);
 
-                      //       if(name.isEmpty){
-                      //         return const SizedBox(height: 1,width: 1,);
-                      //       }
-                      //       else if(dataa['productName'].toLowerCase().startsWith(name.toLowerCase())){
-                      //        return ResultWidget(product: product);
-                      //       }
-                      //     });
-                   // }
+      //                 //       if(name.isEmpty){
+      //                 //         return const SizedBox(height: 1,width: 1,);
+      //                 //       }
+      //                 //       else if(dataa['productName'].toLowerCase().startsWith(name.toLowerCase())){
+      //                 //        return ResultWidget(product: product);
+      //                 //       }
+      //                 //     });
+      //              }
       //             }))
       //   ],
       // ),

@@ -5,7 +5,6 @@ import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/home_items.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/product_showcase_list_view.dart';
-import 'package:amazon_clone/utils/products_showcase.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

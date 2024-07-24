@@ -1,4 +1,5 @@
 import 'package:amazon_clone/utils/cloud_firestore.dart';
+import 'package:amazon_clone/utils/loading_widget.dart';
 import 'package:amazon_clone/utils/products_showcase.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class ResultsScreen extends StatefulWidget {
 }
 
 class _ResultsScreenState extends State<ResultsScreen> {
-
+  late String name = widget.querry;
   List<Widget>? product;
 
   @override
@@ -20,13 +21,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
     super.initState();
   }
 
-  void getData(querry) async{
-    List<Widget>?temp=await CloudFirestoreClass().searchProducts(name: querry);
+  void getData(querry) async {
+    List<Widget>? temp =
+        await CloudFirestoreClass().searchProducts(name: querry);
     setState(() {
-      product=temp;
+      product = temp;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       child: TextField(
                         onSubmitted: (value) {
                           getData(value);
-                          setState(() {});
+                          setState(() {
+                            name = value;
+                          });
                         },
                         decoration: InputDecoration(
                           isCollapsed: true,
@@ -107,7 +110,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       text: "Search results for ",
                       style: TextStyle(fontSize: 17, color: Colors.black)),
                   TextSpan(
-                    text: "'${widget.querry}'",
+                    text: "'$name'",
                     style: const TextStyle(
                         fontSize: 17,
                         fontStyle: FontStyle.italic,
@@ -118,8 +121,29 @@ class _ResultsScreenState extends State<ResultsScreen> {
             ),
           ),
           Expanded(
-            child: ProductsShowcase(children: product!)
-          )
+            child: FutureBuilder(
+              future: CloudFirestoreClass().searchProducts(name: name),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Widget?>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const LoadingWidget();
+                } else if (snapshot.data == []) {
+                  return Center(
+                    child: SizedBox(
+                      height: 100,
+                      width: width,
+                      child: Text(
+                        "Oops nothing found with the name $name",
+                        style: const TextStyle(fontSize: 30),
+                      ),
+                    ),
+                  );
+                } else {
+                  return ProductsShowcase(children: product!);
+                }
+              },
+            ),
+          ),
         ],
       ),
     );

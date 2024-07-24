@@ -2,7 +2,9 @@ import 'package:amazon_clone/pages/results_screen.dart';
 import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/custom_simple_rounded_button.dart';
+import 'package:amazon_clone/utils/home_items.dart';
 import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/utils/product_showcase_list_view.dart';
 import 'package:amazon_clone/utils/rating_star_widget.dart';
 import 'package:amazon_clone/utils/review_dialog.dart';
 import 'package:amazon_clone/utils/review_model.dart';
@@ -10,6 +12,7 @@ import 'package:amazon_clone/utils/review_widget.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -223,7 +226,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                         fontWeight: FontWeight.w500,
                                         fontSize: 22),
                                   ),
-                                  RatingStatWidget(rating: widget.product.rating),
+                                  RatingStatWidget(
+                                      rating: widget.product.rating!),
                                 ],
                               ),
                               Padding(
@@ -281,14 +285,46 @@ class _ProductScreenState extends State<ProductScreen> {
                       const SizedBox(
                         height: 10,
                       ),
+                      FutureBuilder(
+                          future: FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .collection("orders")
+                              .where("category",
+                                  isEqualTo: widget.product.category)
+                              .get(),
+                          builder: (context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                  snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Container();
+                            } 
+                            else if(!snapshot.hasData){
+                              return const SizedBox(height: 20,);
+                            }
+                            else {
+                              List<Widget> children = [];
+                              for (int i = 0;
+                                  i < snapshot.data!.docs.length;
+                                  i++) {
+                                ProductModels model =
+                                    ProductModels.getModelFromJson(
+                                        json: snapshot.data!.docs[i].data());
+                                children.add(HomeItems(productModels: model));
+                              }
+                              return ProductsShowcaseListView(
+                                  title: "Similar Items ", children: children);
+                            }
+                          }),
                       CustomSimpleRoundedButton(
                           text: "Add review for this product",
                           onPressed: () {
                             showDialog(
-                                    context: context,
-                                    builder: (context) => ReviewDialog(
-                                          productUid: widget.product.uid,
-                                        ));
+                                context: context,
+                                builder: (context) => ReviewDialog(
+                                      productUid: widget.product.uid,
+                                    ));
                           }),
                       Padding(
                         padding: const EdgeInsets.all(8.0),

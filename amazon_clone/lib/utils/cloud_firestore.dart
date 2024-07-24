@@ -1,3 +1,4 @@
+
 import 'dart:typed_data';
 import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/utils/checkout_items.dart';
@@ -32,6 +33,7 @@ class CloudFirestoreClass {
       required String cost,
       required String sellerName,
       required String sellerUid,
+      required String category,
       }) async {
     productName.trim();
     description.trim();
@@ -49,7 +51,8 @@ class CloudFirestoreClass {
             uid: uid,
             url: url,
             description: description,
-            rating: 0);
+            rating: null,
+            category: category);
         firebaseFirestore.collection("products").doc(uid).set(product.getJson());
         output = "Success";
       } catch (e) {
@@ -116,12 +119,19 @@ class CloudFirestoreClass {
 
    Future changeAverageRating(
       {required String productUid, required ReviewModel reviewModel}) async {
+    int newRating;
     DocumentSnapshot snapshot =
         await firebaseFirestore.collection("products").doc(productUid).get();
     ProductModels model =
         ProductModels.getModelFromJson(json: (snapshot.data() as dynamic));
-    int currentRating = model.rating;
-    int newRating = ((currentRating + reviewModel.rating) / 2).toInt();
+    if(model.rating!=null){
+     int currentRating = model.rating!;
+     newRating = ((currentRating + reviewModel.rating) ~/ 2).toInt();
+    }
+    else{
+      newRating = reviewModel.rating;
+    }
+    
     await firebaseFirestore
         .collection("products")
         .doc(productUid)

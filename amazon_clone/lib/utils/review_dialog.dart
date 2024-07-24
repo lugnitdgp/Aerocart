@@ -16,7 +16,7 @@ class ReviewDialog extends StatelessWidget {
       title: const Text(
         'Type a review for this product',
         textAlign: TextAlign.center,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 25,
           fontWeight: FontWeight.bold,
         ),

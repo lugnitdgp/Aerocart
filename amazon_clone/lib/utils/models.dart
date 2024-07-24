@@ -6,7 +6,8 @@ class ProductModels {
   final String selleruid;
   final double? cost;
   final String description;
-  final int rating;
+  final int? rating;
+  final String category;
 
   ProductModels(
       {required this.cost,
@@ -17,6 +18,7 @@ class ProductModels {
       required this.url,
       required this.description,
       required this.rating,
+      required this.category,
       });
   Map<String, dynamic> getJson() {
     return {
@@ -28,6 +30,7 @@ class ProductModels {
       'sellerUid': selleruid,
       'description': description,
       'rating': rating,
+      'category': category
     };
   }
 
@@ -40,6 +43,7 @@ class ProductModels {
         uid: json["uid"],
         url: json["url"],
         description: json["description"],
-        rating: json["rating"]);
+        rating: json["rating"],
+        category: json["category"]);
   }
 }

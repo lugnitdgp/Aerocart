@@ -52,7 +52,8 @@ class CloudFirestoreClass {
             url: url,
             description: description,
             rating: null,
-            category: category);
+            category: category,
+            quantity: null);
         firebaseFirestore.collection("products").doc(uid).set(product.getJson());
         output = "Success";
       } catch (e) {
@@ -98,6 +99,15 @@ class CloudFirestoreClass {
     }
     return children;
   }
+      Future<bool> isEmpty() async{
+    QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").get();
+    if(snap.docs.isNotEmpty){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
 
     Future uploadReviewToDatabase(
       {required String productUid, required ReviewModel model}) async {
@@ -111,6 +121,7 @@ class CloudFirestoreClass {
 
   Future addProducttoCart({required ProductModels model})async{
     await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").doc(model.uid).set(model.getJson());
+    await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").doc(model.uid).update({"quantity":1});
   }
 
   Future deleteFromCart({required String uid}) async{
@@ -144,7 +155,7 @@ class CloudFirestoreClass {
     for(int i=0;i<snap.docs.length;i++){
       DocumentSnapshot docSnap = snap.docs[i];
       ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
-      cost+=models.cost!;
+      cost+=models.cost!*models.quantity!;
     }
     return cost;
   }

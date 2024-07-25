@@ -46,12 +46,12 @@ class ProductsShowcaseListView extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: height - (titleHeight + 26),
+            height: height/1.23,
             width: screenSize.width,
-            child: ListView(
+            child:children.isNotEmpty? ListView(
               scrollDirection: Axis.horizontal,
               children: children,
-            ),
+            ):const Center(child: Text("Oops Nothing found!!",style: TextStyle(fontSize: 20),)),
           )
         ],
       ),

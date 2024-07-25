@@ -5,6 +5,7 @@ import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
+import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -93,8 +94,14 @@ class _CartPageState extends State<CartPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50.0),
               child: MyButton(ontap: () async{
-                double cost=await CloudFirestoreClass().getTotalCost();
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckoutScreen(cost:cost,),),);
+                bool a=await CloudFirestoreClass().isEmpty();
+                if(a){
+                  Utils().showSnackBar(context: context, content: "Cart is Empty");
+                }
+                else{
+                  double cost=await CloudFirestoreClass().getTotalCost();
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckoutScreen(cost:cost,),),);
+              }
               }, text: "Proceed to buy"),
             ),
             Expanded(

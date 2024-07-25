@@ -30,7 +30,7 @@ class HomeItems extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                flex: 5,
+                flex: 9,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -40,20 +40,23 @@ class HomeItems extends StatelessWidget {
                 
               ),
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       productModels.productname,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                     )
                   ],
                 ),
                 
               ),
+
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

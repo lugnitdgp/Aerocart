@@ -18,7 +18,7 @@ class CheckoutScreen extends StatefulWidget {
 class _OrderScreenState extends State<CheckoutScreen> {
   TextEditingController controller = TextEditingController();
   TextEditingController number = TextEditingController();
-  List<Widget>? product;
+  List<Widget> product=[];
   double shipping = 7;
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _OrderScreenState extends State<CheckoutScreen> {
   }
 
   void getData() async {
-    List<Widget>? temp = await CloudFirestoreClass().checkoutProducts();
+    List<Widget>temp = await CloudFirestoreClass().checkoutProducts();
     setState(() {
       product = temp;
     });
@@ -119,7 +119,7 @@ class _OrderScreenState extends State<CheckoutScreen> {
                 ListView(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  children: product!,
+                  children: product,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),

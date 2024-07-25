@@ -50,6 +50,7 @@ class CartItems extends StatelessWidget {
                   ],
                 ),
                 ProductInfo(
+                    productUid: product.uid,
                     productName: product.productname,
                     cost: product.cost,
                     sellerName: product.sellername,),

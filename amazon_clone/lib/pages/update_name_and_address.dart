@@ -5,14 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UserDetails extends StatefulWidget {  
-  const UserDetails({super.key});
+class UpdateNameAndAddress extends StatefulWidget {  
+  const UpdateNameAndAddress({super.key});
 
   @override
-  State<UserDetails> createState() => _LoginPageState();
+  State<UpdateNameAndAddress> createState() => _UpdateNameAndAddressState();
 }
 
-class _LoginPageState extends State<UserDetails> {
+class _UpdateNameAndAddressState extends State<UpdateNameAndAddress> {
 
   final username = TextEditingController();
   final address = TextEditingController();
@@ -20,6 +20,7 @@ class _LoginPageState extends State<UserDetails> {
 
   @override
   void dispose() {
+
     username.dispose();
     address.dispose();
     super.dispose();
@@ -40,7 +41,7 @@ class _LoginPageState extends State<UserDetails> {
         await firebaseFirestore
             .collection("users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({"name": username.text, "address": address.text});   
+            .update({"address": address.text,"name":username.text});   
         Navigator.pop(context);     
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
           builder: (context) {
@@ -101,7 +102,7 @@ class _LoginPageState extends State<UserDetails> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  'Update your name and address',
+                  'Update your address',
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w500,
@@ -109,6 +110,7 @@ class _LoginPageState extends State<UserDetails> {
                   ),
                 ),
               ),
+              //username
               Textfield(
                   controller: username,
                   hintText: 'Enter Username',
@@ -116,7 +118,6 @@ class _LoginPageState extends State<UserDetails> {
               const SizedBox(
                 height: 5,
               ),
-
               //address
               Textfield(
                   controller: address,
@@ -125,12 +126,14 @@ class _LoginPageState extends State<UserDetails> {
               const SizedBox(
                 height: 5,
               ),
-             
+
 
               //sign-up
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 20),
-                child: MyButton(text: 'Continue', ontap: signUserUp),
+                child: MyButton(text: 'Update', ontap: () {
+                  Navigator.pop(context);
+                },),
               ),
              
              

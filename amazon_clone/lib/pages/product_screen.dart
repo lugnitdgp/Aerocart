@@ -3,6 +3,7 @@ import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/custom_simple_rounded_button.dart';
 import 'package:amazon_clone/utils/home_items.dart';
+import 'package:amazon_clone/utils/loading_widget.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/product_showcase_list_view.dart';
 import 'package:amazon_clone/utils/rating_star_widget.dart';
@@ -12,7 +13,6 @@ import 'package:amazon_clone/utils/review_widget.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -227,7 +227,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                         fontSize: 22),
                                   ),
                                   RatingStatWidget(
-                                      rating: widget.product.rating!),
+                                      rating: widget.product.rating),
                                 ],
                               ),
                               Padding(
@@ -287,9 +287,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       ),
                       FutureBuilder(
                           future: FirebaseFirestore.instance
-                              .collection("users")
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .collection("orders")
+                              .collection("products")
                               .where("category",
                                   isEqualTo: widget.product.category)
                               .get(),
@@ -298,11 +296,9 @@ class _ProductScreenState extends State<ProductScreen> {
                                   snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return Container();
+                              return const LoadingWidget();
                             } 
-                            else if(!snapshot.hasData){
-                              return const SizedBox(height: 20,);
-                            }
+
                             else {
                               List<Widget> children = [];
                               for (int i = 0;
@@ -311,10 +307,15 @@ class _ProductScreenState extends State<ProductScreen> {
                                 ProductModels model =
                                     ProductModels.getModelFromJson(
                                         json: snapshot.data!.docs[i].data());
-                                children.add(HomeItems(productModels: model));
+                                if(model.uid==widget.product.uid) {
+                                  continue;
+                                }
+                                else{
+                                  children.add(HomeItems(productModels: model));
+                                }
                               }
-                              return ProductsShowcaseListView(
-                                  title: "Similar Items ", children: children);
+                              return snapshot.data!=null?ProductsShowcaseListView(
+                                  title: "Similar Items ", children: children):const SizedBox(height: 10,);
                             }
                           }),
                       CustomSimpleRoundedButton(
@@ -329,7 +330,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          height: MediaQuery.of(context).size.height,
+                          height: MediaQuery.of(context).size.height/3,
                           child: StreamBuilder(
                             stream: FirebaseFirestore.instance
                                 .collection("products")

@@ -99,14 +99,15 @@ class _UserPageState extends State<UserPage> {
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Container();
-                    } else {
+                    }
+                    else {
                       List<Widget> children = [];
                       for (int i = 0; i < snapshot.data!.docs.length; i++) {
                         ProductModels model = ProductModels.getModelFromJson(
                             json: snapshot.data!.docs[i].data());
                         children.add(HomeItems(productModels: model));
                       }
-                      return ProductsShowcaseListView(title: "Your Orders ", children: children);
+                      return snapshot.data!=null? ProductsShowcaseListView(title: "Your Orders ", children: children):const SizedBox(height: 20,);
                     }
                   }),
               Padding(

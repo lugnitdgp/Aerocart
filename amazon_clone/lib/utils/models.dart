@@ -1,3 +1,5 @@
+
+
 class ProductModels {
   final String url;
   final String productname;
@@ -8,6 +10,7 @@ class ProductModels {
   final String description;
   final int? rating;
   final String category;
+  final int? quantity;
 
   ProductModels(
       {required this.cost,
@@ -19,6 +22,7 @@ class ProductModels {
       required this.description,
       required this.rating,
       required this.category,
+      required this.quantity,
       });
   Map<String, dynamic> getJson() {
     return {
@@ -30,7 +34,8 @@ class ProductModels {
       'sellerUid': selleruid,
       'description': description,
       'rating': rating,
-      'category': category
+      'category': category,
+      'quantity':quantity,
     };
   }
 
@@ -44,6 +49,7 @@ class ProductModels {
         url: json["url"],
         description: json["description"],
         rating: json["rating"],
-        category: json["category"]);
+        category: json["category"],
+        quantity: json["quantity"]);
   }
 }

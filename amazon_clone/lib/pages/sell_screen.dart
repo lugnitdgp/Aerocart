@@ -299,6 +299,7 @@ class _SellScreenState extends State<SellScreen> {
                         EdgeInsets.symmetric(horizontal: width - width / 1.2),
                     child: MyButton(
                         ontap: () async {
+
                           if(name.text!=""&&description.text!=""&&cost.text!=""&&image!=null&&dropdownValue!="Select"){
                           String output = await CloudFirestoreClass()
                               .uploadProducttoDatabase(
@@ -318,7 +319,7 @@ class _SellScreenState extends State<SellScreen> {
                             Utils().showSnackBar(context: context, content: "Product Uploaded");
                             Navigator.pop(context);
                           }
-                          else{
+                          else if(output!="Success") {
                             Utils().showSnackBar(context: context, content: output);
                           }
                           }

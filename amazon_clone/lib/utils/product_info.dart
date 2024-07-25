@@ -1,8 +1,11 @@
 import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/custom_square_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProductInfo extends StatefulWidget {
+  final String productUid;
   final String productName;
   final double? cost;
   final String sellerName;
@@ -11,6 +14,7 @@ class ProductInfo extends StatefulWidget {
     required this.productName,
     required this.cost,
     required this.sellerName,
+    required this.productUid,
   });
 
   @override
@@ -74,9 +78,10 @@ class _ProductInfoState extends State<ProductInfo> {
               children: [
                 count > 1
                     ? CustomSquareButton(
-                        onpressed: () {
-                          setState(() {
-                            count--;
+                        onpressed: () async{                            
+                          await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("cart").doc(widget.productUid).update({"quantity":--count});
+                         setState(() async{
+
                           });
                         },
                         dimension: 30,
@@ -98,9 +103,9 @@ class _ProductInfoState extends State<ProductInfo> {
                           TextStyle(fontSize: 16, color: Colors.cyan.shade700),
                     )),
                 CustomSquareButton(
-                  onpressed: () {
-                    setState(() {
-                      count++;
+                  onpressed: () async{
+                  await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("cart").doc(widget.productUid).update({"quantity":++count});
+                   setState(() {
                     });
                   },
                   dimension: 30,

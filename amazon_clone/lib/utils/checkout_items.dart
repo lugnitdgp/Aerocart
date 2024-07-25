@@ -19,7 +19,7 @@ class CheckoutItems extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              product.productname,
+              ("${product.productname}(${product.quantity})"),
               style: const TextStyle(fontSize: 16),
             ),
             Text(

@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   double offset = 0;
   ScrollController scrollController = ScrollController();
   final search = TextEditingController();
-  List<Widget>? product;
+  List<Widget>? product=[];
   @override
   void initState() {
     super.initState();

@@ -1,4 +1,7 @@
+import 'package:amazon_clone/auth/user_details_model.dart';
+import 'package:amazon_clone/login_screens/user_details.dart';
 import 'package:amazon_clone/pages/results_screen.dart';
+import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/custom_simple_rounded_button.dart';
@@ -14,6 +17,8 @@ import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:async/async.dart';
 
 class ProductScreen extends StatefulWidget {
   final ProductModels product;
@@ -24,8 +29,44 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer = AsyncMemoizer();
+  final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> memoizer = AsyncMemoizer();
+  Future<QuerySnapshot<Map<String, dynamic>>> _fetchData() {
+  return this._memoizer.runOnce(() async {
+    return await FirebaseFirestore.instance
+                              .collection("products")
+                              .where("category",
+                                  isEqualTo: widget.product.category)
+                              .get();
+  });
+}
+ Future<QuerySnapshot<Map<String, dynamic>>> fetchData() {
+  return memoizer.runOnce(() async {
+    return await FirebaseFirestore.instance
+                              .collection("products")
+                              .where("category",
+                                  isEqualTo: widget.product.category)
+                              .get();
+  });
+}
+   Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
+
+
+  @override
+  void initState() {
+    super.initState();
+    userStream = FirebaseFirestore.instance
+                              .collection("products")
+                              .doc(widget.product.uid).collection("reviews")
+                              .snapshots();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+    UserDetailsModel userDetailsModel =
+        Provider.of<UserDetailsProvider>(context).userdetails;
     double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
@@ -286,78 +327,79 @@ class _ProductScreenState extends State<ProductScreen> {
                         height: 10,
                       ),
                       FutureBuilder(
-                          future: FirebaseFirestore.instance
-                              .collection("products")
-                              .where("category",
-                                  isEqualTo: widget.product.category)
-                              .get(),
+                          future: _fetchData(),
                           builder: (context,
                               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                                   snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return const LoadingWidget();
-                            } 
-
-                            else {
+                            } else {
                               List<Widget> children = [];
                               for (int i = 0;
                                   i < snapshot.data!.docs.length;
-                                  i++) {
+                                  i++)  {
                                 ProductModels model =
                                     ProductModels.getModelFromJson(
                                         json: snapshot.data!.docs[i].data());
-                                if(model.uid==widget.product.uid) {
+                                if (model.uid == widget.product.uid) {
                                   continue;
-                                }
-                                else{
+                                } else {
                                   children.add(HomeItems(productModels: model));
                                 }
                               }
-                              return snapshot.data!=null?ProductsShowcaseListView(
-                                  title: "Similar Items ", children: children):const SizedBox(height: 10,);
+                              return 
+                                  ProductsShowcaseListView(
+                                      title: "Similar Items ",
+                                      children: children);
+                                  
                             }
                           }),
                       CustomSimpleRoundedButton(
                           text: "Add review for this product",
                           onPressed: () {
+                            if (userDetailsModel.name == "loading" ||
+                                userDetailsModel.name == "loading") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const UserDetails(),
+                                ),
+                              );
+                            }
+                            else{
                             showDialog(
                                 context: context,
                                 builder: (context) => ReviewDialog(
                                       productUid: widget.product.uid,
                                     ));
+                            }
                           }),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          height: MediaQuery.of(context).size.height/3,
-                          child: StreamBuilder(
-                            stream: FirebaseFirestore.instance
-                                .collection("products")
-                                .doc(widget.product.uid)
-                                .collection("reviews")
-                                .snapshots(),
-                            builder: (context,
-                                AsyncSnapshot<
-                                        QuerySnapshot<Map<String, dynamic>>>
-                                    snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Container();
-                              } else {
-                                return ListView.builder(
-                                    itemCount: snapshot.data!.docs.length,
-                                    itemBuilder: (context, index) {
-                                      ReviewModel model =
-                                          ReviewModel.getModelFromJson(
-                                              json: snapshot.data!.docs[index]
-                                                  .data());
-                                      return ReviewWidget(review: model);
-                                    });
-                              }
-                            },
-                          ),
-                        ),
+                        height: MediaQuery.of(context).size.height/2,
+                        child: StreamBuilder(
+                          stream: userStream,
+                          builder: (context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                  snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Container();
+                            } else {
+                              return ListView.builder(
+                                  itemCount: snapshot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    ReviewModel model =
+                                        ReviewModel.getModelFromJson(
+                                            json: snapshot.data!.docs[index]
+                                                .data());
+                                    return ReviewWidget(review: model);
+                                  });
+                            }
+                          },
+                        ))
                       ),
                       const SizedBox(
                         height: 90,

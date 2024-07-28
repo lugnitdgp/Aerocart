@@ -89,9 +89,9 @@ class CloudFirestoreClass {
     QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("products").get();
     for(int i=0;i<snap.docs.length;i++){
       DocumentSnapshot docSnap = snap.docs[i];
-      if(docSnap['productName'].toLowerCase().startsWith(name.toLowerCase())){
-      ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
-      children.add(HomeItems(productModels: models));
+      if(docSnap['productName'].toLowerCase().startsWith(name.toLowerCase())||docSnap['category'].toLowerCase().startsWith(name.toLowerCase())||docSnap['category'].toLowerCase().contains(name.toLowerCase())||docSnap['productName'].toLowerCase().contains(name.toLowerCase())){
+        ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
+        children.add(HomeItems(productModels: models));
       }
       else {
         continue;
@@ -194,6 +194,11 @@ class CloudFirestoreClass {
         .collection("orders")
         .add(model.getJson());
     await deleteFromCart(uid: model.uid);
+  }
+    Future<bool> isSeller() async{
+    QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("seller").get();
+    if(snap.docs.isEmpty) {return false;}
+    else {return true;}
   }
 
 

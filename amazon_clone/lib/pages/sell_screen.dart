@@ -22,20 +22,41 @@ class _SellScreenState extends State<SellScreen> {
   TextEditingController name = TextEditingController();
   TextEditingController cost = TextEditingController();
   TextEditingController description = TextEditingController();
-  String dropdownValue="Select";
-  var itemss =<String>[
+  String dropdownValue = "Select";
+  var itemss = <String>[
     'Select',
     'Appliances',
     'Books',
-    'Elecronics',
+    'Electronics',
     'Essentials',
     'Fashion',
     'Grocery',
-    'Home', 
+    'Home',
     'Mobile',
     'Toys',
-    ];
+  ];
 
+  int tag = 1;
+  List<String> tags = [];
+  List<String> options = [
+    'Appliances',
+    'Beauty'
+        'Sports'
+        'Fitness'
+        'Medicine'
+        'Books',
+    'Electronics',
+    'Essentials',
+    'Fashion',
+    'Grocery',
+    'Travel',
+    'Home',
+    'Mobile',
+    'Toys',
+    'Laptop',
+    'Mobile',
+    'Headphone',
+  ];
 
   @override
   void dispose() {
@@ -242,7 +263,6 @@ class _SellScreenState extends State<SellScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        
                         const Row(
                           children: [
                             Padding(
@@ -259,38 +279,37 @@ class _SellScreenState extends State<SellScreen> {
                         const SizedBox(
                           height: 20,
                         ),
+                        
+                        
                         Container(
                           height: 40,
                           width: 140,
                           decoration: BoxDecoration(
-                            color: Colors.blueGrey[50],
-                            borderRadius: BorderRadius.circular(15)
-                          ),
+                              color: Colors.blueGrey[50],
+                              borderRadius: BorderRadius.circular(15)),
                           child: Center(
-                            child: DropdownButton<String>(                   
-                              value: dropdownValue,
-                              icon: const Icon(Icons.arrow_drop_down),                               
-                              
-                              items:itemss.map((String item){
-                                return DropdownMenuItem(
-                                  value: item,
-                                  child: Text(item),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  dropdownValue=value!;
-                                });
-                              },
-                            )
-
-                          ),
+                              child: DropdownButton<String>(
+                            value: dropdownValue,
+                            icon: const Icon(Icons.arrow_drop_down),
+                            items: itemss.map((String item) {
+                              return DropdownMenuItem(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                dropdownValue = value!;
+                              });
+                            },
+                          )),
                         ),
-                        const SizedBox(height: 10,),
+                        const SizedBox(
+                          height: 10,
+                        ),
                       ],
                     ),
                   ),
-                  
                   const SizedBox(
                     height: 10,
                   ),
@@ -299,32 +318,39 @@ class _SellScreenState extends State<SellScreen> {
                         EdgeInsets.symmetric(horizontal: width - width / 1.2),
                     child: MyButton(
                         ontap: () async {
-
-                          if(name.text!=""&&description.text!=""&&cost.text!=""&&image!=null&&dropdownValue!="Select"){
-                          String output = await CloudFirestoreClass()
-                              .uploadProducttoDatabase(
-                                  image: image,
-                                  description: description.text,
-                                  productName: name.text,
-                                  cost: cost.text,
-                                  sellerName: Provider.of<UserDetailsProvider>(
-                                          context,
-                                          listen: false)
-                                      .userdetails
-                                      .name,
-                                  sellerUid:
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                  category: dropdownValue);
-                          if(output=="Success"){
-                            Utils().showSnackBar(context: context, content: "Product Uploaded");
-                            Navigator.pop(context);
-                          }
-                          else if(output!="Success") {
-                            Utils().showSnackBar(context: context, content: output);
-                          }
-                          }
-                          else{
-                            Utils().showSnackBar(context: context, content: "Please fill all the sections");
+                          if (name.text != "" &&
+                              description.text != "" &&
+                              cost.text != "" &&
+                              image != null &&
+                              dropdownValue != "Select") {
+                            String output = await CloudFirestoreClass()
+                                .uploadProducttoDatabase(
+                                    image: image,
+                                    description: description.text,
+                                    productName: name.text,
+                                    cost: cost.text,
+                                    sellerName:
+                                        Provider.of<UserDetailsProvider>(
+                                                context,
+                                                listen: false)
+                                            .userdetails
+                                            .name,
+                                    sellerUid:
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    category: dropdownValue);
+                            if (output == "Success") {
+                              Utils().showSnackBar(
+                                  context: context,
+                                  content: "Product Uploaded");
+                              Navigator.pop(context);
+                            } else if (output != "Success") {
+                              Utils().showSnackBar(
+                                  context: context, content: output);
+                            }
+                          } else {
+                            Utils().showSnackBar(
+                                context: context,
+                                content: "Please fill all the sections");
                           }
                         },
                         text: "Sell"),

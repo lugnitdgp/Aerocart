@@ -1,34 +1,25 @@
 import 'package:amazon_clone/auth/auth_page.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/text_field.dart';
+import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UpdateNameAndAddress extends StatefulWidget {  
-  const UpdateNameAndAddress({super.key});
+class SellerDetailsScreen extends StatefulWidget {
+  const SellerDetailsScreen({super.key});
 
   @override
-  State<UpdateNameAndAddress> createState() => _UpdateNameAndAddressState();
+  State<SellerDetailsScreen> createState() => _SellerDetailsScreenState();
 }
 
-class _UpdateNameAndAddressState extends State<UpdateNameAndAddress> {
+class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
+  TextEditingController gst=TextEditingController();
+  TextEditingController aadhar=TextEditingController();
+  TextEditingController shop=TextEditingController();
+  TextEditingController address=TextEditingController();
 
-  final username = TextEditingController();
-  final address = TextEditingController();
-  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
-  @override
-  void dispose() {
-
-    username.dispose();
-    address.dispose();
-    super.dispose();
-  }
-
-
-
-  void signUserUp() async {
+    void signUserUp() async {
     showDialog(
         context: context,
         builder: (context) {
@@ -38,10 +29,12 @@ class _UpdateNameAndAddressState extends State<UpdateNameAndAddress> {
         });
     try {
       
-        await firebaseFirestore
+        await FirebaseFirestore.instance
             .collection("users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
-            .update({"address": address.text,"name":username.text});   
+            .collection("seller")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({"shop name ": shop.text, "address": address.text});   
         Navigator.pop(context);     
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
           builder: (context) {
@@ -71,6 +64,7 @@ class _UpdateNameAndAddressState extends State<UpdateNameAndAddress> {
           );
         });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +96,7 @@ class _UpdateNameAndAddressState extends State<UpdateNameAndAddress> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  'Update your address',
+                  'Update your name and address',
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w500,
@@ -110,29 +104,48 @@ class _UpdateNameAndAddressState extends State<UpdateNameAndAddress> {
                   ),
                 ),
               ),
-              //username
               Textfield(
-                  controller: username,
-                  hintText: 'Enter Username',
-                  obstext: false),
-              const SizedBox(
-                height: 5,
-              ),
-              //address
-              Textfield(
-                  controller: address,
-                  hintText: 'Enter address',
+                  controller: shop,
+                  hintText: 'Enter Shop name',
                   obstext: false),
               const SizedBox(
                 height: 5,
               ),
 
+              //address
+              Textfield(
+                  controller: address ,
+                  hintText: 'Enter Shop Address',
+                  obstext: false),
+              const SizedBox(
+                height: 5,
+              ),
+              Textfield(
+                  controller: gst ,
+                  hintText: 'Enter GST no.',
+                  obstext: false),
+              const SizedBox(
+                height: 5,
+              ),
+              Textfield(
+                  controller: aadhar,
+                  hintText: 'Enter Aadhar no.',
+                  obstext: false),
+              const SizedBox(
+                height: 5,
+              ),
+             
 
               //sign-up
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 20),
-                child: MyButton(text: 'Update', ontap: () {
-                  Navigator.pop(context);
+                child: MyButton(text: 'Continue', ontap: () {
+                  if(gst.text==""||shop.text==""||address.text==""||aadhar.text==""){
+                    Utils().showSnackBar(context: context, content: "Please fill all the fields");
+                  }
+                  else{
+                    signUserUp();
+                  }
                 },),
               ),
              

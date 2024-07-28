@@ -1,7 +1,9 @@
 import 'package:amazon_clone/auth/auth_page.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/pages/sell_screen.dart';
+import 'package:amazon_clone/pages/seller_details_screen.dart';
 import 'package:amazon_clone/utils/button.dart';
+import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/home_items.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/product_showcase_list_view.dart';
@@ -99,25 +101,41 @@ class _UserPageState extends State<UserPage> {
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Container();
-                    }
-                    else {
+                    } else {
                       List<Widget> children = [];
                       for (int i = 0; i < snapshot.data!.docs.length; i++) {
                         ProductModels model = ProductModels.getModelFromJson(
                             json: snapshot.data!.docs[i].data());
                         children.add(HomeItems(productModels: model));
                       }
-                      return snapshot.data!=null? ProductsShowcaseListView(title: "Your Orders ", children: children):const SizedBox(height: 20,);
+                      return snapshot.data != null
+                          ? ProductsShowcaseListView(
+                              title: "Your Orders ", children: children)
+                          : const SizedBox(
+                              height: 20,
+                            );
                     }
                   }),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: MyButton(
-                    ontap: () {
-                      Navigator.push(
+                    ontap: () async {
+                      bool t = await CloudFirestoreClass().isSeller();
+                      if (t) {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const SellScreen()));
+                            builder: (context) => const SellScreen(),
+                          ),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SellerDetailsScreen(),
+                          ),
+                        );
+                      }
                     },
                     text: "Sell"),
               ),

@@ -1,4 +1,7 @@
+import 'package:amazon_clone/auth/user_details_model.dart';
+import 'package:amazon_clone/login_screens/user_details.dart';
 import 'package:amazon_clone/pages/checkout_screen.dart';
+import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/cart_items.dart';
 import 'package:amazon_clone/utils/cloud_firestore.dart';
@@ -9,6 +12,7 @@ import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -18,8 +22,24 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+     Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
+
+
+  @override
+  void initState() {
+    super.initState();
+    userStream = FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection("cart")
+                  .snapshots();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    UserDetailsModel userDetailsModel =
+        Provider.of<UserDetailsProvider>(context).userdetails;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: PreferredSize(
@@ -93,47 +113,68 @@ class _CartPageState extends State<CartPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50.0),
-              child: MyButton(ontap: () async{
-                bool a=await CloudFirestoreClass().isEmpty();
-                if(a){
-                  Utils().showSnackBar(context: context, content: "Cart is Empty");
-                }
-                else{
-                  double cost=await CloudFirestoreClass().getTotalCost();
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckoutScreen(cost:cost,),),);
-              }
-              }, text: "Proceed to buy"),
+              child: MyButton(
+                  ontap: () async {
+                    bool a = await CloudFirestoreClass().isEmpty();
+                    if (a) {
+                      Utils().showSnackBar(
+                          context: context, content: "Cart is Empty");
+                    } else if (userDetailsModel.name == "loading" ||
+                        userDetailsModel.address == "loading") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UserDetails(),
+                        ),
+                      );
+                    } else {
+                      double cost = await CloudFirestoreClass().getTotalCost();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CheckoutScreen(
+                            cost: cost,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  text: "Proceed to buy"),
             ),
             Expanded(
                 child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .collection("cart")
-                  .snapshots(),
+              stream: userStream,
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Container();
-                }
-                else if(!snapshot.hasData){
+                } else if (!snapshot.hasData) {
                   return const Center(
-                    child: Text("No Items in Cart",style: TextStyle(fontSize: 30,color: Colors.black),),
+                    child: Text(
+                      "No Items in Cart",
+                      style: TextStyle(fontSize: 30, color: Colors.black),
+                    ),
                   );
-                }
-                 else {
+                } else {
                   return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         ProductModels model = ProductModels.getModelFromJson(
                             json: snapshot.data!.docs[index].data());
-                        return CartItems(product: model);
+                        return CartItems(product: model,onpressed: () async{
+                            await CloudFirestoreClass().deleteFromCart(uid: model.uid);
+                            setState(() {
+                              
+                            });
+                            
+                          },);
                       });
                 }
               },
+            )),
+            const SizedBox(
+              height: 180,
             )
-            ),
-            const SizedBox(height: 180,)
           ],
         ),
         UserDetailsBar(

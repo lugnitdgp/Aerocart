@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 
 class CartItems extends StatelessWidget {
   final ProductModels product;
-  const CartItems({super.key, required this.product});
+  final VoidCallback onpressed;
+  const CartItems({super.key, required this.product,required this.onpressed});
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +69,7 @@ class CartItems extends StatelessWidget {
                         ),
                       ),
                       child: IconButton(
-                          onPressed: () async{
-                            await CloudFirestoreClass().deleteFromCart(uid: product.uid);
-                          }, icon:const Icon(Icons.delete_outlined)),
+                          onPressed: onpressed , icon:const Icon(Icons.delete_outlined)),
                     )),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:amazon_clone/auth/auth_page.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/text_field.dart';
+import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -77,10 +78,13 @@ class _LoginPageState extends State<RegisterPage> {
         ), (route) => false);
         
       } else {
-        showErrorMsg("Passwords don't match");
+        Navigator.pop(context);
+        Utils().showSnackBar(context: context, content: "Passwords don't match");
       }
-    }catch (e) {
-      showErrorMsg(e.toString());
+    }on FirebaseAuthException  catch(e) {
+      Navigator.pop(context);
+      Utils().showSnackBar(context: context, content: e.message.toString());
+
     }
   }
 

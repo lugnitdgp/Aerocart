@@ -12,11 +12,11 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController querry = TextEditingController();
   String name = "";
-  List<Widget> product=[];
+  List<Widget>? product=[];
 
 
     void getData(String name) async{
-    List<Widget>temp=await CloudFirestoreClass().searchProducts(name: name);
+    List<Widget>?temp=await CloudFirestoreClass().searchProducts(name: name);
     setState(() {
       product=temp;
     });

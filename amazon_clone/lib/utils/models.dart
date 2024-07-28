@@ -9,7 +9,7 @@ class ProductModels {
   final double? cost;
   final String description;
   final int? rating;
-  final String category;
+  final String? category;
   final int? quantity;
 
   ProductModels(

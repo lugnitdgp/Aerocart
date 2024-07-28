@@ -47,6 +47,8 @@ dependencies:
   dotted_border: ^2.1.0
   image_picker: ^1.1.2
   rating_dialog: ^2.0.4
+  async: ^2.11.0
+
 
 dev_dependencies:
   flutter_test:

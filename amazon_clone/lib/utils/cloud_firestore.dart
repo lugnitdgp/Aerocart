@@ -4,6 +4,7 @@ import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/utils/checkout_items.dart';
 import 'package:amazon_clone/utils/home_items.dart';
 import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/utils/order_request_model.dart';
 import 'package:amazon_clone/utils/review_model.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -47,7 +48,7 @@ class CloudFirestoreClass {
             cost: double.parse(cost),
             productname: productName,
             sellername: sellerName,
-            selleruid: sellerName,
+            selleruid: sellerUid,
             uid: uid,
             url: url,
             description: description,
@@ -119,6 +120,7 @@ class CloudFirestoreClass {
           await changeAverageRating(productUid: productUid, reviewModel: model);
   }
 
+
   Future addProducttoCart({required ProductModels model})async{
     await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").doc(model.uid).set(model.getJson());
     await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").doc(model.uid).update({"quantity":1});
@@ -170,6 +172,17 @@ class CloudFirestoreClass {
     }
     return children;
   }
+    Future sendOrderRequest(
+      {required ProductModels model,
+      required UserDetailsModel userDetails}) async {
+    OrderRequestModel orderRequestModel = OrderRequestModel(
+        orderName: model.productname, buyersAddress: userDetails.address);
+    await firebaseFirestore
+        .collection("users")
+        .doc(model.selleruid)
+        .collection("orderRequests")
+        .add(orderRequestModel.getJson());
+  }
    Future buyAllItemsInCart({required UserDetailsModel userDetails}) async {
     QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
         .collection("users")
@@ -180,7 +193,7 @@ class CloudFirestoreClass {
     for (int i = 0; i < snapshot.docs.length; i++) {
       ProductModels model =
           ProductModels.getModelFromJson(json: snapshot.docs[i].data());
-      addProductToOrders(model: model, userDetails: userDetails);
+      await addProductToOrders(model: model, userDetails: userDetails);
       await deleteFromCart(uid: model.uid);
     }
   }
@@ -193,7 +206,8 @@ class CloudFirestoreClass {
         .doc(firebaseAuth.currentUser!.uid)
         .collection("orders")
         .add(model.getJson());
-    await deleteFromCart(uid: model.uid);
+        await sendOrderRequest(model: model, userDetails: userDetails);
+
   }
     Future<bool> isSeller() async{
     QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("seller").get();

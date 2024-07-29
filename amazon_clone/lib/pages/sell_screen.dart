@@ -26,14 +26,22 @@ class _SellScreenState extends State<SellScreen> {
   var itemss = <String>[
     'Select',
     'Appliances',
+    'Beauty'
+    'Sports'
+    'Fitness'
+    'Medicine'
     'Books',
     'Electronics',
     'Essentials',
     'Fashion',
     'Grocery',
+    'Travel',
     'Home',
     'Mobile',
     'Toys',
+    'Laptop',
+    'Mobile',
+    'Headphone',
   ];
 
   int tag = 1;
@@ -41,10 +49,10 @@ class _SellScreenState extends State<SellScreen> {
   List<String> options = [
     'Appliances',
     'Beauty'
-        'Sports'
-        'Fitness'
-        'Medicine'
-        'Books',
+    'Sports'
+    'Fitness'
+    'Medicine'
+    'Books',
     'Electronics',
     'Essentials',
     'Fashion',
@@ -335,8 +343,7 @@ class _SellScreenState extends State<SellScreen> {
                                                 listen: false)
                                             .userdetails
                                             .name,
-                                    sellerUid:
-                                        FirebaseAuth.instance.currentUser!.uid,
+                                    sellerUid:FirebaseAuth.instance.currentUser!.uid,
                                     category: dropdownValue);
                             if (output == "Success") {
                               Utils().showSnackBar(

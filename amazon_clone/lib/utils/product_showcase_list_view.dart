@@ -46,7 +46,7 @@ class ProductsShowcaseListView extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: height/1.23,
+            height: height/1.235,
             width: screenSize.width,
             child:children.isNotEmpty? ListView(
               scrollDirection: Axis.horizontal,

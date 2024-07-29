@@ -6,6 +6,7 @@ import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/home_items.dart';
 import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/utils/order_request_model.dart';
 import 'package:amazon_clone/utils/product_showcase_list_view.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -143,6 +144,60 @@ class _UserPageState extends State<UserPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: MyButton(ontap: signout, text: "Sign Out"),
               ),
+                            const Padding(
+                padding: EdgeInsets.all(15),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Order Requests",
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Expanded(
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .collection("orderRequests")
+                          .snapshots(),
+                      builder: (context,
+                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container();
+                        } else {
+                          return ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                OrderRequestModel model =
+                                    OrderRequestModel.getModelFromJson(
+                                        json:
+                                            snapshot.data!.docs[index].data());
+                                return ListTile(
+                                  title: Text(
+                                    "Order: ${model.orderName}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w500),
+                                  ),
+                                  subtitle:
+                                      Text("Address: ${model.buyersAddress}"),
+                                  trailing: IconButton(
+                                      onPressed: () async {
+                                        FirebaseFirestore.instance
+                                            .collection("users")
+                                            .doc(FirebaseAuth
+                                                .instance.currentUser!.uid)
+                                            .collection("orderRequests")
+                                            .doc(snapshot.data!.docs[index].id)
+                                            .delete();
+                                      },
+                                      icon: Icon(Icons.check)),
+                                );
+                              });
+                        }
+                      }))
             ],
           ),
           UserDetailsBar(

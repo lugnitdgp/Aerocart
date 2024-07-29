@@ -4,8 +4,11 @@ import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final double cost;
@@ -16,10 +19,26 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<CheckoutScreen> {
+  String payment="";
+  User? userr;
+  UserDetailsModel? user;
   TextEditingController controller = TextEditingController();
   TextEditingController number = TextEditingController();
-  List<Widget> product=[];
+  List<Widget> product = [];
   double shipping = 7;
+  final Razorpay razorpay = Razorpay();
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+                          await CloudFirestoreClass().buyAllItemsInCart(userDetails: user!);
+
+    payment="success";
+
+        Fluttertoast.showToast(msg: "Payment Success");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Fluttertoast.showToast(msg: "Payment Failure");
+  }
+  
   @override
   void initState() {
     getData();
@@ -27,11 +46,17 @@ class _OrderScreenState extends State<CheckoutScreen> {
   }
 
   void getData() async {
-    List<Widget>temp = await CloudFirestoreClass().checkoutProducts();
+    User? te = FirebaseAuth.instance.currentUser;
+    UserDetailsModel tem = await CloudFirestoreClass().getNameandAddress();
+    List<Widget> temp = await CloudFirestoreClass().checkoutProducts();
     setState(() {
       product = temp;
+      user = tem;
+      userr = te;
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +67,27 @@ class _OrderScreenState extends State<CheckoutScreen> {
       floatingActionButton: Padding(
         padding: EdgeInsets.fromLTRB(width * 0.077, 10, 0, 10),
         child: MyButton(
-            ontap: () async{
+            ontap: () async {
               if ((int.parse(number.text) / 1000000000 < 10) &&
                   (int.parse(number.text) / 1000000000 > 5)) {
-                   await CloudFirestoreClass().buyAllItemsInCart(userDetails: userDetailsModel);
-                   Utils().showSnackBar(context: context, content: "Success");
-                   Navigator.pop(context);
+                var options = {
+                  'key': 'rzp_test_GcZZFDPP0jHtC4',
+                  'amount': (widget.cost + shipping)*100,
+                  'name': user!.name,
+                  'description': 'Amazon Shopping',
+                  'prefill': {
+                    'contact': number.text,
+                    'email': userr!.email,
+                  }
+                };
+                razorpay.open(options);
+                razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+                razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+                Navigator.pop(context);
+                if(payment=="success"){
+                }
+
+                
               } else {
                 Utils().showSnackBar(
                     context: context,
@@ -208,19 +248,11 @@ class _OrderScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Row(
-                    children: [
-                      const Text(
-                        "Deliver to- ",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w400),
-                      ),
-                      Text(
-                        userDetailsModel.address,
-                        style: const TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w400),
-                      ),
-                    ],
+                  child: Text(
+                    "Deliver to- ${userDetailsModel.address}",
+                    maxLines: 10,
+                    style: const TextStyle(
+                        fontSize: 17, fontWeight: FontWeight.w400),
                   ),
                 ),
                 const Padding(

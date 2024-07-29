@@ -16,7 +16,7 @@ const List<String> categoriesList = [
   "Home",
   "Fresh",
   "Appliances",
-  "Books, Toys",
+  "Books",
   "Essential"
 ];
 

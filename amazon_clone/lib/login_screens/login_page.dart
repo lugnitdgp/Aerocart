@@ -3,6 +3,7 @@ import 'package:amazon_clone/auth/auth_page.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/login_screens/forgot_pw_page.dart';
 import 'package:amazon_clone/utils/text_field.dart';
+import 'package:amazon_clone/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
     );
     }on FirebaseAuthException catch (e){
       Navigator.pop(context);
-      showErrorMsg(e.message.toString());
+      Utils().showSnackBar(context: context, content: e.message.toString());
     }      
   }
 
@@ -166,7 +167,15 @@ class _LoginPageState extends State<LoginPage> {
             //sign-in
             MyButton (
               text: 'Sign-in',
-              ontap: signUserIn,                                            
+              ontap: () {
+                if(email.text==""||password.text==""){
+                  Utils().showSnackBar(context: context, content: "Please fill all the fields");
+                }
+                else{
+                  signUserIn();
+                }
+                
+              },                                            
               ),
             //other option
             const Padding(

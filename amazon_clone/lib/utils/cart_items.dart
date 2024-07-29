@@ -1,5 +1,4 @@
 import 'package:amazon_clone/pages/product_screen.dart';
-import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/product_info.dart';
 import 'package:flutter/material.dart';

@@ -52,22 +52,24 @@ class _SellScreenState extends State<SellScreen> {
     super.dispose();
   }
 
-  List<XFile> imagefileList = [];
+  List<XFile> imagefileList = []; 
+  List<Uint8List> image = [];
 
   Future<void> selectImages() async {
     final List<XFile> selectImages = await ImagePicker().pickMultiImage();
     if (selectImages.isNotEmpty) {
       imagefileList.addAll(selectImages);
-      for (XFile file in imagefileList) {
+      for (int i=0;i<imagefileList.length;i++) {
+        XFile file=imagefileList[i];
         Uint8List bytes = await file.readAsBytes();
         image.add(bytes);
       }
     }
-
+    print(image);
     setState(() {});
   }
 
-  List<Uint8List> image = [];
+ 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

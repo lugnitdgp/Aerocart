@@ -72,10 +72,10 @@ class CloudFirestoreClass {
   Future<List<String>> uploadImagetoDatabase(
       {required List<Uint8List> image, required String uid}) async {
        List<String> url=[];
-    Reference storageRef =
-        FirebaseStorage.instance.ref().child("products").child(uid).child((int.parse(uid)*1000).toString());
     int i=0;
     while(i<image.length){
+      Reference storageRef =
+        FirebaseStorage.instance.ref().child("products").child(uid).child((int.parse(uid)*1000+i).toString());
       UploadTask uploadTask = storageRef.putData(image[i]);    
       TaskSnapshot task = await uploadTask;
       url.add(await task.ref.getDownloadURL());

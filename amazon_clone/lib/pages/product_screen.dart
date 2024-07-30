@@ -57,6 +57,7 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
+    getImages(widget.product);
     userStream = FirebaseFirestore.instance
         .collection("products")
         .doc(widget.product.uid)
@@ -69,7 +70,7 @@ class _ProductScreenState extends State<ProductScreen> {
     for (int i = 0; i < model.url.length; i++) {
       myitems.add(
         Image.network(model.url[i]),
-      );
+      );      
     }
   }
 
@@ -245,7 +246,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: Padding(
                               padding:
                                   const EdgeInsets.fromLTRB(15, 15, 15, 25),
-                              child: ItemCarousel(myitems: myitems),
+                              child: ItemCarousel(myitemss: myitems),
                             ),
                           ),
                           Align(

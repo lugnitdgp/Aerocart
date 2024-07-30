@@ -12,6 +12,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class CloudFirestoreClass {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -28,7 +30,7 @@ class CloudFirestoreClass {
   }
 
   Future<String> uploadProducttoDatabase(
-      {required Uint8List? image,
+      {required List<Uint8List> image,
       required String description,
       required String productName,
       required String cost,
@@ -40,10 +42,10 @@ class CloudFirestoreClass {
     description.trim();
     String output = "Something went wrong";
 
-    if (image != null && productName != "" && cost != "" && description != "") {
+    if (image.isNotEmpty && productName != "" && cost != "" && description != "") {
       try {
         String uid = Utils().getUid();
-        String url = await uploadImagetoDatabase(image: image, uid: uid);
+        List<String> url = await uploadImagetoDatabase(image: image, uid: uid);
         ProductModels product = ProductModels(
             cost: double.parse(cost),
             productname: productName,
@@ -54,7 +56,8 @@ class CloudFirestoreClass {
             description: description,
             rating: null,
             category: category,
-            quantity: null);
+            quantity: null,
+            email: firebaseAuth.currentUser!.email!);
         firebaseFirestore.collection("products").doc(uid).set(product.getJson());
         output = "Success";
       } catch (e) {
@@ -66,13 +69,19 @@ class CloudFirestoreClass {
     return output;
   }
 
-  Future<String> uploadImagetoDatabase(
-      {required Uint8List image, required String uid}) async {
+  Future<List<String>> uploadImagetoDatabase(
+      {required List<Uint8List> image, required String uid}) async {
+       List<String> url=[];
     Reference storageRef =
-        FirebaseStorage.instance.ref().child("products").child(uid);
-    UploadTask uploadTask = storageRef.putData(image);
-    TaskSnapshot task = await uploadTask;
-    return task.ref.getDownloadURL();
+        FirebaseStorage.instance.ref().child("products").child(uid).child((int.parse(uid)*1000).toString());
+    int i=0;
+    while(i<image.length){
+      UploadTask uploadTask = storageRef.putData(image[i]);    
+      TaskSnapshot task = await uploadTask;
+      url.add(await task.ref.getDownloadURL());
+      i++;
+    }
+    return url;
   }
 
   Future<List<Widget>> getProducts() async{
@@ -81,6 +90,7 @@ class CloudFirestoreClass {
     for(int i=0;i<snap.docs.length;i++){
       DocumentSnapshot docSnap = snap.docs[i];
       ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
+      print(models);
       children.add(HomeItems(productModels: models));
     }
     return children;
@@ -175,11 +185,13 @@ class CloudFirestoreClass {
     Future sendOrderRequest(
       {required ProductModels model,
       required UserDetailsModel userDetails}) async {
+    
     OrderRequestModel orderRequestModel = OrderRequestModel(
         orderName: model.productname, buyersAddress: userDetails.address);
+    //sendEmail(model: model);
     await firebaseFirestore
         .collection("users")
-        .doc(model.selleruid)
+        .doc(model.selleruid.trim())
         .collection("orderRequests")
         .add(orderRequestModel.getJson());
   }
@@ -209,6 +221,22 @@ class CloudFirestoreClass {
         await sendOrderRequest(model: model, userDetails: userDetails);
 
   }
+  Future<void> sendEmail({required ProductModels model}) async {
+  final smtpServer = gmail('your-email@gmail.com', 'your-password');
+  
+  final message = Message()
+    ..from = const Address('test@gmail.com', 'test')
+    ..recipients.add(model.email)
+    ..subject = 'Amoazon Order request Mail'
+    ..text = 'Name- ${model.productname}, quantity-${model.quantity}';
+
+  try {
+    final sendReport = await send(message, smtpServer);
+    print('Message sent: ${sendReport.mail}');
+  } on MailerException catch (e) {
+    print('Message not sent. ${e.toString()}');
+  }
+}
     Future<bool> isSeller() async{
     QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("seller").get();
     if(snap.docs.isEmpty) {return false;}

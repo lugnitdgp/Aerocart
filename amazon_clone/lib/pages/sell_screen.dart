@@ -9,6 +9,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class SellScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class SellScreen extends StatefulWidget {
 }
 
 class _SellScreenState extends State<SellScreen> {
+  int itemCount = 1;
   TextEditingController name = TextEditingController();
   TextEditingController cost = TextEditingController();
   TextEditingController description = TextEditingController();
@@ -26,46 +28,22 @@ class _SellScreenState extends State<SellScreen> {
   var itemss = <String>[
     'Select',
     'Appliances',
-    'Beauty'
-    'Sports'
-    'Fitness'
-    'Medicine'
+    'Beauty', 
     'Books',
     'Electronics',
     'Essentials',
     'Fashion',
+    'Fitness',
     'Grocery',
-    'Travel',
-    'Home',
-    'Mobile',
-    'Toys',
-    'Laptop',
-    'Mobile',
     'Headphone',
-  ];
-
-  int tag = 1;
-  List<String> tags = [];
-  List<String> options = [
-    'Appliances',
-    'Beauty'
-    'Sports'
-    'Fitness'
-    'Medicine'
-    'Books',
-    'Electronics',
-    'Essentials',
-    'Fashion',
-    'Grocery',
-    'Travel',
     'Home',
-    'Mobile',
-    'Toys',
     'Laptop',
+    'Medicine',
     'Mobile',
-    'Headphone',
+    'Sports',
+    'Travel',
+    'Toys',    
   ];
-
   @override
   void dispose() {
     name.dispose();
@@ -74,7 +52,22 @@ class _SellScreenState extends State<SellScreen> {
     super.dispose();
   }
 
-  Uint8List? image;
+  List<XFile> imagefileList = [];
+
+  Future<void> selectImages() async {
+    final List<XFile> selectImages = await ImagePicker().pickMultiImage();
+    if (selectImages.isNotEmpty) {
+      imagefileList.addAll(selectImages);
+      for (XFile file in imagefileList) {
+        Uint8List bytes = await file.readAsBytes();
+        image.add(bytes);
+      }
+    }
+
+    setState(() {});
+  }
+
+  List<Uint8List> image = [];
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -135,65 +128,80 @@ class _SellScreenState extends State<SellScreen> {
           SingleChildScrollView(
             child: Center(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
-                    child: DottedBorder(
-                      borderType: BorderType.RRect,
-                      radius: const Radius.circular(10),
-                      strokeWidth: 2,
-                      color: Colors.blueGrey,
-                      child: ClipRRect(
-                        child: Container(
-                          width: width / 3,
-                          height: 180,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: image == null
-                              ? Center(
-                                  child: IconButton(
-                                      onPressed: () async {
-                                        Uint8List? temp =
-                                            await Utils().pickImage();
-                                        if (temp != null) {
-                                          setState(() {
-                                            image = temp;
-                                          });
-                                        }
-                                      },
-                                      icon: const Icon(
-                                        Icons.upload_outlined,
-                                        size: 30,
-                                        color: Colors.blueGrey,
-                                      )),
-                                )
-                              : Stack(
-                                  children: [
+                  SizedBox(
+                    height: 200,
+                    child: image.isEmpty?Container(
+                          padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
+                          child: DottedBorder(
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(10),
+                            strokeWidth: 2,
+                            color: Colors.blueGrey,
+                            child: ClipRRect(
+                              child: Container(
+                                width: width / 3,
+                                height: 180,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child:
                                     Center(
-                                      child: Image.memory(image!),
-                                    ),
-                                    Center(
-                                      child: IconButton(
-                                          onPressed: () async {
-                                            Uint8List? temp =
-                                                await Utils().pickImage();
-                                            if (temp != null) {
-                                              setState(() {
-                                                image = temp;
-                                              });
-                                            }
-                                          },
-                                          icon: const Icon(
-                                            Icons.upload_outlined,
-                                            size: 30,
-                                            color: Colors.blueGrey,
-                                          )),
-                                    )
-                                  ],
-                                ),
-                        ),
-                      ),
+                                        child: IconButton(
+                                            onPressed: () async {
+                                              selectImages();
+                                            },
+                                            icon: const Icon(
+                                              Icons.upload_outlined,
+                                              size: 30,
+                                              color: Colors.blueGrey,
+                                            )),
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ): ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: image.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
+                          child: DottedBorder(
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(10),
+                            strokeWidth: 2,
+                            color: Colors.blueGrey,
+                            child: ClipRRect(
+                              child: Container(
+                                width: width / 3,
+                                height: 180,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: imagefileList.isEmpty
+                                    ? Center(
+                                        child: IconButton(
+                                            onPressed: () async {
+                                              selectImages();
+                                            },
+                                            icon: const Icon(
+                                              Icons.upload_outlined,
+                                              size: 30,
+                                              color: Colors.blueGrey,
+                                            )),
+                                      )
+                                    : Stack(
+                                        children: [
+                                          Center(
+                                            child: Image.memory(image[index]),
+                                          ),
+                                        ],
+                                      ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const Text(
@@ -287,11 +295,9 @@ class _SellScreenState extends State<SellScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        
-                        
                         Container(
                           height: 40,
-                          width: 140,
+                          width: 150,
                           decoration: BoxDecoration(
                               color: Colors.blueGrey[50],
                               borderRadius: BorderRadius.circular(15)),
@@ -329,7 +335,7 @@ class _SellScreenState extends State<SellScreen> {
                           if (name.text != "" &&
                               description.text != "" &&
                               cost.text != "" &&
-                              image != null &&
+                              image.isNotEmpty &&
                               dropdownValue != "Select") {
                             String output = await CloudFirestoreClass()
                                 .uploadProducttoDatabase(
@@ -343,7 +349,8 @@ class _SellScreenState extends State<SellScreen> {
                                                 listen: false)
                                             .userdetails
                                             .name,
-                                    sellerUid:FirebaseAuth.instance.currentUser!.uid,
+                                    sellerUid:
+                                        FirebaseAuth.instance.currentUser!.uid,
                                     category: dropdownValue);
                             if (output == "Success") {
                               Utils().showSnackBar(

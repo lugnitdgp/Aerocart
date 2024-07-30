@@ -6,6 +6,7 @@ import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/custom_simple_rounded_button.dart';
 import 'package:amazon_clone/utils/home_items.dart';
+import 'package:amazon_clone/utils/item_carousel.dart';
 import 'package:amazon_clone/utils/loading_widget.dart';
 import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/product_showcase_list_view.dart';
@@ -29,39 +30,48 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer = AsyncMemoizer();
-  final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> memoizer = AsyncMemoizer();
+  final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
+      AsyncMemoizer();
+  final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> memoizer =
+      AsyncMemoizer();
   Future<QuerySnapshot<Map<String, dynamic>>> _fetchData() {
-  return this._memoizer.runOnce(() async {
-    return await FirebaseFirestore.instance
-                              .collection("products")
-                              .where("category",
-                                  isEqualTo: widget.product.category)
-                              .get();
-  });
-}
- Future<QuerySnapshot<Map<String, dynamic>>> fetchData() {
-  return memoizer.runOnce(() async {
-    return await FirebaseFirestore.instance
-                              .collection("products")
-                              .where("category",
-                                  isEqualTo: widget.product.category)
-                              .get();
-  });
-}
-   Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
+    return this._memoizer.runOnce(() async {
+      return await FirebaseFirestore.instance
+          .collection("products")
+          .where("category", isEqualTo: widget.product.category)
+          .get();
+    });
+  }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchData() {
+    return memoizer.runOnce(() async {
+      return await FirebaseFirestore.instance
+          .collection("products")
+          .where("category", isEqualTo: widget.product.category)
+          .get();
+    });
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
 
   @override
   void initState() {
     super.initState();
     userStream = FirebaseFirestore.instance
-                              .collection("products")
-                              .doc(widget.product.uid).collection("reviews")
-                              .snapshots();
+        .collection("products")
+        .doc(widget.product.uid)
+        .collection("reviews")
+        .snapshots();
   }
 
-
+  List<Widget> myitems = [];
+  void getImages(ProductModels model) {
+    for (int i = 0; i < model.url.length; i++) {
+      myitems.add(
+        Image.network(model.url[i]),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +245,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: Padding(
                               padding:
                                   const EdgeInsets.fromLTRB(15, 15, 15, 25),
-                              child: Image.network(widget.product.url),
+                              child: ItemCarousel(myitems: myitems),
                             ),
                           ),
                           Align(
@@ -338,7 +348,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               List<Widget> children = [];
                               for (int i = 0;
                                   i < snapshot.data!.docs.length;
-                                  i++)  {
+                                  i++) {
                                 ProductModels model =
                                     ProductModels.getModelFromJson(
                                         json: snapshot.data!.docs[i].data());
@@ -348,11 +358,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                   children.add(HomeItems(productModels: model));
                                 }
                               }
-                              return 
-                                  ProductsShowcaseListView(
-                                      title: "Similar Items ",
-                                      children: children);
-                                  
+                              return ProductsShowcaseListView(
+                                  title: "Similar Items ", children: children);
                             }
                           }),
                       CustomSimpleRoundedButton(
@@ -366,41 +373,41 @@ class _ProductScreenState extends State<ProductScreen> {
                                   builder: (context) => const UserDetails(),
                                 ),
                               );
-                            }
-                            else{
-                            showDialog(
-                                context: context,
-                                builder: (context) => ReviewDialog(
-                                      productUid: widget.product.uid,
-                                    ));
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => ReviewDialog(
+                                        productUid: widget.product.uid,
+                                      ));
                             }
                           }),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                        height: MediaQuery.of(context).size.height/2,
-                        child: StreamBuilder(
-                          stream: userStream,
-                          builder: (context,
-                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                                  snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Container();
-                            } else {
-                              return ListView.builder(
-                                  itemCount: snapshot.data!.docs.length,
-                                  itemBuilder: (context, index) {
-                                    ReviewModel model =
-                                        ReviewModel.getModelFromJson(
-                                            json: snapshot.data!.docs[index]
-                                                .data());
-                                    return ReviewWidget(review: model);
-                                  });
-                            }
-                          },
-                        ))
-                      ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                              height: MediaQuery.of(context).size.height / 2,
+                              child: StreamBuilder(
+                                stream: userStream,
+                                builder: (context,
+                                    AsyncSnapshot<
+                                            QuerySnapshot<Map<String, dynamic>>>
+                                        snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Container();
+                                  } else {
+                                    return ListView.builder(
+                                        itemCount: snapshot.data!.docs.length,
+                                        itemBuilder: (context, index) {
+                                          ReviewModel model =
+                                              ReviewModel.getModelFromJson(
+                                                  json: snapshot
+                                                      .data!.docs[index]
+                                                      .data());
+                                          return ReviewWidget(review: model);
+                                        });
+                                  }
+                                },
+                              ))),
                       const SizedBox(
                         height: 90,
                       )

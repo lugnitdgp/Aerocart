@@ -34,7 +34,7 @@ class HomeItems extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.network(productModels.url)
+                    Image.network(productModels.url[0])
                   ],
                 ),
                 

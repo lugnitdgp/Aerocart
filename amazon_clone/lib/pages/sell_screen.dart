@@ -69,6 +69,22 @@ class _SellScreenState extends State<SellScreen> {
     setState(() {});
   }
 
+  void loadingWidget(int i){
+    if(i==1){
+          showDialog(
+      context: context,
+      builder: (context){
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      );
+    }
+    else{
+      Navigator.pop(context);
+    }
+  }
+
  
   @override
   Widget build(BuildContext context) {
@@ -339,7 +355,8 @@ class _SellScreenState extends State<SellScreen> {
                               cost.text != "" &&
                               image.isNotEmpty &&
                               dropdownValue != "Select") {
-                            String output = await CloudFirestoreClass()
+                              loadingWidget(1);
+                              String output = await CloudFirestoreClass()
                                 .uploadProducttoDatabase(
                                     image: image,
                                     description: description.text,
@@ -358,10 +375,12 @@ class _SellScreenState extends State<SellScreen> {
                               Utils().showSnackBar(
                                   context: context,
                                   content: "Product Uploaded");
+                              loadingWidget(0);
                               Navigator.pop(context);
                             } else if (output != "Success") {
                               Utils().showSnackBar(
                                   context: context, content: output);
+                              loadingWidget(2);
                             }
                           } else {
                             Utils().showSnackBar(

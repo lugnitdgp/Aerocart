@@ -268,12 +268,14 @@ class _ProductScreenState extends State<ProductScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
+                              Column(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     widget.product.productname,
+                                    maxLines: 10,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 22),

@@ -1,7 +1,10 @@
 import 'package:amazon_clone/auth/auth_page.dart';
+import 'package:amazon_clone/auth/user_details_model.dart';
+import 'package:amazon_clone/login_screens/user_details.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/pages/sell_screen.dart';
 import 'package:amazon_clone/pages/seller_details_screen.dart';
+import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/cloud_firestore.dart';
 import 'package:amazon_clone/utils/home_items.dart';
@@ -9,9 +12,11 @@ import 'package:amazon_clone/utils/models.dart';
 import 'package:amazon_clone/utils/order_request_model.dart';
 import 'package:amazon_clone/utils/product_showcase_list_view.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
+import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -21,6 +26,21 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+
+  Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
+
+
+  @override
+  void initState() {
+    super.initState();
+    userStream = FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .collection("orderRequests")
+                          .snapshots();
+  }
+
+
   void signout() async {
     await FirebaseAuth.instance.signOut();
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
@@ -30,8 +50,33 @@ class _UserPageState extends State<UserPage> {
     ), (route) => false);
   }
 
+final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
+      AsyncMemoizer();
+  final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> memoizer =
+      AsyncMemoizer();
+  Future<QuerySnapshot<Map<String, dynamic>>> _fetchData() {
+    return this._memoizer.runOnce(() async {
+      return await  FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection("orders")
+                      .get();
+    });
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchData() {
+    return memoizer.runOnce(() async {
+      return await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection("orders")
+                      .get();
+    });
+  }
   @override
   Widget build(BuildContext context) {
+    UserDetailsModel userDetailsModel =
+        Provider.of<UserDetailsProvider>(context).userdetails;
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size(double.infinity, 55),
@@ -92,11 +137,7 @@ class _UserPageState extends State<UserPage> {
                 height: 35,
               ),
               FutureBuilder(
-                  future: FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .collection("orders")
-                      .get(),
+                  future: fetchData(),
                   builder: (context,
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
@@ -121,21 +162,32 @@ class _UserPageState extends State<UserPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: MyButton(
                     ontap: () async {
-                      bool t = await CloudFirestoreClass().isSeller();
-                      if (t) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SellScreen(),
-                          ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SellerDetailsScreen(),
-                          ),
-                        );
+                      if(userDetailsModel.name == "loading" ||
+                        userDetailsModel.address == "loading"){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const UserDetails(),
+                            ),
+                          );
+                      }
+                      else {
+                        bool t = await CloudFirestoreClass().isSeller();
+                        if (t) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SellScreen(),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SellerDetailsScreen(),
+                            ),
+                          );
+                        }
                       }
                     },
                     text: "Sell"),
@@ -156,11 +208,7 @@ class _UserPageState extends State<UserPage> {
               ),
               Expanded(
                   child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .collection("orderRequests")
-                          .snapshots(),
+                      stream: userStream,
                       builder: (context,
                           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                               snapshot) {

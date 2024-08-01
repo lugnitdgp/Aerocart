@@ -188,7 +188,7 @@ class CloudFirestoreClass {
     
     OrderRequestModel orderRequestModel = OrderRequestModel(
         orderName: model.productname, buyersAddress: userDetails.address);
-    //sendEmail(model: model);
+    sendEmail(model: model);
     await firebaseFirestore
         .collection("users")
         .doc(model.selleruid.trim())
@@ -222,12 +222,12 @@ class CloudFirestoreClass {
 
   }
   Future<void> sendEmail({required ProductModels model}) async {
-  final smtpServer = gmail('your-email@gmail.com', 'your-password');
+  final smtpServer = gmail('archishflutter@gmail.com', 'ngzf psrv ensj yyxn');
   
   final message = Message()
     ..from = const Address('test@gmail.com', 'test')
     ..recipients.add(model.email)
-    ..subject = 'Amoazon Order request Mail'
+    ..subject = 'Amazon Order request Mail'
     ..text = 'Name- ${model.productname}, quantity-${model.quantity}';
 
   try {

@@ -44,7 +44,7 @@ class CartItems extends StatelessWidget {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width / 3,
                         height: 120,
-                        child: Image.network(product.url[0]),
+                        child: Expanded(child: Image.network(product.url[0])),
                       ),
                     ),
                   ],

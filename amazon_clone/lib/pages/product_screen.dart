@@ -239,6 +239,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         child: Stack(children: [
                           Container(
                             width: width - 10,
+                            height: MediaQuery.of(context).size.height/3.1,
                             constraints: const BoxConstraints(maxHeight: 320),
                             decoration: BoxDecoration(
                                 color: Colors.white,

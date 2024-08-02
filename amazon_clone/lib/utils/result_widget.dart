@@ -24,7 +24,7 @@ class ResultWidget extends StatelessWidget {
         children: [
           SizedBox(
             height: 149,
-            child: Image.network(product.url[0]),
+            child: Expanded(child: Image.network(product.url[0])),
           ),
           Text(product.productname,maxLines: 3,overflow: TextOverflow.ellipsis,),
           CostWidget(cost: product.cost)

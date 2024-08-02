@@ -17,7 +17,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
 
   @override
   void initState() {
+    if(widget.querry.isNotEmpty){
     getData(widget.querry);
+    }
     super.initState();
   }
 
@@ -103,7 +105,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
-            child: RichText(
+            child:widget.querry.isNotEmpty? RichText(
               text: TextSpan(
                 children: [
                   const TextSpan(
@@ -118,7 +120,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   ),
                 ],
               ),
-            ),
+            ):Container(),
           ),
           Expanded(
             child: FutureBuilder(
@@ -139,7 +141,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     ),
                   );
                 } else {
-                  return ProductsShowcase(children: product!);
+                  return product!=null?ProductsShowcase(children: product!):Container();
                 }
               },
             ),

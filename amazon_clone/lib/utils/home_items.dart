@@ -22,6 +22,7 @@ class HomeItems extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
+          width: MediaQuery.of(context).size.width/4,
           padding:const EdgeInsetsDirectional.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: Colors.white,

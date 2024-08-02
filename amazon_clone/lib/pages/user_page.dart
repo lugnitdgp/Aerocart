@@ -16,6 +16,7 @@ import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
@@ -75,11 +76,11 @@ final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
   }
   @override
   Widget build(BuildContext context) {
-    UserDetailsModel userDetailsModel =
-        Provider.of<UserDetailsProvider>(context).userdetails;
+    double height=MediaQuery.of(context).size.height;
+    UserDetailsModel userDetailsModel =Provider.of<UserDetailsProvider>(context).userdetails;
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 55),
+          preferredSize: Size(double.infinity, height/12),
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(

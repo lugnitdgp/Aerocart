@@ -90,25 +90,42 @@ class CloudFirestoreClass {
     for(int i=0;i<snap.docs.length;i++){
       DocumentSnapshot docSnap = snap.docs[i];
       ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
-      print(models);
       children.add(HomeItems(productModels: models));
     }
     return children;
   }
     Future<List<Widget>> searchProducts({required String name}) async{
-    List<Widget> children=[];
-    QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("products").get();
-    for(int i=0;i<snap.docs.length;i++){
-      DocumentSnapshot docSnap = snap.docs[i];
-      if(docSnap['productName'].toLowerCase().startsWith(name.toLowerCase())||docSnap['category'].toLowerCase().startsWith(name.toLowerCase())||docSnap['category'].toLowerCase().contains(name.toLowerCase())||docSnap['productName'].toLowerCase().contains(name.toLowerCase())){
-        ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
-        children.add(HomeItems(productModels: models));
+      String querry=name.trim();
+      List<Widget> children=[];
+      QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("products").get();
+      for(int i=0;i<snap.docs.length;i++){
+        DocumentSnapshot docSnap = snap.docs[i];
+        if(querry.toLowerCase()=="electronics"){
+          if(docSnap['productName'].toLowerCase().startsWith(querry.toLowerCase(),)||docSnap['category'].toLowerCase().startsWith(querry.toLowerCase(),)
+              ||docSnap['category'].toLowerCase().contains(querry.toLowerCase(),)||docSnap['productName'].toLowerCase().contains(querry.toLowerCase(),)
+              ||docSnap['category'].toLowerCase().startsWith("mobiles")||docSnap['category'].toLowerCase().contains("mobiles")
+              ||docSnap['category'].toLowerCase().startsWith("laptop")||docSnap['category'].toLowerCase().contains("laptop")
+              ||docSnap['category'].toLowerCase().startsWith('appliances')||docSnap['category'].toLowerCase().contains('appliances')
+              ||docSnap['category'].toLowerCase().startsWith('headphone')||docSnap['category'].toLowerCase().contains('headphone')){
+                ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
+                children.add(HomeItems(productModels: models));
+              }
+          else{
+            continue;
+          }
+        }
+        else{
+          if(docSnap['productName'].toLowerCase().startsWith(querry.toLowerCase(),)||docSnap['category'].toLowerCase().startsWith(querry.toLowerCase(),)
+                ||docSnap['category'].toLowerCase().contains(querry.toLowerCase(),)||docSnap['productName'].toLowerCase().contains(querry.toLowerCase(),)){
+            ProductModels models = ProductModels.getModelFromJson(json: (docSnap.data()) as dynamic);
+            children.add(HomeItems(productModels: models));
+          }
+          else {
+            continue;
+          }
+        }
       }
-      else {
-        continue;
-      }
-    }
-    return children;
+      return children;
   }
       Future<bool> isEmpty() async{
     QuerySnapshot<Map<String?,dynamic>> snap = await firebaseFirestore.collection("users").doc(firebaseAuth.currentUser!.uid).collection("cart").get();

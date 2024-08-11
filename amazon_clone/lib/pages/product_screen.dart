@@ -35,7 +35,7 @@ class _ProductScreenState extends State<ProductScreen> {
   final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> memoizer =
       AsyncMemoizer();
   Future<QuerySnapshot<Map<String, dynamic>>> _fetchData() {
-    return this._memoizer.runOnce(() async {
+    return _memoizer.runOnce(() async {
       return await FirebaseFirestore.instance
           .collection("products")
           .where("category", isEqualTo: widget.product.category)
@@ -70,7 +70,7 @@ class _ProductScreenState extends State<ProductScreen> {
     for (int i = 0; i < model.url.length; i++) {
       myitems.add(
         Image.network(model.url[i]),
-      );      
+      );
     }
   }
 
@@ -239,7 +239,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         child: Stack(children: [
                           Container(
                             width: width - 10,
-                            height: MediaQuery.of(context).size.height/3.1,
+                            height: MediaQuery.of(context).size.height / 3.1,
                             constraints: const BoxConstraints(maxHeight: 320),
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -270,8 +270,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(

@@ -63,28 +63,35 @@ class _LoginPageState extends State<RegisterPage> {
           );
         });
     try {
-      if (password.text == confirmPassword.text) {
+      if (password.text == confirmPassword.text && password.text != "") {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: email.text, password: password.text);
         await firebaseFirestore
             .collection("users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({"name": username.text, "address": address.text});   
-        Navigator.pop(context);     
+            .set({"name": username.text, "address": address.text});
+        Navigator.pop(context);
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
           builder: (context) {
             return const AuthPage();
           },
         ), (route) => false);
-        
+      } else if (password.text == "" ||
+          confirmPassword.text == "" ||
+          address.text == "" ||
+          email.text == "" ||
+          username.text == "") {
+        Navigator.pop(context);
+        Utils().showSnackBar(
+            context: context, content: "Please fill all the fields");
       } else {
         Navigator.pop(context);
-        Utils().showSnackBar(context: context, content: "Passwords don't match");
+        Utils()
+            .showSnackBar(context: context, content: "Passwords don't match");
       }
-    }on FirebaseAuthException  catch(e) {
+    } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       Utils().showSnackBar(context: context, content: e.message.toString());
-
     }
   }
 

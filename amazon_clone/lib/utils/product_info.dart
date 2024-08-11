@@ -1,20 +1,17 @@
+import 'package:amazon_clone/pages/product_screen.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/custom_square_button.dart';
+import 'package:amazon_clone/utils/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProductInfo extends StatefulWidget {
-  final String productUid;
-  final String productName;
-  final double? cost;
-  final String sellerName;
+  final ProductModels model;
   const ProductInfo({
     super.key,
-    required this.productName,
-    required this.cost,
-    required this.sellerName,
-    required this.productUid,
+    required this.model,
+
   });
 
   @override
@@ -36,21 +33,29 @@ class _ProductInfoState extends State<ProductInfo> {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              widget.productName,
-              maxLines: 2,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-                letterSpacing: 0.9,
-                overflow: TextOverflow.ellipsis,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,MaterialPageRoute(
+                    builder: (context) => ProductScreen(product: widget.model),
+                  ),
+                );
+              },
+              child: Text(
+                widget.model.productname,
+                maxLines: 2,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                  letterSpacing: 0.9,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
           ),
           spaceThingy,
           Align(
             alignment: Alignment.centerLeft,
-            child: CostWidget(cost: widget.cost),
+            child: CostWidget(cost: widget.model.cost),
           ),
           spaceThingy,
           Align(
@@ -62,7 +67,7 @@ class _ProductInfoState extends State<ProductInfo> {
                       text: "Sold by ",
                       style: TextStyle(color: Colors.grey[700], fontSize: 14)),
                   TextSpan(
-                      text: widget.sellerName,
+                      text: widget.model.sellername,
                       style: const TextStyle(
                           color: Colors.lightBlue, fontSize: 14)),
                 ],
@@ -79,8 +84,8 @@ class _ProductInfoState extends State<ProductInfo> {
                 count > 1
                     ? CustomSquareButton(
                         onpressed: () async{                            
-                          await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("cart").doc(widget.productUid).update({"quantity":--count});
-                         setState(() async{
+                          await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("cart").doc(widget.model.uid).update({"quantity":--count});
+                         setState(() {
 
                           });
                         },
@@ -104,7 +109,7 @@ class _ProductInfoState extends State<ProductInfo> {
                     )),
                 CustomSquareButton(
                   onpressed: () async{
-                  await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("cart").doc(widget.productUid).update({"quantity":++count});
+                  await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("cart").doc(widget.model.uid).update({"quantity":++count});
                    setState(() {
                     });
                   },

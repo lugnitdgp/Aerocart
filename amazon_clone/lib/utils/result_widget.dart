@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ResultWidget extends StatelessWidget {
   final ProductModels product;
-  const ResultWidget({super.key,required this.product});
+  const ResultWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +14,7 @@ class ResultWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductScreen(
-              product: product
-            ),
+            builder: (context) => ProductScreen(product: product),
           ),
         );
       },
@@ -26,7 +24,11 @@ class ResultWidget extends StatelessWidget {
             height: 149,
             child: Expanded(child: Image.network(product.url[0])),
           ),
-          Text(product.productname,maxLines: 3,overflow: TextOverflow.ellipsis,),
+          Text(
+            product.productname,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
           CostWidget(cost: product.cost)
         ],
       ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class HomeItems extends StatelessWidget {
   final ProductModels productModels;
-  const HomeItems({super.key,required this.productModels});
+  const HomeItems({super.key, required this.productModels});
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +13,15 @@ class HomeItems extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductScreen(
-              product: productModels
-            ),
+            builder: (context) => ProductScreen(product: productModels),
           ),
         );
       },
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
-          width: MediaQuery.of(context).size.width/4,
-          padding:const EdgeInsetsDirectional.symmetric(vertical: 8),
+          width: MediaQuery.of(context).size.width / 4,
+          padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -38,29 +36,28 @@ class HomeItems extends StatelessWidget {
                     Expanded(child: Image.network(productModels.url[0]))
                   ],
                 ),
-                
               ),
               Expanded(
                 flex: 2,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(                      
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Text(
                           productModels.productname,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                          style: const TextStyle(
+                              fontSize: 16.4, fontWeight: FontWeight.w500),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
-                
               ),
-
               Expanded(
                 flex: 2,
                 child: Row(
@@ -72,7 +69,6 @@ class HomeItems extends StatelessWidget {
                     )
                   ],
                 ),
-                
               )
             ],
           ),

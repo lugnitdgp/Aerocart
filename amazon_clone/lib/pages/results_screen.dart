@@ -17,8 +17,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
 
   @override
   void initState() {
-    if(widget.querry.isNotEmpty){
-    getData(widget.querry);
+    if (widget.querry.isNotEmpty) {
+      getData(widget.querry);
     }
     super.initState();
   }
@@ -105,22 +105,25 @@ class _ResultsScreenState extends State<ResultsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
-            child:widget.querry.isNotEmpty? RichText(
-              text: TextSpan(
-                children: [
-                  const TextSpan(
-                      text: "Search results for ",
-                      style: TextStyle(fontSize: 17, color: Colors.black)),
-                  TextSpan(
-                    text: "'$name'",
-                    style: const TextStyle(
-                        fontSize: 17,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.black),
-                  ),
-                ],
-              ),
-            ):Container(),
+            child: widget.querry.isNotEmpty
+                ? RichText(
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                            text: "Search results for ",
+                            style:
+                                TextStyle(fontSize: 17, color: Colors.black)),
+                        TextSpan(
+                          text: "'$name'",
+                          style: const TextStyle(
+                              fontSize: 17,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
           ),
           Expanded(
             child: FutureBuilder(
@@ -141,7 +144,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     ),
                   );
                 } else {
-                  return product!=null?ProductsShowcase(children: product!):Container();
+                  return product != null
+                      ? ProductsShowcase(children: product!)
+                      : Container();
                 }
               },
             ),

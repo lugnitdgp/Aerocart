@@ -16,7 +16,6 @@ import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
@@ -27,20 +26,17 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-
   Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
-
 
   @override
   void initState() {
     super.initState();
     userStream = FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .collection("orderRequests")
-                          .snapshots();
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("orderRequests")
+        .snapshots();
   }
-
 
   void signout() async {
     await FirebaseAuth.instance.signOut();
@@ -51,36 +47,38 @@ class _UserPageState extends State<UserPage> {
     ), (route) => false);
   }
 
-final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
-      AsyncMemoizer();
+  // final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
+  //     AsyncMemoizer();
   final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> memoizer =
       AsyncMemoizer();
-  Future<QuerySnapshot<Map<String, dynamic>>> _fetchData() {
-    return this._memoizer.runOnce(() async {
-      return await  FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .collection("orders")
-                      .get();
-    });
-  }
+  // Future<QuerySnapshot<Map<String, dynamic>>> _fetchData() {
+  //   return this._memoizer.runOnce(() async {
+  //     return await FirebaseFirestore.instance
+  //         .collection("users")
+  //         .doc(FirebaseAuth.instance.currentUser!.uid)
+  //         .collection("orders")
+  //         .get();
+  //   });
+  // }
 
   Future<QuerySnapshot<Map<String, dynamic>>> fetchData() {
     return memoizer.runOnce(() async {
       return await FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .collection("orders")
-                      .get();
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("orders")
+          .get();
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    double height=MediaQuery.of(context).size.height;
-    UserDetailsModel userDetailsModel =Provider.of<UserDetailsProvider>(context).userdetails;
+    double height = MediaQuery.of(context).size.height;
+    UserDetailsModel userDetailsModel =
+        Provider.of<UserDetailsProvider>(context).userdetails;
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size(double.infinity, height/12),
+          preferredSize: Size(double.infinity, height / 12),
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -163,16 +161,15 @@ final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: MyButton(
                     ontap: () async {
-                      if(userDetailsModel.name == "loading" ||
-                        userDetailsModel.address == "loading"){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const UserDetails(),
-                            ),
-                          );
-                      }
-                      else {
+                      if (userDetailsModel.name == "loading" ||
+                          userDetailsModel.address == "loading") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UserDetails(),
+                          ),
+                        );
+                      } else {
                         bool t = await CloudFirestoreClass().isSeller();
                         if (t) {
                           Navigator.push(
@@ -197,7 +194,7 @@ final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: MyButton(ontap: signout, text: "Sign Out"),
               ),
-                            const Padding(
+              const Padding(
                 padding: EdgeInsets.all(15),
                 child: Align(
                   alignment: Alignment.centerLeft,
@@ -217,7 +214,7 @@ final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
                             ConnectionState.waiting) {
                           return Container();
                         } else {
-                          return ListView.builder(
+                          return snapshot.data!.docs.isNotEmpty? ListView.builder(
                               itemCount: snapshot.data!.docs.length,
                               itemBuilder: (context, index) {
                                 OrderRequestModel model =
@@ -228,7 +225,7 @@ final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
                                   title: Text(
                                     "Order: ${model.orderName}",
                                     style:
-                                        TextStyle(fontWeight: FontWeight.w500),
+                                        const TextStyle(fontWeight: FontWeight.w500),
                                   ),
                                   subtitle:
                                       Text("Address: ${model.buyersAddress}"),
@@ -242,9 +239,9 @@ final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
                                             .doc(snapshot.data!.docs[index].id)
                                             .delete();
                                       },
-                                      icon: Icon(Icons.check)),
+                                      icon: const Icon(Icons.check)),
                                 );
-                              });
+                              }): const Text("Nothing found");
                         }
                       }))
             ],

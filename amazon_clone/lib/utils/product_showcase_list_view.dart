@@ -12,12 +12,11 @@ class ProductsShowcaseListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    double height = screenSize.height / 4;
     double titleHeight = 25;
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
-      height: height,
+      height: 226,
       width: screenSize.width,
       color: Colors.white,
       child: Column(
@@ -46,7 +45,7 @@ class ProductsShowcaseListView extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: height/1.235,
+            height: 185,
             width: screenSize.width,
             child:children.isNotEmpty? ListView(
               scrollDirection: Axis.horizontal,

@@ -3,9 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-
-class Utils{
-
+class Utils {
   showSnackBar({required BuildContext context, required String content}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -18,7 +16,7 @@ class Utils{
         ),
         content: SizedBox(
           width: double.infinity,
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
@@ -33,16 +31,16 @@ class Utils{
           ),
         ),
       ),
-    );    
+    );
   }
-  
-  String getUid(){
-      return (100000 + Random().nextInt(10000)).toString();
-    }
 
-  Future<Uint8List?> pickImage() async{
-    ImagePicker picker=ImagePicker();
-    XFile? file=await picker.pickImage(source: ImageSource.gallery);
+  String getUid() {
+    return (100000 + Random().nextInt(10000)).toString();
+  }
+
+  Future<Uint8List?> pickImage() async {
+    ImagePicker picker = ImagePicker();
+    XFile? file = await picker.pickImage(source: ImageSource.gallery);
     return file!.readAsBytes();
   }
 }

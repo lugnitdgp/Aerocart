@@ -22,19 +22,17 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-     Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
-
+  Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
 
   @override
   void initState() {
     super.initState();
     userStream = FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .collection("cart")
-                  .snapshots();
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("cart")
+        .snapshots();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -142,39 +140,48 @@ class _CartPageState extends State<CartPage> {
                   text: "Proceed to buy"),
             ),
             Expanded(
-                child: StreamBuilder(
-              stream: userStream,
-              builder: (context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container();
-                } else if (!snapshot.hasData) {
-                  return const Center(
-                    child: Text(
-                      "No Items in Cart",
-                      style: TextStyle(fontSize: 30, color: Colors.black),
-                    ),
-                  );
-                } else {
-                  return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        ProductModels model = ProductModels.getModelFromJson(
-                            json: snapshot.data!.docs[index].data());
-                        return CartItems(product: model,onpressed: () async{
-                            await CloudFirestoreClass().deleteFromCart(uid: model.uid);
-                            setState(() {
-                              
-                            });
-                            
-                          },);
-                      });
-                }
-              },
-            )),
-            const SizedBox(
-              height: 180,
-            )
+              child: StreamBuilder(
+                stream: userStream,
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  } else if (!snapshot.hasData) {
+                    return const Center(
+                      child: Text(
+                        "No Items in Cart",
+                        style: TextStyle(fontSize: 30, color: Colors.black),
+                      ),
+                    );
+                  } else {
+                    return snapshot.data!.docs.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              ProductModels model =
+                                  ProductModels.getModelFromJson(
+                                      json: snapshot.data!.docs[index].data());
+                              return CartItems(
+                                product: model,
+                                onpressed: () async {
+                                  await CloudFirestoreClass()
+                                      .deleteFromCart(uid: model.uid);
+                                  setState(() {});
+                                },
+                              );
+                            })
+                        : const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 100.0),
+                            child: Text(
+                              "Cart is Empty!!!",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          );
+                  }
+                },
+              ),
+            ),
           ],
         ),
         UserDetailsBar(

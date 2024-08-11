@@ -28,7 +28,7 @@ class _SellScreenState extends State<SellScreen> {
   var itemss = <String>[
     'Select',
     'Appliances',
-    'Beauty', 
+    'Beauty',
     'Books',
     'Electronics',
     'Essentials',
@@ -42,7 +42,7 @@ class _SellScreenState extends State<SellScreen> {
     'Mobiles',
     'Sports',
     'Travel',
-    'Toys',    
+    'Toys',
   ];
   @override
   void dispose() {
@@ -52,40 +52,36 @@ class _SellScreenState extends State<SellScreen> {
     super.dispose();
   }
 
-  List<XFile> imagefileList = []; 
+  List<XFile> imagefileList = [];
   List<Uint8List> image = [];
 
   Future<void> selectImages() async {
     final List<XFile> selectImages = await ImagePicker().pickMultiImage();
     if (selectImages.isNotEmpty) {
       imagefileList.addAll(selectImages);
-      for (int i=0;i<imagefileList.length;i++) {
-        XFile file=imagefileList[i];
+      for (int i = 0; i < imagefileList.length; i++) {
+        XFile file = imagefileList[i];
         Uint8List bytes = await file.readAsBytes();
         image.add(bytes);
       }
     }
-    print(image);
     setState(() {});
   }
 
-  void loadingWidget(int i){
-    if(i==1){
-          showDialog(
-      context: context,
-      builder: (context){
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      );
-    }
-    else{
+  void loadingWidget(int i) {
+    if (i == 1) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
+    } else {
       Navigator.pop(context);
     }
   }
 
- 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -151,76 +147,80 @@ class _SellScreenState extends State<SellScreen> {
                 children: [
                   SizedBox(
                     height: 200,
-                    child: image.isEmpty?Container(
-                          padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
-                          child: DottedBorder(
-                            borderType: BorderType.RRect,
-                            radius: const Radius.circular(10),
-                            strokeWidth: 2,
-                            color: Colors.blueGrey,
-                            child: ClipRRect(
-                              child: Container(
-                                width: width / 3,
-                                height: 180,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child:
-                                    Center(
-                                        child: IconButton(
-                                            onPressed: () async {
-                                              selectImages();
-                                            },
-                                            icon: const Icon(
-                                              Icons.upload_outlined,
-                                              size: 30,
-                                              color: Colors.blueGrey,
-                                            )),
-                                      ),
+                    child: image.isEmpty
+                        ? Container(
+                            padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
+                            child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              radius: const Radius.circular(10),
+                              strokeWidth: 2,
+                              color: Colors.blueGrey,
+                              child: ClipRRect(
+                                child: Container(
+                                  width: width / 3,
+                                  height: 180,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Center(
+                                    child: IconButton(
+                                        onPressed: () async {
+                                          selectImages();
+                                        },
+                                        icon: const Icon(
+                                          Icons.upload_outlined,
+                                          size: 30,
+                                          color: Colors.blueGrey,
+                                        )),
+                                  ),
+                                ),
                               ),
                             ),
+                          )
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: image.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 50, 0, 10),
+                                child: DottedBorder(
+                                  borderType: BorderType.RRect,
+                                  radius: const Radius.circular(10),
+                                  strokeWidth: 2,
+                                  color: Colors.blueGrey,
+                                  child: ClipRRect(
+                                    child: Container(
+                                      width: width / 3,
+                                      height: 180,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: imagefileList.isEmpty
+                                          ? Center(
+                                              child: IconButton(
+                                                  onPressed: () async {
+                                                    selectImages();
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.upload_outlined,
+                                                    size: 30,
+                                                    color: Colors.blueGrey,
+                                                  )),
+                                            )
+                                          : Stack(
+                                              children: [
+                                                Center(
+                                                  child: Image.memory(
+                                                      image[index]),
+                                                ),
+                                              ],
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        ): ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: image.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          padding: const EdgeInsets.fromLTRB(0, 50, 0, 10),
-                          child: DottedBorder(
-                            borderType: BorderType.RRect,
-                            radius: const Radius.circular(10),
-                            strokeWidth: 2,
-                            color: Colors.blueGrey,
-                            child: ClipRRect(
-                              child: Container(
-                                width: width / 3,
-                                height: 180,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: imagefileList.isEmpty
-                                    ? Center(
-                                        child: IconButton(
-                                            onPressed: () async {
-                                              selectImages();
-                                            },
-                                            icon: const Icon(
-                                              Icons.upload_outlined,
-                                              size: 30,
-                                              color: Colors.blueGrey,
-                                            )),
-                                      )
-                                    : Stack(
-                                        children: [
-                                          Center(
-                                            child: Image.memory(image[index]),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
                   ),
                   const Text(
                     "Upload Images of the Product",
@@ -355,8 +355,8 @@ class _SellScreenState extends State<SellScreen> {
                               cost.text != "" &&
                               image.isNotEmpty &&
                               dropdownValue != "Select") {
-                              loadingWidget(1);
-                              String output = await CloudFirestoreClass()
+                            loadingWidget(1);
+                            String output = await CloudFirestoreClass()
                                 .uploadProducttoDatabase(
                                     image: image,
                                     description: description.text,

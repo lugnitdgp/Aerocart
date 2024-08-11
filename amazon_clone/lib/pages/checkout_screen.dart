@@ -248,11 +248,15 @@ class _OrderScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    "Deliver to- ${userDetailsModel.address}",
-                    maxLines: 10,
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.w400),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Deliver to- ${userDetailsModel.address}",
+                        maxLines: 20,
+                        style: const TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w400),
+                      ),
+                    ],
                   ),
                 ),
                 const Padding(

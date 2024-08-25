@@ -28,15 +28,14 @@ class _OrderScreenState extends State<CheckoutScreen> {
   double shipping = 7;
   final Razorpay razorpay = Razorpay();
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-                          await CloudFirestoreClass().buyAllItemsInCart(userDetails: user!);
-
+    await CloudFirestoreClass().buyAllItemsInCart(userDetails: user!);
     payment="success";
-
         Fluttertoast.showToast(msg: "Payment Success");
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     Fluttertoast.showToast(msg: "Payment Failure");
+
   }
   
   @override
@@ -69,30 +68,30 @@ class _OrderScreenState extends State<CheckoutScreen> {
         child: MyButton(
             ontap: () async {
               if ((int.parse(number.text) / 1000000000 < 10) &&
-                  (int.parse(number.text) / 1000000000 > 5)) {
-                var options = {
-                  'key': 'rzp_test_GcZZFDPP0jHtC4',
-                  'amount': (widget.cost + shipping)*100,
-                  'name': user!.name,
-                  'description': 'Amazon Shopping',
-                  'prefill': {
-                    'contact': number.text,
-                    'email': userr!.email,
-                  }
-                };
-                razorpay.open(options);
-                razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-                razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-                Navigator.pop(context);
-                if(payment=="success"){
-                }
+                  (int.parse(number.text) / 1000000000 > 5)) {                    
+                    Navigator.pop(context);
 
-                
-              } else {
-                Utils().showSnackBar(
-                    context: context,
-                    content: "Please enter a valid phone number");
-              }
+                    var options = {
+                      'key': 'rzp_test_GcZZFDPP0jHtC4',
+                      'amount': (widget.cost + shipping)*100,
+                      'name': user!.name,
+                      'description': 'Amazon Shopping',
+                      'prefill': {
+                        'contact': number.text,
+                        'email': userr!.email,
+                      }
+                    };
+                    razorpay.open(options);
+                    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+                    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+
+
+                    
+                } else {
+                    Utils().showSnackBar(
+                        context: context,
+                        content: "Please enter a valid phone number");
+                  }
             },
             text: "Checkout- ₹${(widget.cost + shipping).toString()}"),
       ),

@@ -47,19 +47,9 @@ class _UserPageState extends State<UserPage> {
     ), (route) => false);
   }
 
-  // final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> _memoizer =
-  //     AsyncMemoizer();
   final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> memoizer =
       AsyncMemoizer();
-  // Future<QuerySnapshot<Map<String, dynamic>>> _fetchData() {
-  //   return this._memoizer.runOnce(() async {
-  //     return await FirebaseFirestore.instance
-  //         .collection("users")
-  //         .doc(FirebaseAuth.instance.currentUser!.uid)
-  //         .collection("orders")
-  //         .get();
-  //   });
-  // }
+
 
   Future<QuerySnapshot<Map<String, dynamic>>> fetchData() {
     return memoizer.runOnce(() async {
@@ -67,7 +57,7 @@ class _UserPageState extends State<UserPage> {
           .collection("users")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("orders")
-          .get();
+          .get();  
     });
   }
 

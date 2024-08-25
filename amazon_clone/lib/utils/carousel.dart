@@ -1,4 +1,4 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -24,12 +24,7 @@ const List<String> adItemNames = [
   "Pay Bills"
 ];
 
-// final myitems=[
-//   Image.asset('lib/images/1.jpg',),
-//   Image.asset('lib/images/2.jpg'),
-//   Image.asset('lib/images/3.jpg'),
-//   Image.asset('lib/images/4.jpg'),
-// ];
+
 int currpage = 0;
 
 class _ImageCarouselState extends State<ImageCarousel> {

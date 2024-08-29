@@ -1,7 +1,7 @@
 import 'package:amazon_clone/pages/product_screen.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/custom_square_button.dart';
-import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

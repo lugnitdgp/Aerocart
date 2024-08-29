@@ -2,7 +2,7 @@ import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/pages/update_address.dart';
 import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:amazon_clone/utils/button.dart';
-import 'package:amazon_clone/utils/cloud_firestore.dart';
+import 'package:amazon_clone/cloud_firestore_methods/cloud_firestore.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +19,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<CheckoutScreen> {
+    
   String payment="";
   User? userr;
   UserDetailsModel? user;
@@ -54,6 +55,22 @@ class _OrderScreenState extends State<CheckoutScreen> {
       userr = te;
     });
   }
+    bool isValidPhoneNumber(String value) {
+    if (value.isEmpty) return false;
+    int? phoneNumber;
+    try {
+      phoneNumber = int.parse(value);
+    } catch (e) {
+      return false; 
+    }
+    if (phoneNumber < 5000000000 || phoneNumber > 10000000000) {
+      return false;
+    }
+
+    return true;
+  }
+
+  
 
 
 
@@ -67,8 +84,7 @@ class _OrderScreenState extends State<CheckoutScreen> {
         padding: EdgeInsets.fromLTRB(width * 0.077, 10, 0, 10),
         child: MyButton(
             ontap: () async {
-              if ((int.parse(number.text) / 1000000000 < 10) &&
-                  (int.parse(number.text) / 1000000000 > 5)) {                    
+              if (isValidPhoneNumber(number.text)||(number.text!="")) {                    
                     Navigator.pop(context);
 
                     var options = {
@@ -274,9 +290,9 @@ class _OrderScreenState extends State<CheckoutScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextField(
                     controller: number,
+                    keyboardType: const TextInputType.numberWithOptions(),
                     onSubmitted: (value) {
-                      if ((int.parse(value) / 1000000000 < 10) &&
-                          (int.parse(value) / 1000000000 > 5)) {
+                      if (isValidPhoneNumber(value)) {
                       } else {
                         Utils().showSnackBar(
                             context: context,

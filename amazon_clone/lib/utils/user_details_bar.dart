@@ -41,11 +41,16 @@ class UserDetailsBar extends StatelessWidget {
               ),
               SizedBox(
                 width: width * 0.7,
-                child:userDetailsModel.name!="loading"&&userDetailsModel.address!="loading"? Text(
-                  "Deliver to ${userDetailsModel.name}-${userDetailsModel.address}",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey[800]),
+                child:userDetailsModel.name!="loading"&&userDetailsModel.address!="loading"? GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const UserDetails()));
+                  },
+                  child: Text(
+                    "Deliver to ${userDetailsModel.name}-${userDetailsModel.address}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.grey[800]),
+                  ),
                 ):
                 GestureDetector(
                   onTap: () {

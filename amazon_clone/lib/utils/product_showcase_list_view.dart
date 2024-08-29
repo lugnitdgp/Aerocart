@@ -1,3 +1,4 @@
+import 'package:amazon_clone/pages/show_more.dart';
 import 'package:flutter/material.dart';
 
 class ProductsShowcaseListView extends StatelessWidget {
@@ -34,11 +35,16 @@ class ProductsShowcaseListView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 14),
-                  child: Text(
-                    "Show more",
-                    style: TextStyle(color: Colors.cyan),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowMore(products: children)));
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 14),
+                    child: Text(
+                      "Show more",
+                      style: TextStyle(color: Colors.cyan),
+                    ),
                   ),
                 )
               ],

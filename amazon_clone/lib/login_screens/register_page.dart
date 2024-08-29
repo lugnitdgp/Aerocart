@@ -84,10 +84,12 @@ class _LoginPageState extends State<RegisterPage> {
         Navigator.pop(context);
         Utils().showSnackBar(
             context: context, content: "Please fill all the fields");
-      } else {
+      }else if(password.text.length<6){
+        Utils().showSnackBar(context: context, content: "The password should contain atleast 6 letters");
+      }
+       else {
         Navigator.pop(context);
-        Utils()
-            .showSnackBar(context: context, content: "Passwords don't match");
+        Utils().showSnackBar(context: context, content: "Passwords don't match");
       }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);

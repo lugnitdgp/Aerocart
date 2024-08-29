@@ -1,6 +1,6 @@
 import 'package:amazon_clone/utils/carousel.dart';
 import 'package:amazon_clone/utils/categories.dart';
-import 'package:amazon_clone/utils/cloud_firestore.dart';
+import 'package:amazon_clone/cloud_firestore_methods/cloud_firestore.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/utils/loading_widget.dart';
 import 'package:amazon_clone/utils/products_showcase.dart';

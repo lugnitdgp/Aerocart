@@ -1,9 +1,12 @@
 import 'package:amazon_clone/auth/auth_page.dart';
+import 'package:amazon_clone/auth/user_details_model.dart';
+import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:amazon_clone/utils/button.dart';
 import 'package:amazon_clone/utils/text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserDetails extends StatefulWidget {  
   const UserDetails({super.key});
@@ -73,6 +76,8 @@ class _LoginPageState extends State<UserDetails> {
 
   @override
   Widget build(BuildContext context) {
+    UserDetailsModel userDetailsModel =
+        Provider.of<UserDetailsProvider>(context).userdetails;
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
@@ -80,9 +85,12 @@ class _LoginPageState extends State<UserDetails> {
         title: Center(
           child: Column(
             children: [
-              Image.asset(
-                'lib/images/amazon.png',
-                height: 35,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0,0,50,0),
+                child: Image.asset(
+                  'lib/images/amazon.png',
+                  height: 35,
+                ),
               ),
             ],
           ),
@@ -93,11 +101,24 @@ class _LoginPageState extends State<UserDetails> {
       body: SingleChildScrollView(
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start ,
             children: [
               const SizedBox(
                 height: 16,
               ),
-              //welcome back
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
+                child: Row(
+                  children: [
+                    Text("Name- ${userDetailsModel.name}",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),maxLines: 10,),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
+                child: Text("Address- ${userDetailsModel.address}",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+              ),
+
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(

@@ -1,39 +1,21 @@
-import 'package:amazon_clone/cloud_firestore_methods/cloud_firestore.dart';
-import 'package:amazon_clone/utils/loading_widget.dart';
+import 'package:amazon_clone/pages/results_screen.dart';
 import 'package:amazon_clone/utils/products_showcase.dart';
 import 'package:flutter/material.dart';
 
-class ResultsScreen extends StatefulWidget {
-  final String querry;
-  const ResultsScreen({super.key, required this.querry});
+class ShowMore extends StatefulWidget {
+  final List<Widget> products;
+  const ShowMore({super.key, required this.products});
 
   @override
-  State<ResultsScreen> createState() => _ResultsScreenState();
+  State<ShowMore> createState() => _ShowMoreState();
 }
 
-class _ResultsScreenState extends State<ResultsScreen> {
-  late String name = widget.querry;
-  List<Widget>? product;
-
-  @override
-  void initState() {
-    if (widget.querry.isNotEmpty) {
-      getData(widget.querry);
-    }
-    super.initState();
-  }
-
-  void getData(querry) async {
-    List<Widget>? temp =
-        await CloudFirestoreClass().searchProducts(name: querry);
-    setState(() {
-      product = temp;
-    });
-  }
-
+class _ShowMoreState extends State<ShowMore> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 60),
@@ -65,10 +47,11 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: TextField(
                         onSubmitted: (value) {
-                          getData(value);
-                          setState(() {
-                            name = value;
-                          });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ResultsScreen(querry: value)));
                         },
                         decoration: InputDecoration(
                           isCollapsed: true,
@@ -105,52 +88,26 @@ class _ResultsScreenState extends State<ResultsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
-            child: widget.querry.isNotEmpty
-                ? RichText(
-                    text: TextSpan(
-                      children: [
-                        const TextSpan(
-                            text: "Search results for ",
-                            style:
-                                TextStyle(fontSize: 17, color: Colors.black)),
-                        TextSpan(
-                          text: "'$name'",
-                          style: const TextStyle(
-                              fontSize: 17,
-                              fontStyle: FontStyle.italic,
-                              color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  )
-                : Container(),
-          ),
-          Expanded(
-            child: FutureBuilder(
-              future: CloudFirestoreClass().searchProducts(name: name),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<Widget?>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const LoadingWidget();
-                } else if (snapshot.data == []) {
-                  return Center(
-                    child: SizedBox(
-                      height: 100,
-                      width: width,
-                      child: Text(
-                        "Oops nothing found with the name $name",
-                        style: const TextStyle(fontSize: 30),
-                      ),
-                    ),
-                  );
-                } else {
-                  return product != null
-                      ? ProductsShowcase(children: product!)
-                      : Container();
-                }
-              },
+            child: RichText(
+              text: const TextSpan(
+                children: [
+                  TextSpan(
+                      text: "More Items-",
+                      style: TextStyle(fontSize: 17, color: Colors.black)),
+                ],
+              ),
             ),
           ),
+          widget.products.isNotEmpty
+              ? ProductsShowcase(children: widget.products)
+              : SizedBox(
+                  height: height / 2,
+                  child: const Center(
+                      child: Text(
+                    "Oops!! Nothing here ",
+                    style: TextStyle(fontSize: 20),
+                  )),
+                )
         ],
       ),
     );

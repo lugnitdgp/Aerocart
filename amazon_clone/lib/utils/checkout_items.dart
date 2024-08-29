@@ -1,4 +1,4 @@
-import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/models/models.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutItems extends StatelessWidget {
@@ -20,6 +20,7 @@ class CheckoutItems extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width/1.5,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children:[ Text(
                   ("${product.productname}(${product.quantity})"),
                   maxLines: 5,

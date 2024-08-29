@@ -2,24 +2,26 @@ import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/login_screens/user_details.dart';
 import 'package:amazon_clone/pages/results_screen.dart';
 import 'package:amazon_clone/provider/user_details_provider.dart';
-import 'package:amazon_clone/utils/cloud_firestore.dart';
+import 'package:amazon_clone/cloud_firestore_methods/cloud_firestore.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
 import 'package:amazon_clone/utils/custom_simple_rounded_button.dart';
 import 'package:amazon_clone/utils/home_items.dart';
 import 'package:amazon_clone/utils/item_carousel.dart';
 import 'package:amazon_clone/utils/loading_widget.dart';
-import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/models/models.dart';
 import 'package:amazon_clone/utils/product_showcase_list_view.dart';
 import 'package:amazon_clone/utils/rating_star_widget.dart';
 import 'package:amazon_clone/utils/review_dialog.dart';
-import 'package:amazon_clone/utils/review_model.dart';
+import 'package:amazon_clone/models/review_model.dart';
 import 'package:amazon_clone/utils/review_widget.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:async/async.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProductScreen extends StatefulWidget {
   final ProductModels product;
@@ -253,7 +255,17 @@ class _ProductScreenState extends State<ProductScreen> {
                           Align(
                             alignment: Alignment.topRight,
                             child: IconButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final result = await Share.share(
+                                      'check out my product https://example.com',
+                                      subject: 'Look what I made!');
+
+                                  if (result.status ==
+                                      ShareResultStatus.success) {
+                                    Fluttertoast.showToast(
+                                        msg: "Share Successful");
+                                  }
+                                },
                                 icon: const Icon(Icons.share)),
                           ),
                         ]),
@@ -399,6 +411,9 @@ class _ProductScreenState extends State<ProductScreen> {
                                     return Container();
                                   } else {
                                     return ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
                                         itemCount: snapshot.data!.docs.length,
                                         itemBuilder: (context, index) {
                                           ReviewModel model =

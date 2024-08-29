@@ -1,6 +1,6 @@
 import 'package:amazon_clone/provider/user_details_provider.dart';
-import 'package:amazon_clone/utils/cloud_firestore.dart';
-import 'package:amazon_clone/utils/review_model.dart';
+import 'package:amazon_clone/cloud_firestore_methods/cloud_firestore.dart';
+import 'package:amazon_clone/models/review_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';

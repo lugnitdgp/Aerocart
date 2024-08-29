@@ -1,5 +1,5 @@
 import 'package:amazon_clone/utils/rating_star_widget.dart';
-import 'package:amazon_clone/utils/review_model.dart';
+import 'package:amazon_clone/models/review_model.dart';
 import 'package:flutter/material.dart';
 
 class ReviewWidget extends StatelessWidget {

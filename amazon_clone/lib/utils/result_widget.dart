@@ -1,6 +1,6 @@
 import 'package:amazon_clone/pages/product_screen.dart';
 import 'package:amazon_clone/utils/cost_widget.dart';
-import 'package:amazon_clone/utils/models.dart';
+import 'package:amazon_clone/models/models.dart';
 import 'package:flutter/material.dart';
 
 class ResultWidget extends StatelessWidget {

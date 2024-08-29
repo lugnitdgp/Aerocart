@@ -1,7 +1,7 @@
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:amazon_clone/utils/button.dart';
-import 'package:amazon_clone/utils/cloud_firestore.dart';
+import 'package:amazon_clone/cloud_firestore_methods/cloud_firestore.dart';
 import 'package:amazon_clone/utils/text_field.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:amazon_clone/utils/utils.dart';
@@ -313,6 +313,12 @@ class _SellScreenState extends State<SellScreen> {
                             controller: cost, hintText: "Cost", obstext: false),
                         const SizedBox(
                           height: 20,
+                        ),
+                        const Center(
+                          child: Text("Select Category-",style: TextStyle(fontSize: 15),),
+                        ),
+                        const SizedBox(
+                          height: 10,
                         ),
                         Container(
                           height: 40,

@@ -53,12 +53,13 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   carousel_slider_plus: ^7.0.0
   share_plus: ^10.0.0
+  uni_links: ^0.5.1
   
   
 flutter_icons:
   android: true
   ios: true
-  image_path: "lib/images/amazon_icon.png"
+  image_path: "lib/images/amazon_icon1.png"
   adaptive_icon_background: "#ffffff"
 
 dev_dependencies:

@@ -1,0 +1,14 @@
+[
+    {
+        "relations": [
+            "delegate_permissions/common.handle_all_urls"
+        ],
+        "tarfet":{
+            "namespace": "android_app",
+            "package_name":"com.example.amazon_clone",
+            "sha256_cert_fingerprints":[
+                "74:42:30:45:84:87:14:FC:EB:14:C5:26:EB:C0:62:FA:0B:FD:92:81:BE:26:5E:AA:35:9F:4C:38:23:C4:94:6C"
+            ]
+        }
+    }
+]

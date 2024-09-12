@@ -64,8 +64,8 @@ class HomeItems extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      productModels.cost.toString(),
-                      style: const TextStyle(fontSize: 16),
+                      "₹${productModels.cost.toString()}",
+                      style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 16,),
                     )
                   ],
                 ),

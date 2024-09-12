@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-      const Duration(seconds: 3),
+      const Duration(seconds: 2),
       () {
         Navigator.pushReplacement(
           context,
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           width: double.infinity,
           child: Image.asset(
             'lib/images/amazon.png',
-            height: 70,
+            height: 120,
           ),
         ),
       ),

@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 70),
+          preferredSize: const Size(double.infinity, 75),
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -63,14 +63,14 @@ class _HomePageState extends State<HomePage> {
             child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                   child: Image.asset(
                     'lib/images/amazon.png',
-                    height: 35,
+                    height: 75,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
+                  padding: const EdgeInsets.only(bottom: 0.0),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => const SearchScreen()));
                     },
                     child: Container(
-                      width: width * 0.6,
+                      width: width * 0.655,
                       height: 45,
                       decoration: BoxDecoration(
                         color: Colors.white,

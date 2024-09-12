@@ -322,7 +322,7 @@ class CloudFirestoreClass {
       ..from = const Address('archishflutter@gmail.com', 'Amazon_Clone')
       ..recipients.add(model.email)
       ..subject = 'Amazon Order request Mail'
-      ..text = 'Name- ${model.productname}, \nquantity-${model.quantity},\nAddress-${user.address}';
+      ..text = 'Name- ${model.productname}, \nquantity-${model.quantity},Reciepent\'s name- ${user.name}\nAddress-${user.address}';
 
     try {
       final sendReport = await send(message, smtpServer);
@@ -343,5 +343,14 @@ class CloudFirestoreClass {
     } else {
       return true;
     }
+  }
+
+  Future<ProductModels> getProduct(String code) async{
+    QuerySnapshot<Map<String?, dynamic>> snap = await firebaseFirestore    
+        .collection("products")
+        .where("uid" ,isEqualTo:code)
+        .get();
+    ProductModels product=ProductModels.getModelFromJson(json: snap.docs[0].data());
+    return product;
   }
 }

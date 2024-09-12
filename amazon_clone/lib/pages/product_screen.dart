@@ -257,7 +257,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: IconButton(
                                 onPressed: () async {
                                   final result = await Share.share(
-                                      'check out my product https://example.com',
+                                      'check out my product https://amazn-caa2b.web.app/?code=${widget.product.uid.trim()}',
                                       subject: 'Look what I made!');
 
                                   if (result.status ==

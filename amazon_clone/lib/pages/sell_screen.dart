@@ -86,58 +86,60 @@ class _SellScreenState extends State<SellScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height=MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 55),
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.cyanAccent, Colors.greenAccent],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
+      appBar:  PreferredSize(
+          preferredSize: Size(double.infinity, height / 11),
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.cyanAccent, Colors.greenAccent],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
             ),
-          ),
-          child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 10, 0, 10),
-                      child: Image.asset(
-                        'lib/images/Amazon_icon.png',
-                        height: 50,
+            child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 0, 5),
+                        child: Image.asset(
+                          'lib/images/Amazon_icon.png',
+                          height: 75,
+                        ),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.notifications_none_outlined,
+                                size: 28,
+                              )),
+                          IconButton(
                             onPressed: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SearchScreen()));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SearchScreen(),
+                                ),
+                              );
                             },
                             icon: const Icon(
-                              Icons.notifications_none_outlined,
+                              Icons.search,
                               size: 28,
-                            )),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.search,
-                            size: 28,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ]),
-            ),
-          ]),
+                        ],
+                      ),
+                    ]),
+              ),
+            ]),
+          ),
         ),
-      ),
       body: Stack(
         children: [
           SingleChildScrollView(

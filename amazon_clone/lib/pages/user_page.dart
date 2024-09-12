@@ -68,7 +68,7 @@ class _UserPageState extends State<UserPage> {
         Provider.of<UserDetailsProvider>(context).userdetails;
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size(double.infinity, height / 12),
+          preferredSize: Size(double.infinity, height / 11),
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -84,10 +84,10 @@ class _UserPageState extends State<UserPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 10, 0, 10),
+                        padding: const EdgeInsets.fromLTRB(16, 0, 0, 5),
                         child: Image.asset(
                           'lib/images/Amazon_icon.png',
-                          height: 50,
+                          height: 75,
                         ),
                       ),
                       Row(

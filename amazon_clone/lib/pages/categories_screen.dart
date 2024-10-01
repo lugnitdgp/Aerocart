@@ -3,15 +3,15 @@ import 'package:amazon_clone/utils/loading_widget.dart';
 import 'package:amazon_clone/utils/products_showcase.dart';
 import 'package:flutter/material.dart';
 
-class ResultsScreen extends StatefulWidget {
+class CategoriesScreen extends StatefulWidget {
   final String querry;
-  const ResultsScreen({super.key, required this.querry});
+  const CategoriesScreen({super.key, required this.querry});
 
   @override
-  State<ResultsScreen> createState() => _ResultsScreenState();
+  State<CategoriesScreen> createState() => _CategoriesScreenState();
 }
 
-class _ResultsScreenState extends State<ResultsScreen> {
+class _CategoriesScreenState extends State<CategoriesScreen> {
   late String name = widget.querry;
   List<Widget>? product;
 
@@ -36,13 +36,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 60),
         child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.cyanAccent, Colors.greenAccent],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color.fromARGB(255, 168, 202, 127), Color.fromARGB(255, 37, 46, 42)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
             ),
-          ),
           child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
             Row(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,

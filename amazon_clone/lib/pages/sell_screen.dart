@@ -1,3 +1,4 @@
+import 'package:amazon_clone/layout/screen_layout.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/provider/user_details_provider.dart';
 import 'package:amazon_clone/utils/button.dart';
@@ -86,60 +87,74 @@ class _SellScreenState extends State<SellScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height=MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar:  PreferredSize(
-          preferredSize: Size(double.infinity, height / 11),
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.cyanAccent, Colors.greenAccent],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, height / 11),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 168, 202, 127),
+                Color.fromARGB(255, 37, 46, 42)
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
             ),
-            child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 0, 5),
+          ),
+          child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(context,
+                              MaterialPageRoute(
+                            builder: (context) {
+                              return const ScreenLayout();
+                            },
+                          ), (route) => false);
+                        },
                         child: Image.asset(
-                          'lib/images/Amazon_icon.png',
-                          height: 75,
+                          'lib/images/amazon.png',
+                          height: 80,
                         ),
                       ),
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.notifications_none_outlined,
-                                size: 28,
-                              )),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SearchScreen(),
-                                ),
-                              );
-                            },
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {},
                             icon: const Icon(
-                              Icons.search,
+                              Icons.notifications_none_outlined,
                               size: 28,
-                            ),
+                            )),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SearchScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.search,
+                            color: Colors.white,
+                            size: 28,
                           ),
-                        ],
-                      ),
-                    ]),
-              ),
-            ]),
-          ),
+                        ),
+                      ],
+                    ),
+                  ]),
+            ),
+          ]),
         ),
+      ),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -317,7 +332,10 @@ class _SellScreenState extends State<SellScreen> {
                           height: 20,
                         ),
                         const Center(
-                          child: Text("Select Category-",style: TextStyle(fontSize: 15),),
+                          child: Text(
+                            "Select Category-",
+                            style: TextStyle(fontSize: 15),
+                          ),
                         ),
                         const SizedBox(
                           height: 10,

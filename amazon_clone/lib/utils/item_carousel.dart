@@ -43,7 +43,7 @@ class _ItemCarouselState extends State<ItemCarousel> {
               dotWidth: 8,
               spacing: 10,
               dotColor: Colors.black,
-              activeDotColor: Colors.cyan,
+              activeDotColor: Color.fromARGB(255, 122, 207, 25),
             ),
           ),
         ),

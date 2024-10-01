@@ -11,8 +11,8 @@ class UserDetailsBar extends StatelessWidget {
     required this.offset,
   });
   final List<Color> userdetailscolor = [
-    const Color.fromARGB(255, 127, 247, 247),
-    const Color.fromARGB(224, 169, 248, 220)
+    const Color.fromARGB(255, 192, 211, 156),
+    const Color.fromARGB(223, 55, 63, 61)
   ];
 
   @override

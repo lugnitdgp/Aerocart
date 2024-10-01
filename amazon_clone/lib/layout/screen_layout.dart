@@ -33,7 +33,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
             child: BottomNavigationBar(
-                selectedItemColor: Colors.cyan[600],
+                selectedItemColor: const Color.fromARGB(255, 122, 207, 25),
                 unselectedItemColor: Colors.black,
                 backgroundColor: Colors.white,
                 showSelectedLabels: true,

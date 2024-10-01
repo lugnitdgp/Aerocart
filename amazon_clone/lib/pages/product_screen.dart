@@ -162,7 +162,7 @@ class _ProductScreenState extends State<ProductScreen> {
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.cyanAccent, Colors.greenAccent],
+                colors: [Color.fromARGB(255, 168, 202, 127), Color.fromARGB(255, 37, 46, 42)],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),

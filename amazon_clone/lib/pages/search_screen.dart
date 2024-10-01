@@ -29,13 +29,13 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 60),
         child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.cyanAccent, Colors.greenAccent],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color.fromARGB(255, 168, 202, 127), Color.fromARGB(255, 37, 46, 42)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
             ),
-          ),
           child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
             Row(children: [
               Padding(

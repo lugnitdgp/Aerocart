@@ -1,5 +1,6 @@
 import 'package:amazon_clone/auth/auth_page.dart';
 import 'package:amazon_clone/auth/user_details_model.dart';
+import 'package:amazon_clone/layout/screen_layout.dart';
 import 'package:amazon_clone/login_screens/user_details.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
 import 'package:amazon_clone/pages/sell_screen.dart';
@@ -50,14 +51,13 @@ class _UserPageState extends State<UserPage> {
   final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> memoizer =
       AsyncMemoizer();
 
-
   Future<QuerySnapshot<Map<String, dynamic>>> fetchData() {
     return memoizer.runOnce(() async {
       return await FirebaseFirestore.instance
           .collection("users")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("orders")
-          .get();  
+          .get();
     });
   }
 
@@ -72,7 +72,10 @@ class _UserPageState extends State<UserPage> {
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.cyanAccent, Colors.greenAccent],
+                colors: [
+                  Color.fromARGB(255, 168, 202, 127),
+                  Color.fromARGB(255, 37, 46, 42)
+                ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
@@ -84,10 +87,20 @@ class _UserPageState extends State<UserPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 0, 5),
-                        child: Image.asset(
-                          'lib/images/Amazon_icon.png',
-                          height: 75,
+                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(context,
+                                MaterialPageRoute(
+                              builder: (context) {
+                                return const ScreenLayout();
+                              },
+                            ), (route) => false);
+                          },
+                          child: Image.asset(
+                            'lib/images/amazon.png',
+                            height: 80,
+                          ),
                         ),
                       ),
                       Row(
@@ -97,6 +110,7 @@ class _UserPageState extends State<UserPage> {
                               icon: const Icon(
                                 Icons.notifications_none_outlined,
                                 size: 28,
+                                color: Color.fromARGB(255, 255, 253, 240),
                               )),
                           IconButton(
                             onPressed: () {
@@ -110,6 +124,7 @@ class _UserPageState extends State<UserPage> {
                             icon: const Icon(
                               Icons.search,
                               size: 28,
+                              color: Color.fromARGB(255, 255, 253, 240),
                             ),
                           ),
                         ],
@@ -204,34 +219,37 @@ class _UserPageState extends State<UserPage> {
                             ConnectionState.waiting) {
                           return Container();
                         } else {
-                          return snapshot.data!.docs.isNotEmpty? ListView.builder(
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) {
-                                OrderRequestModel model =
-                                    OrderRequestModel.getModelFromJson(
-                                        json:
-                                            snapshot.data!.docs[index].data());
-                                return ListTile(
-                                  title: Text(
-                                    "Order: ${model.orderName}",
-                                    style:
-                                        const TextStyle(fontWeight: FontWeight.w500),
-                                  ),
-                                  subtitle:
-                                      Text("Address: ${model.buyersAddress}"),
-                                  trailing: IconButton(
-                                      onPressed: () async {
-                                        FirebaseFirestore.instance
-                                            .collection("users")
-                                            .doc(FirebaseAuth
-                                                .instance.currentUser!.uid)
-                                            .collection("orderRequests")
-                                            .doc(snapshot.data!.docs[index].id)
-                                            .delete();
-                                      },
-                                      icon: const Icon(Icons.check)),
-                                );
-                              }): const Text("Nothing found");
+                          return snapshot.data!.docs.isNotEmpty
+                              ? ListView.builder(
+                                  itemCount: snapshot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    OrderRequestModel model =
+                                        OrderRequestModel.getModelFromJson(
+                                            json: snapshot.data!.docs[index]
+                                                .data());
+                                    return ListTile(
+                                      title: Text(
+                                        "Order: ${model.orderName}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      subtitle: Text(
+                                          "Address: ${model.buyersAddress}"),
+                                      trailing: IconButton(
+                                          onPressed: () async {
+                                            FirebaseFirestore.instance
+                                                .collection("users")
+                                                .doc(FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                                .collection("orderRequests")
+                                                .doc(snapshot
+                                                    .data!.docs[index].id)
+                                                .delete();
+                                          },
+                                          icon: const Icon(Icons.check)),
+                                    );
+                                  })
+                              : const Text("Nothing found");
                         }
                       }))
             ],

@@ -63,7 +63,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                       dotWidth: 8,
                       spacing: 10,
                       dotColor: Colors.white60,
-                      activeDotColor: Colors.cyan,
+                      activeDotColor: Color.fromARGB(255, 122, 207, 25),
                     ),
                   ),
                 ),

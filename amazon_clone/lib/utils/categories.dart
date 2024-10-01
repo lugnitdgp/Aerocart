@@ -1,4 +1,4 @@
-import 'package:amazon_clone/pages/results_screen.dart';
+import 'package:amazon_clone/pages/categories_screen.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesBar extends StatefulWidget {
@@ -49,7 +49,7 @@ class _CategoriesBarState extends State<CategoriesBar> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      ResultsScreen(querry: categoriesList[index]),
+                      CategoriesScreen(querry: categoriesList[index]),
                 ),
               );
             },

@@ -8,6 +8,8 @@ class HomeItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -20,7 +22,7 @@ class HomeItems extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
-          width: MediaQuery.of(context).size.width / 4,
+          width: screenWidth / 4,
           padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -33,30 +35,22 @@ class HomeItems extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(child: Image.network(productModels.url[0]))
+                    Expanded(child: Image.network(productModels.url[0])),
                   ],
                 ),
               ),
               Expanded(
                 flex: 2,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Text(
-                            productModels.productname,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 16.4, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      )
-                    ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Text(
+                    productModels.productname,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: screenWidth < 350 ? 14 : 16.4,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
@@ -71,10 +65,10 @@ class HomeItems extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
-                    )
+                    ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

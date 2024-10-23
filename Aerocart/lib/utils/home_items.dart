@@ -20,7 +20,7 @@ class HomeItems extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
-          width: MediaQuery.of(context).size.width / 4,
+          width: MediaQuery.of(context).size.width / 3.6,
           padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -51,7 +51,7 @@ class HomeItems extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 16.4, fontWeight: FontWeight.w500),
+                              fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                       ),
                     )

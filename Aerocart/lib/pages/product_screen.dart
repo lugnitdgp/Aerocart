@@ -18,10 +18,8 @@ import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:async/async.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ProductScreen extends StatefulWidget {
   final ProductModels product;
@@ -36,6 +34,7 @@ class _ProductScreenState extends State<ProductScreen> {
       AsyncMemoizer();
   final AsyncMemoizer<QuerySnapshot<Map<String, dynamic>>> memoizer =
       AsyncMemoizer();
+  bool showMore = false;
   Future<QuerySnapshot<Map<String, dynamic>>> _fetchData() {
     return _memoizer.runOnce(() async {
       return await FirebaseFirestore.instance
@@ -75,6 +74,8 @@ class _ProductScreenState extends State<ProductScreen> {
       );
     }
   }
+
+  int reviewCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +163,10 @@ class _ProductScreenState extends State<ProductScreen> {
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color.fromARGB(255, 168, 202, 127), Color.fromARGB(255, 37, 46, 42)],
+                colors: [
+                  Color.fromARGB(255, 168, 202, 127),
+                  Color.fromARGB(255, 37, 46, 42)
+                ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
@@ -255,17 +259,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           Align(
                             alignment: Alignment.topRight,
                             child: IconButton(
-                                onPressed: () async {
-                                  final result = await Share.share(
-                                      'check out my product https://amazn-caa2b.web.app/?code=${widget.product.uid.trim()}',
-                                      subject: 'Look what I made!');
-
-                                  if (result.status ==
-                                      ShareResultStatus.success) {
-                                    Fluttertoast.showToast(
-                                        msg: "Share Successful");
-                                  }
-                                },
+                                onPressed: (){},
                                 icon: const Icon(Icons.share)),
                           ),
                         ]),
@@ -292,8 +286,14 @@ class _ProductScreenState extends State<ProductScreen> {
                                         fontWeight: FontWeight.w500,
                                         fontSize: 22),
                                   ),
-                                  RatingStatWidget(
-                                      rating: widget.product.rating),
+                                  Row(
+                                    children: [
+                                      RatingStatWidget(
+                                          rating: widget.product.rating),
+                                      Text(
+                                          "(${reviewCount.toString()} Reviews)"),
+                                    ],
+                                  ),
                                 ],
                               ),
                               Padding(
@@ -337,13 +337,47 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  widget.product.description,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      showMore = !showMore;
+                                    });
+                                  },
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: showMore
+                                          ? widget.product.description
+                                          : widget.product.description.substring(
+                                              0,
+                                              100), // Adjust this number for truncation length
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                      children: [
+                                        if (!showMore &&
+                                            widget.product.description.length >
+                                                100)
+                                          const TextSpan(
+                                            text: " ... See More",
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        if (showMore)
+                                          const TextSpan(
+                                            text: " Show Less",
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -410,6 +444,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                       ConnectionState.waiting) {
                                     return Container();
                                   } else {
+                                    reviewCount = snapshot.data!.docs.length;
                                     return ListView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),

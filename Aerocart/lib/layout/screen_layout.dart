@@ -31,6 +31,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<UserDetailsProvider>(context).getData();
     return Scaffold(
       body: Stack(children: [
         tablist.elementAt(currPage),

@@ -9,9 +9,7 @@ import 'package:amazon_clone/utils/user_tile.dart';
 import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 import '../utils/user_details_bar.dart';
 
 class UserPage extends StatefulWidget {
@@ -58,7 +56,8 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
+    final MQ=MediaQuery.of(context).size;
+    double height = MQ.height;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, height / 11),
@@ -158,108 +157,119 @@ class _UserPageState extends State<UserPage> {
                 ),
                 color: Colors.white,
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  Column(children: [
-                    const SizedBox(height: 5),
-                    UserTile(
-                      icon: Icon(
-                      Iconsax.user_outline,
-                        color: Colors.white,
-                        size: MediaQuery.of(context).size.height * 0.2,
-                      ),
-                      child: Text('User Profile',
-                          style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.width * 0.06,
-                            color: Colors.white,
-                          )),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const UserProfile(),
-                          ),
-                        );
-                      },
+                  Container(
+                    width: double.infinity,
+                    height: MQ.height * 0.08,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:BorderRadius.all(Radius.circular(15)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 25,
+                          offset: Offset(0, 8),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 15),
-                    UserTile2(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Wishlist(),
-                          ),
-                        );
-                      },
-                      icon: Icon(
-                        CupertinoIcons.square_favorites_alt,
-                        color: Colors.white,
-                        size: MediaQuery.of(context).size.height * 0.12,
-                      ),
-                      child: Text('Wishlist',
-                          style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.width * 0.06,
-                            color: Colors.white,
-                          )),
+                    child: Padding(padding: EdgeInsets.symmetric(vertical: MQ.height*0.023,horizontal: 20),
+                      child: Text('Hello, User!', style: TextStyle(
+                        fontSize:
+                        MQ.width * 0.06,
+                        color: Colors.black87,
+                      )),
                     ),
-                  ]),
-                  const Spacer(),
-                  Column(
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
                     children: [
-                      const SizedBox(height: 5),
-                      UserTile2(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const YourOrders(),
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          TeenyIcons.box,
-                            color: Colors.white,
-                          size: MediaQuery.of(context).size.height * 0.12,
+                      Column(children: [
+                        const SizedBox(height: 5),
+                        UserTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const UserProfile(),
+                              ),
+                            );
+                          }, image: 'lib/images/profile5.jpg',
+                          child: Text('Your Account',
+                              style: TextStyle(
+                                fontSize:
+                                    MQ.width * 0.06,
+                              )),
                         ),
-                        child: Text('Your orders',
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.06,
-                              color: Colors.white,
-                            )),
-                      ),
-                      const SizedBox(height: 15),
-                      UserTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const OrderRequests(),
-                            ),
-                          );
-                        },
-                        icon: Icon(CupertinoIcons.square_stack_3d_down_right,
-                            color: Colors.white,
-                            size: MediaQuery.of(context).size.height * 0.2),
-                        child: Column(
-                          children: [
-                            Text('Order',
+                        const SizedBox(height: 15),
+                        UserTile2(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Wishlist(),
+                              ),
+                            );
+                          },
+                          image: 'lib/images/wis.webp',
+                          child: Text('Wishlist',
+                              style: TextStyle(
+                                fontSize:
+                                    MQ.width * 0.06,
+                              )),
+                        ),
+                      ]),
+                      const Spacer(),
+                      Column(
+                        children: [
+                          const SizedBox(height: 5),
+                          UserTile2(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const YourOrders(),
+                                ),
+                              );
+                            },
+                            image: 'lib/images/orders3.jpg',
+                            child: Text('Your orders',
                                 style: TextStyle(
                                   fontSize:
-                                      MediaQuery.of(context).size.width * 0.06,
-                                  color: Colors.white,
+                                      MQ.width * 0.06,
                                 )),
-                            Text('Requests',
-                                style: TextStyle(
-                                  fontSize:
-                                  MediaQuery.of(context).size.width * 0.06,
-                                  color: Colors.white,
-                                )),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 15),
+                          UserTile(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OrderRequests(),
+                                ),
+                              );
+                            },
+                            image: 'lib/images/order-requests.png',
+                            child: Column(
+                              children: [
+                                Text('Order',
+                                    style: TextStyle(
+                                      fontSize:
+                                          MQ.width *
+                                              0.06,
+                                    )),
+                                Text('Requests',
+                                    style: TextStyle(
+                                      fontSize:
+                                          MQ.width *
+                                              0.06,
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

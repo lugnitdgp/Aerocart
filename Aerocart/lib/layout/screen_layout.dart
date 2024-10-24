@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:amazon_clone/pages/cart_page.dart';
 import 'package:amazon_clone/pages/home_pge.dart';
 import 'package:amazon_clone/pages/user_page.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/user_details_provider.dart';
 
 class ScreenLayout extends StatefulWidget {
   const ScreenLayout({super.key});
@@ -31,6 +34,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<UserDetailsProvider>(context).getData();
     return Scaffold(
       body: Stack(children: [
         tablist.elementAt(currPage),

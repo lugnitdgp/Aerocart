@@ -4,54 +4,48 @@ class UserTile extends StatelessWidget {
   const UserTile({
     required this.child,
     this.onTap,
-    required this.icon,
+    required this.image,
     super.key,
   });
 
   final Widget child;
   final VoidCallback? onTap;
-  final dynamic icon;
-
+  final dynamic image;
 
   @override
   Widget build(BuildContext context) {
+    final MQ =MediaQuery.of(context).size;
     final widget = Padding(
-      padding: const EdgeInsets.all(0.0),
+      padding: const EdgeInsets.symmetric(vertical: 3.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          icon,
-          const SizedBox(height: 10,),
+          Container(
+            height: MQ.height*0.2,
+            child:Image.asset(image,fit: BoxFit.contain,),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
           child,
         ],
       ),
     );
-
     return Container(
-      width: MediaQuery.of(context).size.width * 0.42,
-      height: MediaQuery.of(context).size.height * 0.3,
+      width: MQ.width * 0.42,
+      height: MQ.height * 0.3,
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Color.fromARGB(255, 253, 178, 17),
-            blurRadius: 5,
+            color: Colors.grey,
+            blurRadius: 30,
             offset: Offset(8, 8),
-            //blurStyle: BlurStyle(),
           ),
         ],
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        gradient: const LinearGradient(
-          colors: [
-            Color.fromARGB(255, 168, 202, 127),
-            Color.fromARGB(0,0,0,0),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Colors.white,
       ),
       child: SizedBox(
-        height: 30,
-        //width: double.infinity,
         child: null == onTap
             ? widget
             : Material(
@@ -70,54 +64,48 @@ class UserTile2 extends StatelessWidget {
   const UserTile2({
     required this.child,
     this.onTap,
-    required this.icon,
+    required this.image,
     super.key,
   });
 
   final Widget child;
   final VoidCallback? onTap;
-  final dynamic icon;
-
+  final dynamic image;
 
   @override
   Widget build(BuildContext context) {
+    final MQ =MediaQuery.of(context).size;
     final widget = Padding(
-      padding: const EdgeInsets.all(5.0),
-      child:Column(
+      padding: const EdgeInsets.symmetric(vertical: 3.0),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          icon,
-          SizedBox(height:MediaQuery.of(context).size.height * 0.02,),
+          Container(
+            height: MQ.height*0.1,
+            child:Image.asset(image,),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
           child,
         ],
       ),
     );
-
     return Container(
-      width: MediaQuery.of(context).size.width * 0.42,
-      height: MediaQuery.of(context).size.height * 0.2,
+      width: MQ.width * 0.42,
+      height: MQ.height * 0.2,
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color:  Color.fromARGB(255, 168, 202, 127),
-            blurRadius: 5,
+            color: Colors.grey,
+            blurRadius: 30,
             offset: Offset(8, 8),
-            //blurStyle: BlurStyle(),
           ),
         ],
-        borderRadius: const BorderRadius.all(Radius.circular(15)),
-        gradient: const LinearGradient(
-          colors: [
-            Color.fromARGB(255, 253, 178, 17),
-            Color.fromARGB(0,0,0,0),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        color: Colors.white,
       ),
       child: SizedBox(
-        height: 30,
-        width: double.infinity,
         child: null == onTap
             ? widget
             : Material(

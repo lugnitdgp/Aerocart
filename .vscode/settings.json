@@ -1,0 +1,5 @@
+{
+    "cmake.sourceDirectory": "C:/dev/Hacktoberfest/Aerocart/Aerocart/Aerocart/linux",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic"
+}

@@ -10,6 +10,9 @@ import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../auth/user_details_model.dart';
+import '../provider/user_details_provider.dart';
 import '../utils/user_details_bar.dart';
 
 class UserPage extends StatefulWidget {
@@ -56,6 +59,8 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
+    UserDetailsModel userDetailsModel =
+        Provider.of<UserDetailsProvider>(context).userdetails;
     final MQ=MediaQuery.of(context).size;
     double height = MQ.height;
     return Scaffold(
@@ -169,12 +174,12 @@ class _UserPageState extends State<UserPage> {
                         BoxShadow(
                           color: Colors.grey,
                           blurRadius: 25,
-                          offset: Offset(0, 8),
+                          offset: Offset(0, 1),
                         ),
                       ],
                     ),
-                    child: Padding(padding: EdgeInsets.symmetric(vertical: MQ.height*0.023,horizontal: 20),
-                      child: Text('Hello, User!', style: TextStyle(
+                    child: Padding(padding: EdgeInsets.symmetric(vertical: MQ.height*0.02,horizontal: MQ.width*0.03),
+                      child: Text('Hello, ${userDetailsModel.name}!', style: TextStyle(
                         fontSize:
                         MQ.width * 0.06,
                         color: Colors.black87,
@@ -200,11 +205,11 @@ class _UserPageState extends State<UserPage> {
                           child: Text('Your Account',
                               style: TextStyle(
                                 fontSize:
-                                    MQ.width * 0.06,
+                                    MQ.width * 0.04,
                               )),
                         ),
                         const SizedBox(height: 15),
-                        UserTile2(
+                        UserTile(
                           onTap: () {
                             Navigator.push(
                               context,
@@ -217,7 +222,7 @@ class _UserPageState extends State<UserPage> {
                           child: Text('Wishlist',
                               style: TextStyle(
                                 fontSize:
-                                    MQ.width * 0.06,
+                                    MQ.width * 0.04,
                               )),
                         ),
                       ]),
@@ -225,7 +230,7 @@ class _UserPageState extends State<UserPage> {
                       Column(
                         children: [
                           const SizedBox(height: 5),
-                          UserTile2(
+                          UserTile(
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -238,7 +243,7 @@ class _UserPageState extends State<UserPage> {
                             child: Text('Your orders',
                                 style: TextStyle(
                                   fontSize:
-                                      MQ.width * 0.06,
+                                      MQ.width * 0.04,
                                 )),
                           ),
                           const SizedBox(height: 15),
@@ -258,13 +263,13 @@ class _UserPageState extends State<UserPage> {
                                     style: TextStyle(
                                       fontSize:
                                           MQ.width *
-                                              0.06,
+                                              0.04,
                                     )),
                                 Text('Requests',
                                     style: TextStyle(
                                       fontSize:
                                           MQ.width *
-                                              0.06,
+                                              0.04,
                                     )),
                               ],
                             ),

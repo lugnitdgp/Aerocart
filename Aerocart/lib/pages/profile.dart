@@ -167,7 +167,7 @@ class _UserProfileState extends State<UserProfile> {
                         }
                       }
                     },
-                    text: "User details"),
+                    text: "Sell"),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),

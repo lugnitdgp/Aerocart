@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class UserTile extends StatelessWidget {
-  const UserTile({
+class MenuTile extends StatelessWidget {
+  const MenuTile({
     required this.child,
     this.onTap,
     required this.image,

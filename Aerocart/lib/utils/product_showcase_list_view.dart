@@ -17,7 +17,7 @@ class ProductsShowcaseListView extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
-      height: 226,
+      height: screenSize.height/4,
       width: screenSize.width,
       color: Colors.white,
       child: Column(
@@ -51,7 +51,7 @@ class ProductsShowcaseListView extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 185,
+            height: 190,
             width: screenSize.width,
             child:children.isNotEmpty? ListView(
               scrollDirection: Axis.horizontal,

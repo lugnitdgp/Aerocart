@@ -18,10 +18,8 @@ import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:async/async.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ProductScreen extends StatefulWidget {
   final ProductModels product;
@@ -261,17 +259,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           Align(
                             alignment: Alignment.topRight,
                             child: IconButton(
-                                onPressed: () async {
-                                  final result = await Share.share(
-                                      'check out my product https://amazn-caa2b.web.app/?code=${widget.product.uid.trim()}',
-                                      subject: 'Look what I made!');
-
-                                  if (result.status ==
-                                      ShareResultStatus.success) {
-                                    Fluttertoast.showToast(
-                                        msg: "Share Successful");
-                                  }
-                                },
+                                onPressed: (){},
                                 icon: const Icon(Icons.share)),
                           ),
                         ]),

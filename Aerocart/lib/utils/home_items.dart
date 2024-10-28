@@ -8,6 +8,8 @@ class HomeItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -33,7 +35,7 @@ class HomeItems extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(child: Image.network(productModels.url[0]))
+                    Expanded(child: Image.network(productModels.url[0])),
                   ],
                 ),
               ),
@@ -65,11 +67,14 @@ class HomeItems extends StatelessWidget {
                   children: [
                     Text(
                       "₹${productModels.cost.toString()}",
-                      style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 16,),
-                    )
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

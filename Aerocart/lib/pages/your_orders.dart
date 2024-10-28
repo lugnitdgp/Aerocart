@@ -1,32 +1,23 @@
 import 'package:amazon_clone/auth/auth_page.dart';
-import 'package:amazon_clone/auth/user_details_model.dart';
 import 'package:amazon_clone/layout/screen_layout.dart';
-import 'package:amazon_clone/login_screens/user_details.dart';
 import 'package:amazon_clone/pages/search_screen.dart';
-import 'package:amazon_clone/pages/sell_screen.dart';
-import 'package:amazon_clone/pages/seller_details_screen.dart';
-import 'package:amazon_clone/provider/user_details_provider.dart';
-import 'package:amazon_clone/utils/button.dart';
-import 'package:amazon_clone/cloud_firestore_methods/cloud_firestore.dart';
 import 'package:amazon_clone/utils/home_items.dart';
 import 'package:amazon_clone/models/models.dart';
-import 'package:amazon_clone/models/order_request_model.dart';
 import 'package:amazon_clone/utils/product_showcase_list_view.dart';
 import 'package:amazon_clone/utils/user_details_bar.dart';
 import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class UserPage extends StatefulWidget {
-  const UserPage({super.key});
+class YourOrders extends StatefulWidget {
+  const YourOrders({super.key});
 
   @override
-  State<UserPage> createState() => _UserPageState();
+  State<YourOrders> createState() => _YourOrdersState();
 }
 
-class _UserPageState extends State<UserPage> {
+class _YourOrdersState extends State<YourOrders> {
   Stream<QuerySnapshot<Map<String, dynamic>>>? userStream;
 
   @override
@@ -64,8 +55,6 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    UserDetailsModel userDetailsModel =
-        Provider.of<UserDetailsProvider>(context).userdetails;
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(double.infinity, height / 11),
@@ -162,96 +151,6 @@ class _UserPageState extends State<UserPage> {
                             );
                     }
                   }),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: MyButton(
-                    ontap: () async {
-                      if (userDetailsModel.name == "loading" ||
-                          userDetailsModel.address == "loading") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const UserDetails(),
-                          ),
-                        );
-                      } else {
-                        bool t = await CloudFirestoreClass().isSeller();
-                        if (t) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SellScreen(),
-                            ),
-                          );
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SellerDetailsScreen(),
-                            ),
-                          );
-                        }
-                      }
-                    },
-                    text: "Sell"),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: MyButton(ontap: signout, text: "Sign Out"),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(15),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Order Requests",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Expanded(
-                  child: StreamBuilder(
-                      stream: userStream,
-                      builder: (context,
-                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                              snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Container();
-                        } else {
-                          return snapshot.data!.docs.isNotEmpty
-                              ? ListView.builder(
-                                  itemCount: snapshot.data!.docs.length,
-                                  itemBuilder: (context, index) {
-                                    OrderRequestModel model =
-                                        OrderRequestModel.getModelFromJson(
-                                            json: snapshot.data!.docs[index]
-                                                .data());
-                                    return ListTile(
-                                      title: Text(
-                                        "Order: ${model.orderName}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      subtitle: Text(
-                                          "Address: ${model.buyersAddress}"),
-                                      trailing: IconButton(
-                                          onPressed: () async {
-                                            FirebaseFirestore.instance
-                                                .collection("users")
-                                                .doc(FirebaseAuth
-                                                    .instance.currentUser!.uid)
-                                                .collection("orderRequests")
-                                                .doc(snapshot
-                                                    .data!.docs[index].id)
-                                                .delete();
-                                          },
-                                          icon: const Icon(Icons.check)),
-                                    );
-                                  })
-                              : const Text("Nothing found");
-                        }
-                      }))
             ],
           ),
           UserDetailsBar(

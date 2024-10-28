@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:amazon_clone/pages/cart_page.dart';
 import 'package:amazon_clone/pages/home_pge.dart';
-import 'package:amazon_clone/pages/user_page.dart';
+import 'package:amazon_clone/pages/menu.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/user_details_provider.dart';
 
 class ScreenLayout extends StatefulWidget {
   const ScreenLayout({super.key});
@@ -19,7 +21,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   final List<Widget> tablist = [
     const HomePage(),
     const CartPage(),
-    const UserPage(),
+    const Menu(),
   ];
 
   Stream<int> getCartItemCountStream() {
@@ -72,8 +74,13 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                         label: "Cart",
                       ),
                       const BottomNavigationBarItem(
+<<<<<<< master
+                        icon: Icon(Icons.menu),
+                        label: "More",
+=======
                         icon: Icon(Icons.account_circle_outlined),
                         label: "User",
+>>>>>>> master
                       ),
                     ],
                   );
